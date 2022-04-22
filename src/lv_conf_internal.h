@@ -306,6 +306,7 @@
  * The widget can be buffered in smaller chunks to avoid using large buffers.
  * `draw_area` is an `lv_area_t`variable for the area to draw and
  * it can be used the set the buffer size adaptively.
+ * `px_size` is size of a pixel on the buffer in bytes
  *
  * - LV_LAYER_SIMPLE_BUF_SIZE: the optimal target buffer size. LVGL will try to allocate it
  * - LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE: is used if `LV_LAYER_SIMPLE_BUF_SIZE` couldn't be allocated.
@@ -316,14 +317,14 @@
     #ifdef CONFIG_LV_LAYER_SIMPLE_BUF_SIZE
         #define LV_LAYER_SIMPLE_BUF_SIZE CONFIG_LV_LAYER_SIMPLE_BUF_SIZE
     #else
-        #define LV_LAYER_SIMPLE_BUF_SIZE  		   (16 * 1024)
+        #define LV_LAYER_SIMPLE_BUF_SIZE  		   (24 * 1024)
     #endif
 #endif
 #ifndef LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE
     #ifdef CONFIG_LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE
         #define LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE CONFIG_LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE
     #else
-        #define LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE  LV_MAX(lv_area_get_width(&draw_area), 1024)
+        #define LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE  LV_MAX(lv_area_get_width(&draw_area) * px_size, 2048)
     #endif
 #endif
 

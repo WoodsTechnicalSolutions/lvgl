@@ -891,7 +891,7 @@ void refr_obj(lv_draw_ctx_t * draw_ctx, lv_obj_t * obj)
                             buf_size_sub * px_size, LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE * px_size);
                 buf_size_sub = LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE;
                 if(buf_size_sub > buf_size_full) buf_size_sub = buf_size_full;
-                layer_buf = lv_mem_alloc(buf_size_sub * px_size);
+                layer_buf = lv_mem_alloc(buf_size_sub);
             }
         }
         if(layer_buf == NULL) {
