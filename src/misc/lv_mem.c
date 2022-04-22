@@ -153,8 +153,10 @@ void * lv_mem_alloc(size_t size)
 #endif
 
     if(alloc) {
+#if LV_MEM_CUSTOM == 0
         cur_used += size;
         max_used = LV_MAX(cur_used, max_used);
+#endif
         MEM_TRACE("allocated at %p", alloc);
     }
     return alloc;
