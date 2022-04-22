@@ -820,6 +820,9 @@ void refr_obj(lv_draw_ctx_t * draw_ctx, lv_obj_t * obj)
         lv_obj_redraw(draw_ctx, obj);
     }
     else {
+        lv_opa_t opa = lv_obj_get_style_opa(obj, 0);
+        if(opa < LV_OPA_MIN) return;
+
         lv_area_t draw_area;
         const lv_area_t * clip_area_ori = draw_ctx->clip_area;
         lv_coord_t ext_draw_size = _lv_obj_get_ext_draw_size(obj);
@@ -919,13 +922,15 @@ void refr_obj(lv_draw_ctx_t * draw_ctx, lv_obj_t * obj)
 
         lv_draw_img_dsc_t draw_dsc;
         lv_draw_img_dsc_init(&draw_dsc);
-        draw_dsc.opa = lv_obj_get_style_opa(obj, 0);
+        draw_dsc.opa = opa;
         draw_dsc.angle = lv_obj_get_style_transform_angle(obj, 0);
         draw_dsc.zoom = lv_obj_get_style_transform_zoom(obj, 0);
         draw_dsc.antialias = disp_refr->driver->antialiasing;
+
         lv_point_t pivot;
         pivot.x = lv_obj_get_style_transform_pivot_x(obj, 0);
         pivot.y = lv_obj_get_style_transform_pivot_y(obj, 0);
+
         lv_img_dsc_t img;
         img.data = layer_buf;
         img.header.always_zero = 0;
