@@ -303,15 +303,17 @@
 /**
  * "Simple layers" are used when a widget has `style_opa < 255` to buffer the widget into a layer
  * and blend it as an image with the given opacity.
+ * Note that `bg_opa`, `text_opa` etc don't require buffering into layer)
  * The widget can be buffered in smaller chunks to avoid using large buffers.
- * `draw_area` is an `lv_area_t`variable for the area to draw and
- * it can be used the set the buffer size adaptively.
- * `px_size` is size of a pixel on the buffer in bytes
+ * `draw_area` (`lv_area_t` meaning the area to draw and `px_size` (size of a pixel in bytes)
+ * can be used the set the buffer size adaptively.
  *
- * - LV_LAYER_SIMPLE_BUF_SIZE: the optimal target buffer size. LVGL will try to allocate it
- * - LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE: is used if `LV_LAYER_SIMPLE_BUF_SIZE` couldn't be allocated.
+ * - LV_LAYER_SIMPLE_BUF_SIZE: [bytes] the optimal target buffer size. LVGL will try to allocate it
+ * - LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE: [bytes]  used if `LV_LAYER_SIMPLE_BUF_SIZE` couldn't be allocated.
  *
  * Both buffer sizes are in bytes.
+ * "Transformed layers" (where transform_angle/zoom properties are used) use larger buffers
+ * and can't be drawn in chunks. So these settings affects only widgets with opacity.
  */
 #ifndef LV_LAYER_SIMPLE_BUF_SIZE
     #ifdef CONFIG_LV_LAYER_SIMPLE_BUF_SIZE

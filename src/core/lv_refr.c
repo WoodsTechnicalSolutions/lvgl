@@ -856,29 +856,28 @@ void refr_obj(lv_draw_ctx_t * draw_ctx, lv_obj_t * obj)
             return;
         }
 
-        bool full_cover_global = false;
+        bool full_cover = false;
         if(_lv_area_is_in(&draw_area, &obj->coords, 0)) {
-        	lv_cover_check_info_t info;
-        	info.res = LV_COVER_RES_COVER;
-        	info.area = &draw_area;
-        	lv_event_send(obj, LV_EVENT_COVER_CHECK, &info);
-        	if(info.res == LV_COVER_RES_COVER) full_cover_global = true;
+            lv_cover_check_info_t info;
+            info.res = LV_COVER_RES_COVER;
+            info.area = &draw_area;
+            lv_event_send(obj, LV_EVENT_COVER_CHECK, &info);
+            if(info.res == LV_COVER_RES_COVER) full_cover = true;
         }
 
-        if(LV_COLOR_SCREEN_TRANSP == 0 && !full_cover_global) {
-        	LV_LOG_WARN("Rendering this widget needs LV_COLOR_SCREEN_TRANSP 1");
-        	return;
+        if(LV_COLOR_SCREEN_TRANSP == 0 && !full_cover) {
+            LV_LOG_WARN("Rendering this widget needs LV_COLOR_SCREEN_TRANSP 1");
+            return;
         }
 
-        uint32_t px_size = full_cover_global ? sizeof(lv_color_t) : LV_IMG_PX_SIZE_ALPHA_BYTE;
+        uint32_t px_size = full_cover ? sizeof(lv_color_t) : LV_IMG_PX_SIZE_ALPHA_BYTE;
 
         if(inlayer == LV_INTERMEDIATE_LAYER_TYPE_SIMPLE) {
             buf_size_sub = LV_LAYER_SIMPLE_BUF_SIZE;
-        } else {
+        }
+        else {
             buf_size_sub = lv_area_get_size(&draw_area) * px_size;
         }
-
-        lv_area_t draw_area_sub;
 
         uint32_t buf_size_full = lv_area_get_size(&draw_area) * px_size;
         if(buf_size_sub > buf_size_full) buf_size_sub = buf_size_full;
@@ -900,10 +899,7 @@ void refr_obj(lv_draw_ctx_t * draw_ctx, lv_obj_t * obj)
             return;
         }
 
-        int32_t row_cnt = buf_size_sub / (px_size * lv_area_get_width(&draw_area));
-        draw_area_sub = draw_area;
-        draw_area_sub.y2 = draw_area_sub.y1 + row_cnt - 1;
-        if(draw_area_sub.y2 > draw_area.y2) draw_area_sub.y2 = draw_area.y2;
+        int32_t row_cnt;
         lv_draw_ctx_t * new_draw_ctx = lv_mem_alloc(disp_refr->driver->draw_ctx_size);
         LV_ASSERT_MALLOC(new_draw_ctx);
         if(new_draw_ctx == NULL) {
@@ -911,6 +907,8 @@ void refr_obj(lv_draw_ctx_t * draw_ctx, lv_obj_t * obj)
             lv_mem_free(layer_buf);
             return;
         }
+
+        lv_area_t draw_area_sub = draw_area;
 
         /*Set-up a new draw_ctx*/
         bool old_scr_transp = disp_refr->driver->screen_transp;
@@ -925,27 +923,60 @@ void refr_obj(lv_draw_ctx_t * draw_ctx, lv_obj_t * obj)
         draw_dsc.angle = lv_obj_get_style_transform_angle(obj, 0);
         draw_dsc.zoom = lv_obj_get_style_transform_zoom(obj, 0);
         draw_dsc.antialias = disp_refr->driver->antialiasing;
-
+        lv_point_t pivot;
+        pivot.x = lv_obj_get_style_transform_pivot_x(obj, 0);
+        pivot.y = lv_obj_get_style_transform_pivot_y(obj, 0);
         lv_img_dsc_t img;
         img.data = layer_buf;
         img.header.always_zero = 0;
         img.header.w = lv_area_get_width(&draw_area);
+
+        /*If the whole area is covers calculate the row count only once*/
+        if(full_cover) {
+            row_cnt = buf_size_sub / (sizeof(lv_color_t) * lv_area_get_width(&draw_area));
+            draw_area_sub.y2 = draw_area_sub.y1 + row_cnt - 1;
+            if(draw_area_sub.y2 > draw_area.y2) draw_area_sub.y2 = draw_area.y2;
+        }
+
         while(draw_area_sub.y1 <= draw_area.y2) {
-            bool full_cover = false;
+            /* If the widget covers the area of as many rows as an RGB buffer provides,
+             * draw it as RGB  instead of ARGB because it's much faster
+             * `full_cover_global == true` indicates that the widget covers the whole draw_area anyway*/
+            if(!full_cover) {
+                row_cnt = buf_size_sub / (sizeof(lv_color_t) * lv_area_get_width(&draw_area));
+            }
+
+            draw_area_sub.y2 = draw_area_sub.y1 + row_cnt - 1;
+            if(draw_area_sub.y2 > draw_area.y2) draw_area_sub.y2 = draw_area.y2;
+
+            bool full_cover_sub = false;
             if(_lv_area_is_in(&draw_area_sub, &obj->coords, 0)) {
                 lv_cover_check_info_t info;
                 info.res = LV_COVER_RES_COVER;
                 info.area = &draw_area_sub;
                 lv_event_send(obj, LV_EVENT_COVER_CHECK, &info);
-                if(info.res == LV_COVER_RES_COVER) full_cover = true;
+                if(info.res == LV_COVER_RES_COVER) full_cover_sub = true;
             }
 
-            disp_refr->driver->screen_transp = full_cover ? 0 : 1;
-            img.header.cf = full_cover ? LV_IMG_CF_TRUE_COLOR : LV_IMG_CF_TRUE_COLOR_ALPHA;
-            draw_dsc.pivot.x = obj->coords.x1 + lv_obj_get_style_transform_pivot_x(obj, 0) - draw_area_sub.x1;
-            draw_dsc.pivot.y = obj->coords.y1 + lv_obj_get_style_transform_pivot_y(obj, 0) - draw_area_sub.y1;
+            /* In the area is not covered by the widget recalculate the row count using ARGB pixel size
+             * It can happen that this smaller area is already covered by the widget but ignore this case
+             * in favor of fewer LV_EVENT_COVER_CHECK calls */
+            if(!full_cover_sub) {
+                row_cnt = buf_size_sub / (LV_IMG_PX_SIZE_ALPHA_BYTE * lv_area_get_width(&draw_area));
+                draw_area_sub.y2 = draw_area_sub.y1 + row_cnt - 1;
+                if(draw_area_sub.y2 > draw_area.y2) draw_area_sub.y2 = draw_area.y2;
+                disp_refr->driver->screen_transp = 1;
+                img.header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA;
+            }
+            else {
+                disp_refr->driver->screen_transp = 0;
+                img.header.cf = LV_IMG_CF_TRUE_COLOR;
+            }
 
-            if(!full_cover) lv_memset_00(layer_buf, buf_size_sub);
+            draw_dsc.pivot.x = obj->coords.x1 + pivot.x - draw_area_sub.x1;
+            draw_dsc.pivot.y = obj->coords.y1 + pivot.y - draw_area_sub.y1;
+
+            if(!full_cover_sub) lv_memset_00(layer_buf, buf_size_sub);
             lv_obj_redraw(new_draw_ctx, obj);
 
             lv_img_cache_invalidate_src(&img);
@@ -955,8 +986,7 @@ void refr_obj(lv_draw_ctx_t * draw_ctx, lv_obj_t * obj)
             disp_refr->driver->screen_transp = old_scr_transp;
             lv_draw_img(draw_ctx, &draw_dsc, &draw_area_sub, &img);
 
-            draw_area_sub.y1 += row_cnt;
-            draw_area_sub.y2 += row_cnt;
+            draw_area_sub.y1 = draw_area_sub.y2 + 1;
             if(draw_area_sub.y2 > draw_area.y2) draw_area_sub.y2 = draw_area.y2;
         }
 
