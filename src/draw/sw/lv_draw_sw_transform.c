@@ -226,10 +226,12 @@ static void argb_and_rgb_aa(const uint8_t * src, lv_coord_t src_w, lv_coord_t sr
             continue;
         }
 
+
         /*Get the direction the hor and ver neighbor
          *`fract` will be in range of 0x00..0xFF and `next` (+/-1) indicates the direction*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
+        printf("%d,%d; %d,%d\n", xs_int, xs_fract, ys_int, ys_fract);
         int32_t x_next;
         int32_t y_next;
         if(xs_fract < 0x80) {
@@ -334,24 +336,27 @@ static void argb_and_rgb_aa(const uint8_t * src, lv_coord_t src_w, lv_coord_t sr
 static void transform_point_upscaled(point_transform_dsc_t * t, int32_t xin, int32_t yin, int32_t * xout,
                                      int32_t * yout)
 {
-    xin -= t->pivot.x;
-    yin -= t->pivot.y;
-
-    xin = ((int32_t)(xin * t->zoom) >> 8) + t->pivot.x;
-    yin = ((int32_t)(yin * t->zoom) >> 8) + t->pivot.y;
-
-    if(t->angle == 0) {
+    if(t->angle == 0 && t->zoom == LV_IMG_ZOOM_NONE) {
         *xout = xin << 8;
         *yout = yin << 8;
         return;
     }
 
-    lv_coord_t xt = xin - t->pivot.x;
-    lv_coord_t yt = yin - t->pivot.y;
+    xin -= t->pivot.x;
+    yin -= t->pivot.y;
 
-    *xout = ((t->cosma * xt - t->sinma * yt) >> 2) + t->pivot.x * 256;
-    *yout = ((t->sinma * xt + t->cosma * yt) >> 2) + t->pivot.y * 256;
-
+    if(t->angle == 0) {
+        *xout = ((int32_t)(xin * t->zoom)) + (t->pivot.x << 8);
+        *yout = ((int32_t)(yin * t->zoom)) + (t->pivot.y << 8);
+    }
+    else if(t->zoom == LV_IMG_ZOOM_NONE) {
+        *xout = ((t->cosma * xin - t->sinma * yin) >> 2) + (t->pivot.x << 8);
+        *yout = ((t->sinma * xin + t->cosma * yin) >> 2) + (t->pivot.y << 8);
+    }
+    else {
+        *xout = (((t->cosma * xin - t->sinma * yin) * t->zoom) >> 10) + (t->pivot.x << 8);
+        *yout = (((t->sinma * xin + t->cosma * yin) * t->zoom) >> 10) + (t->pivot.y << 8);
+    }
 }
 
 #endif

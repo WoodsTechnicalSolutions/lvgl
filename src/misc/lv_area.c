@@ -466,10 +466,9 @@ void lv_point_transform(lv_point_t * p, int32_t angle, int32_t zoom, const lv_po
     p->x -= pivot->x;
     p->y -= pivot->y;
 
-    p->x = (((int32_t)(p->x) * zoom) >> 8) + pivot->x;
-    p->y = (((int32_t)(p->y) * zoom) >> 8) + pivot->y;
-
     if(angle == 0) {
+        p->x = (((int32_t)(p->x) * zoom) >> 8) + pivot->x;
+        p->y = (((int32_t)(p->y) * zoom) >> 8) + pivot->y;
         return;
     }
 
@@ -493,13 +492,18 @@ void lv_point_transform(lv_point_t * p, int32_t angle, int32_t zoom, const lv_po
         cosma = cosma >> (LV_TRIGO_SHIFT - _LV_TRANSFORM_TRIGO_SHIFT);
         angle_prev = angle;
     }
-
-    lv_coord_t xt = p->x - pivot->x;
-    lv_coord_t yt = p->y - pivot->y;
-
-    p->x = ((cosma * xt - sinma * yt) >> _LV_TRANSFORM_TRIGO_SHIFT) + pivot->x;
-    p->y = ((sinma * xt + cosma * yt) >> _LV_TRANSFORM_TRIGO_SHIFT) + pivot->y;
+    int32_t x = p->x;
+    int32_t y = p->y;
+    if(zoom == 256) {
+        p->x = ((cosma * x - sinma * y) >> _LV_TRANSFORM_TRIGO_SHIFT) + pivot->x;
+        p->y = ((sinma * x + cosma * y) >> _LV_TRANSFORM_TRIGO_SHIFT) + pivot->y;
+    }
+    else {
+        p->x = (((cosma * x - sinma * y) * zoom) >> (_LV_TRANSFORM_TRIGO_SHIFT + 8)) + pivot->x;
+        p->y = (((sinma * x + cosma * y) * zoom) >> (_LV_TRANSFORM_TRIGO_SHIFT + 8)) + pivot->y;
+    }
 }
+
 
 /**********************
  *   STATIC FUNCTIONS

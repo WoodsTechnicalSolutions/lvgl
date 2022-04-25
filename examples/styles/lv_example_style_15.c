@@ -18,6 +18,7 @@ void lv_example_style_15(void)
 
     label = lv_label_create(btn);
     lv_label_set_text(label, "Normal");
+    lv_obj_center(label);
 
     /*Set opacity
      *The button and the label is rendered to a layer first and that layer is blended*/
@@ -28,6 +29,7 @@ void lv_example_style_15(void)
 
     label = lv_label_create(btn);
     lv_label_set_text(label, "Opa:50%");
+    lv_obj_center(label);
 
     /*Set transformations
      *The button and the label is rendered to a layer first and that layer is transformed*/
@@ -42,6 +44,7 @@ void lv_example_style_15(void)
 
     label = lv_label_create(btn);
     lv_label_set_text(label, "Transf.");
+    lv_obj_center(label);
 }
 
 #endif
