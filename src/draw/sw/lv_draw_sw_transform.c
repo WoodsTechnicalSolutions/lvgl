@@ -231,7 +231,7 @@ static void argb_and_rgb_aa(const uint8_t * src, lv_coord_t src_w, lv_coord_t sr
          *`fract` will be in range of 0x00..0xFF and `next` (+/-1) indicates the direction*/
         int32_t xs_fract = xs_ups & 0xFF;
         int32_t ys_fract = ys_ups & 0xFF;
-        printf("%d,%d; %d,%d\n", xs_int, xs_fract, ys_int, ys_fract);
+
         int32_t x_next;
         int32_t y_next;
         if(xs_fract < 0x80) {
