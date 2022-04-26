@@ -889,7 +889,7 @@ void refr_obj(lv_draw_ctx_t * draw_ctx, lv_obj_t * obj)
         /*Try again with a smaller buf size*/
         if(inlayer == LV_INTERMEDIATE_LAYER_TYPE_SIMPLE) {
             if(layer_buf == NULL) {
-                LV_LOG_WARN("Cannot allocate %"LV_PRIu32" bytes for layer buffer. Allocating %d bytes instead. (Reduced performance)",
+                LV_LOG_WARN("Cannot allocate %"LV_PRIu32" bytes for layer buffer. Allocating "LV_PRIu32" bytes instead. (Reduced performance)",
                             (uint32_t)buf_size_sub * px_size, (uint32_t)LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE * px_size);
                 buf_size_sub = LV_LAYER_SIMPLE_FALLBACK_BUF_SIZE;
                 if(buf_size_sub > buf_size_full) buf_size_sub = buf_size_full;
