@@ -4,11 +4,9 @@ class KeyboardEncoder:
         self.g.set_default()
 
         cur_drv = lv.indev_t.__cast__(None)
-        while True:
+        while cur_drv != None:
             cur_drv = cur_drv.get_next()
 
-            if not cur_drv :
-                break
             if cur_drv.get_type() == lv.INDEV_TYPE.KEYPAD:
                 print("Found keypad")
                 cur_drv.set_group(self.g)
