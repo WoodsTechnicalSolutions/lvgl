@@ -50,7 +50,7 @@ typedef enum {
 typedef enum {
     LV_DRAW_TASK_STATE_WAITING,     /*Waiting for something to be finished. E.g. rendering a layer*/
     LV_DRAW_TASK_STATE_QUEUED,
-    LV_DRAW_TASK_STATE_IN_PRGRESS,
+    LV_DRAW_TASK_STATE_IN_PROGRESS,
     LV_DRAW_TASK_STATE_READY,
 } lv_draw_task_state_t;
 
