@@ -59,6 +59,7 @@ extern "C" {
     LV_DISPATCH(f, void * , _lv_theme_default_styles)                                                  \
     LV_DISPATCH(f, void * , _lv_theme_basic_styles)                                                    \
     LV_DISPATCH(f, uint8_t * , _lv_style_custom_prop_flag_lookup_table)                                \
+    LV_DISPATCH(f, lv_draw_unit_t *, _lv_draw_unit_head)                                \
     LV_DISPATCH(f, lv_ll_t, _subs_ll)
 
 #define LV_DEFINE_ROOT(root_type, root_name) root_type root_name;
