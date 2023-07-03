@@ -168,7 +168,7 @@ lv_res_t lv_ffmpeg_player_set_src(lv_obj_t * obj, const char * path)
     uint32_t data_size = 0;
 
     data_size = width * height * 4;
-    
+
 
     player->imgdsc.header.always_zero = 0;
     player->imgdsc.header.w = width;

@@ -119,7 +119,7 @@ static int32_t lv_draw_sw_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * laye
 
         uint8_t * buf = lv_malloc(layer_size_byte);
         if(buf == NULL) {
-            LV_LOG_WARN("Allocating %d bytes of layer buffer failed. Try later", layer_size_byte);
+            LV_LOG_WARN("Allocating %"LV_PRIu32" bytes of layer buffer failed. Try later", layer_size_byte);
             return -1;
         }
         LV_ASSERT_MALLOC(buf);
