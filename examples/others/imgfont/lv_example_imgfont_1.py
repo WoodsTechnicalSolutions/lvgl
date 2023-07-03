@@ -14,16 +14,15 @@ try:
 except NameError: 
     script_path = ''
     
-def get_imgfont_path(font, img_src, length, unicode, unicode_next, offset_y, user_data) :
-    if unicode < 0xf600:
-        return
-    if LV_USE_FFMPEG:
-        path = bytes(script_path + "/../../assets/emoji/{:04X}.png".format(unicode) + "\0","ascii")
-    else:
-        path = bytes("A:"+ script_path + "/../../assets/emoji/{:04X}.png".format(unicode) + "\0","ascii")
-    # print("image path: ",path)
-    img_src.__dereference__(length)[0:len(path)] = path
-    return True
+def get_imgfont_path(font, unicode, unicode_next, offset_y, user_data) :
+    if unicode < 0xf000: None
+    if unicode == 0xF600:
+        if LV_USE_FFMPEG:
+            return bytes(script_path + "/../../assets/emoji/{:04X}.png".format(unicode) + "\0","ascii")
+        else:
+            return bytes("A:"+ script_path + "/../../assets/emoji/{:04X}.png".format(unicode) + "\0","ascii")
+
+    return None
 
 #
 # draw img in label or span obj

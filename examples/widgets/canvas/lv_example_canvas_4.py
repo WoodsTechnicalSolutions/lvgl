@@ -46,7 +46,22 @@ if script_path != '':
             dsc.font = font_montserrat_18
 
 dsc.decor = lv.TEXT_DECOR.UNDERLINE
-print('Printing "Hello"')
-canvas.draw_text(10, 10, 30, dsc, "Hello")
+dsc.text = "Hello"
+
+
+layer = lv.layer_t()
+canvas.init_layer(layer);
+
+
+coords = lv.area_t()
+coords.x1 = 10
+coords.y1 = 10
+coords.x2 = 40
+coords.y2 = 30
+
+
+lv.draw_label(layer, dsc, coords)
+
+canvas.finish_layer(layer)
 
 
