@@ -227,7 +227,7 @@ static void flush_cb(lv_disp_t * disp, const lv_area_t * area, uint8_t * color_p
     int32_t y;
     for(y = area->y1; y <= area->y2; y++) {
         location = (area->x1 + dsc->vinfo.xoffset) + (y + dsc->vinfo.yoffset) * dsc->finfo.line_length;
-        lv_memcpy(&fbp32[location], (uint32_t *)color_p, w * px_size);
+        lv_memcpy(&fbp[location], (uint32_t *)color_p, w * px_size);
         color_p += w * px_size;
     }
 
