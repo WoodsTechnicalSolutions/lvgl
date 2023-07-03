@@ -29,7 +29,7 @@
     static void render_thread_cb(void * ptr);
 #endif
 
-static void exectue_drawing(lv_draw_sw_unit_t * u);
+static void execute_drawing(lv_draw_sw_unit_t * u);
 
 static int32_t lv_draw_sw_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * layer);
 
@@ -146,7 +146,7 @@ static int32_t lv_draw_sw_dispatch(lv_draw_unit_t * draw_unit, lv_layer_t * laye
     draw_sw_unit->base_unit.clip_area = &t->clip_area;
     draw_sw_unit->task_act = t;
 
-    exectue_drawing(draw_sw_unit);
+    execute_drawing(draw_sw_unit);
 
     draw_sw_unit->task_act->state = LV_DRAW_TASK_STATE_READY;
     draw_sw_unit->task_act = NULL;
@@ -287,7 +287,7 @@ static void render_thread_cb(void * ptr)
             lv_thread_sync_wait(&u->sync);
         }
 
-        exectue_drawing(u);
+        execute_drawing(u);
 
         /*Cleaup*/
         u->task_act->state = LV_DRAW_TASK_STATE_READY;
@@ -299,7 +299,7 @@ static void render_thread_cb(void * ptr)
 }
 #endif
 
-static void exectue_drawing(lv_draw_sw_unit_t * u)
+static void execute_drawing(lv_draw_sw_unit_t * u)
 {
     /*Render the draw task*/
     lv_draw_task_t * t = u->task_act;
