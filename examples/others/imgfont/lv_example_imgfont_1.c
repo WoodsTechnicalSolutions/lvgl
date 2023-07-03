@@ -14,7 +14,7 @@ static const void * get_imgfont_path(const lv_font_t * font, uint32_t unicode, u
     LV_UNUSED(offset_y);
     LV_UNUSED(user_data);
 
-    if(unicode < 0xF000) return false;
+    if(unicode < 0xF000) return NULL;
 
     if(unicode == 0xF617) {
         return &emoji_F617;
