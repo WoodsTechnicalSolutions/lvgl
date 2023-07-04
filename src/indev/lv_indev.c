@@ -6,11 +6,9 @@
 /*********************
  *      INCLUDES
  ********************/
-#include "../disp/lv_disp.h"
-#include "../disp/lv_disp_private.h"
-#include "lv_indev.h"
 #include "lv_indev_private.h"
 #include "lv_indev_scroll.h"
+#include "../disp/lv_disp_private.h"
 #include "../core/lv_obj.h"
 #include "../core/lv_group.h"
 #include "../core/lv_refr.h"

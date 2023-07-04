@@ -14,7 +14,8 @@ extern "C" {
  *      INCLUDES
  *********************/
 #include "../core/lv_obj.h"
-#include "../themes/lv_theme.h"
+#include "../draw/lv_draw.h"
+#include "lv_disp.h"
 
 /*********************
  *      DEFINES
@@ -28,8 +29,6 @@ extern "C" {
  **********************/
 
 struct _lv_disp_t;
-
-typedef void (*lv_disp_flush_cb_t)(struct _lv_disp_t * disp, const lv_area_t * area, uint8_t * px_map);
 
 struct _lv_disp_t {
 

@@ -7,6 +7,8 @@
  *      INCLUDES
  *********************/
 #include "core/lv_obj.h"
+#include "disp/lv_disp_private.h"
+#include "indev/lv_indev_private.h"
 #include "layouts/lv_layouts.h"
 #include "libs/bmp/lv_bmp.h"
 #include "libs/ffmpeg/lv_ffmpeg.h"
