@@ -116,8 +116,6 @@ extern "C" {
 #include "src/dev/disp/drm/lv_linux_drm.h"
 #include "src/dev/disp/fb/lv_linux_fbdev.h"
 
-#include "src/lvgl_private.h"
-
 /*********************
  *      DEFINES
  *********************/
