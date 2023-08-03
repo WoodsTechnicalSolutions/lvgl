@@ -176,6 +176,7 @@ typedef struct _lv_obj_t {
     struct _lv_obj_t * parent;
     _lv_obj_spec_attr_t * spec_attr;
     _lv_obj_style_t * styles;
+    uint32_t style_props[8];
     void * user_data;
     lv_area_t coords;
     lv_obj_flag_t flags;

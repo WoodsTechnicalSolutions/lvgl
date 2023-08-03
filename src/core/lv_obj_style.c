@@ -113,6 +113,22 @@ void lv_obj_add_style(lv_obj_t * obj, const lv_style_t * style, lv_style_selecto
     obj->styles[i].style = style;
     obj->styles[i].selector = selector;
 
+
+
+    if(style->prop_cnt == 1) {
+        uint32_t idx = style->prop1 / 32;
+        obj->style_props[idx] |= 1 << (style->prop1 & 0x1F);
+    }
+    else {
+        uint8_t * tmp = style->v_p.values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
+        uint16_t * props = (uint16_t *)tmp;
+        for(i = 0; i < style->prop_cnt; i++) {
+            uint32_t idx = props[i] / 32;
+            obj->style_props[idx] |= 1 << (props[i] & 0x1F);
+        }
+    }
+
+
     lv_obj_refresh_style(obj, selector, LV_STYLE_PROP_ANY);
 }
 
@@ -342,6 +358,12 @@ void lv_obj_set_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_style_
     if(selector == LV_PART_MAIN && lv_style_prop_has_flag(prop, LV_STYLE_PROP_FLAG_TRANSFORM))
         lv_obj_invalidate(obj);
     lv_style_set_prop(style, prop, value);
+
+
+    uint32_t idx = prop / 32;
+    obj->style_props[idx] |= 1 << (prop & 0x1F);
+
+
     lv_obj_refresh_style(obj, selector, prop);
 }
 
@@ -643,6 +665,18 @@ static _lv_obj_style_t * get_trans_style(lv_obj_t * obj,  lv_style_selector_t se
 
 static lv_style_res_t get_prop_core(const lv_obj_t * obj, lv_part_t part, lv_style_prop_t prop, lv_style_value_t * v)
 {
+
+    //    static uint32_t total = 0;
+    //    static uint32_t skip = 0;
+    //    total++;
+
+    uint32_t idx = prop / 32;
+    if((obj->style_props[idx] & (1 << (prop & 0x1F))) == 0) {
+        //        skip++;
+        //        if((skip % 1000) == 0) printf("%d %%\n", skip * 100 / total);
+        return LV_STYLE_RES_NOT_FOUND;
+    }
+
     uint8_t group = 1 << _lv_style_get_prop_group(prop);
     int32_t weight = -1;
     lv_state_t state = obj->state;
