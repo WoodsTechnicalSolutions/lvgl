@@ -297,14 +297,13 @@ void lv_style_transition_dsc_init(lv_style_transition_dsc_t * tr, const lv_style
 
 lv_style_value_t lv_style_prop_get_default(lv_style_prop_t prop)
 {
-    lv_style_value_t value = {0};
+	const lv_color_t black = LV_COLOR_MAKE(0x00, 0x00, 0x00);
+	const lv_color_t white = LV_COLOR_MAKE(0xff, 0xff, 0xff);
     switch(prop) {
         case LV_STYLE_TRANSFORM_ZOOM:
-            value.num = LV_ZOOM_NONE;
-            break;
+            return (lv_style_value_t){.num = LV_ZOOM_NONE};
         case LV_STYLE_BG_COLOR:
-            value.color = lv_color_white();
-            break;
+        	return (lv_style_value_t){.color = black};
         case LV_STYLE_BG_GRAD_COLOR:
         case LV_STYLE_BORDER_COLOR:
         case LV_STYLE_SHADOW_COLOR:
@@ -313,8 +312,7 @@ lv_style_value_t lv_style_prop_get_default(lv_style_prop_t prop)
         case LV_STYLE_LINE_COLOR:
         case LV_STYLE_TEXT_COLOR:
         case LV_STYLE_IMG_RECOLOR:
-            value.color = lv_color_black();
-            break;
+        	return (lv_style_value_t){.color = white};
         case LV_STYLE_OPA:
         case LV_STYLE_BORDER_OPA:
         case LV_STYLE_TEXT_OPA:
@@ -324,28 +322,19 @@ lv_style_value_t lv_style_prop_get_default(lv_style_prop_t prop)
         case LV_STYLE_SHADOW_OPA:
         case LV_STYLE_LINE_OPA:
         case LV_STYLE_ARC_OPA:
-            value.num = LV_OPA_COVER;
-            break;
+            return (lv_style_value_t){.num = LV_OPA_COVER};
         case LV_STYLE_BG_GRAD_STOP:
-            value.num = 255;
-            break;
+            return (lv_style_value_t){.num = 255};
         case LV_STYLE_BORDER_SIDE:
-            value.num = LV_BORDER_SIDE_FULL;
-            break;
+            return (lv_style_value_t){.num = LV_BORDER_SIDE_FULL};
         case LV_STYLE_TEXT_FONT:
-            value.ptr = LV_FONT_DEFAULT;
-            break;
+            return (lv_style_value_t){.ptr = LV_FONT_DEFAULT};
         case LV_STYLE_MAX_WIDTH:
         case LV_STYLE_MAX_HEIGHT:
-            value.num = LV_COORD_MAX;
-            break;
+            return (lv_style_value_t){.num = LV_COORD_MAX};
         default:
-            value.ptr = NULL;
-            value.num = 0;
-            break;
+            return (lv_style_value_t){.ptr = 0};
     }
-
-    return value;
 }
 
 bool lv_style_is_empty(const lv_style_t * style)
