@@ -723,14 +723,14 @@ static _lv_obj_style_t * get_trans_style(lv_obj_t * obj,  lv_style_selector_t se
 
 static lv_style_res_t get_prop_core(const lv_obj_t * obj, lv_part_t part, lv_style_prop_t prop, lv_style_value_t * v)
 {
-    uint32_t group = (uint32_t)1 << _lv_style_get_prop_group(prop);
+
+    const uint32_t group = (uint32_t)1 << _lv_style_get_prop_group(prop);
+    const lv_state_t state = obj->state;
+    const lv_state_t state_inv = ~state;
+    const bool skip_trans = obj->skip_trans;
     int32_t weight = -1;
-    lv_state_t state = obj->state;
-    lv_state_t state_inv = ~state;
-    lv_style_value_t value_tmp;
-    bool skip_trans = obj->skip_trans;
-    uint32_t i;
     lv_style_res_t found;
+    uint32_t i;
     for(i = 0; i < obj->style_cnt; i++) {
         _lv_obj_style_t * obj_style = &obj->styles[i];
         if(obj_style->is_trans == false) break;
@@ -740,9 +740,8 @@ static lv_style_res_t get_prop_core(const lv_obj_t * obj, lv_part_t part, lv_sty
 
         if(part_act != part) continue;
         if((obj_style->style->has_group & group) == 0) continue;
-        found = lv_style_get_prop_inlined(obj_style->style, prop, &value_tmp);
+        found = lv_style_get_prop_inlined(obj_style->style, prop, v);
         if(found == LV_STYLE_RES_FOUND) {
-            *v = value_tmp;
             return LV_STYLE_RES_FOUND;
         }
     }
@@ -751,34 +750,26 @@ static lv_style_res_t get_prop_core(const lv_obj_t * obj, lv_part_t part, lv_sty
         if((obj->styles[i].style->has_group & group) == 0) continue;
         _lv_obj_style_t * obj_style = &obj->styles[i];
         lv_part_t part_act = lv_obj_style_get_selector_part(obj->styles[i].selector);
-        lv_state_t state_act = lv_obj_style_get_selector_state(obj->styles[i].selector);
         if(part_act != part) continue;
 
         /*Be sure the style not specifies other state than the requested.
          *E.g. For HOVER+PRESS object state, HOVER style only is OK, but HOVER+FOCUS style is not*/
+        lv_state_t state_act = lv_obj_style_get_selector_state(obj->styles[i].selector);
         if((state_act & state_inv)) continue;
 
         /*Check only better candidates*/
         if(state_act <= weight) continue;
 
-        found = lv_style_get_prop(obj_style->style, prop, &value_tmp);
-
+        found = lv_style_get_prop_inlined(obj_style->style, prop, v);
         if(found == LV_STYLE_RES_FOUND) {
             if(state_act == state) {
-                *v = value_tmp;
                 return LV_STYLE_RES_FOUND;
             }
-            if(weight < state_act) {
-                weight = state_act;
-                *v = value_tmp;
-            }
+			weight = state_act;
         }
     }
 
-    if(weight >= 0) {
-        *v = value_tmp;
-        return LV_STYLE_RES_FOUND;
-    }
+    if(weight >= 0) return LV_STYLE_RES_FOUND;
     else return LV_STYLE_RES_NOT_FOUND;
 }
 

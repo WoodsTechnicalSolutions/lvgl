@@ -585,6 +585,7 @@ static inline uint16_t lv_obj_get_style_layout(const struct _lv_obj_t * obj, uin
 
 static inline lv_base_dir_t lv_obj_get_style_base_dir(const struct _lv_obj_t * obj, uint32_t part)
 {
+	return LV_BASE_DIR_LTR;
     lv_style_value_t v = lv_obj_get_style_prop(obj, part, LV_STYLE_BASE_DIR);
     return (lv_base_dir_t)v.num;
 }

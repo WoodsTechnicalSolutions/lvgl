@@ -344,13 +344,6 @@ bool lv_style_is_empty(const lv_style_t * style)
     return style->prop_cnt == 0 ? true : false;
 }
 
-uint32_t _lv_style_get_prop_group(lv_style_prop_t prop)
-{
-    uint32_t group = (prop & 0x1FF) >> 2;
-    if(group > 30) group = 31;    /*The MSB marks all the custom properties*/
-    return group;
-}
-
 uint8_t _lv_style_prop_lookup_flags(lv_style_prop_t prop)
 {
     extern const uint8_t _lv_style_builtin_prop_flag_lookup_table[];

@@ -523,7 +523,13 @@ bool lv_style_is_empty(const lv_style_t * style);
  * @param prop a style property
  * @return the group [0..7] 7 means all the custom properties with index > 112
  */
-uint32_t _lv_style_get_prop_group(lv_style_prop_t prop);
+static inline uint32_t _lv_style_get_prop_group(lv_style_prop_t prop)
+{
+	uint32_t group = prop >> 2;
+	if(group > 30) group = 31;    /*The MSB marks all the custom properties*/
+	return group;
+
+}
 
 /**
  * Get the flags of a built-in or custom property.
@@ -532,6 +538,7 @@ uint32_t _lv_style_get_prop_group(lv_style_prop_t prop);
  * @return the flags of the property
  */
 uint8_t _lv_style_prop_lookup_flags(lv_style_prop_t prop);
+
 
 #include "lv_style_gen.h"
 
