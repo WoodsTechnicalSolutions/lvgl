@@ -334,7 +334,7 @@ enum _lv_style_prop_t {
 #ifdef DOXYGEN
 typedef _lv_style_prop_t lv_style_prop_t;
 #else
-typedef uint16_t lv_style_prop_t;
+typedef uint8_t lv_style_prop_t;
 #endif /*DOXYGEN*/
 
 enum _lv_style_res_t {
@@ -498,14 +498,10 @@ lv_style_value_t lv_style_prop_get_default(lv_style_prop_t prop);
 static inline lv_style_res_t lv_style_get_prop_inlined(const lv_style_t * style, lv_style_prop_t prop,
                                                        lv_style_value_t * value)
 {
-    if(style->prop_cnt == 0) return LV_STYLE_RES_NOT_FOUND;
-
-    uint8_t * tmp = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
-    uint16_t * props = (uint16_t *)tmp;
+	lv_style_prop_t * props = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
     uint32_t i;
     for(i = 0; i < style->prop_cnt; i++) {
-        lv_style_prop_t prop_id = props[i];
-        if(prop_id == prop) {
+        if(props[i] == prop) {
             lv_style_value_t * values = (lv_style_value_t *)style->values_and_props;
             *value = values[i];
             return LV_STYLE_RES_FOUND;

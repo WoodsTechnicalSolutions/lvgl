@@ -85,8 +85,7 @@ void lv_obj_add_style(lv_obj_t * obj, const lv_style_t * style, lv_style_selecto
     lv_part_t part = lv_obj_style_get_selector_part(selector);
 
     if(style && part == LV_PART_MAIN) {
-        uint8_t * tmp = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
-        uint16_t * props = (uint16_t *)tmp;
+    	lv_style_prop_t * props = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
         uint32_t i;
         for(i = 0; i < style->prop_cnt; i++) {
             if(lv_style_prop_has_flag(props[i], LV_STYLE_PROP_FLAG_TRANSFORM)) {
@@ -124,16 +123,13 @@ void lv_obj_add_style(lv_obj_t * obj, const lv_style_t * style, lv_style_selecto
     obj->styles[i].style = style;
     obj->styles[i].selector = selector;
 
+	lv_style_prop_t * props = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
     if(part == 0) {
-        uint8_t * tmp = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
-        uint16_t * props = (uint16_t *)tmp;
         for(i = 0; i < style->prop_cnt; i++) {
             obj->style_main_prop_is_set |= (uint32_t)1 << (props[i] >> 2);
         }
     }
     else {
-        uint8_t * tmp = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
-        uint16_t * props = (uint16_t *)tmp;
         for(i = 0; i < style->prop_cnt; i++) {
             obj->style_other_prop_is_set |= (uint32_t)1 << (props[i] >> 2);
         }
@@ -196,8 +192,7 @@ void lv_obj_remove_style(lv_obj_t * obj, const lv_style_t * style, lv_style_sele
     if(style && style->prop_cnt == 0) prop = LV_STYLE_PROP_INV;
 
     if(style && part == LV_PART_MAIN) {
-        uint8_t * tmp = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
-        uint16_t * props = (uint16_t *)tmp;
+    	lv_style_prop_t * props = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
         uint32_t i;
         for(i = 0; i < style->prop_cnt; i++) {
             if(lv_style_prop_has_flag(props[i], LV_STYLE_PROP_FLAG_TRANSFORM)) {
@@ -745,7 +740,7 @@ static lv_style_res_t get_prop_core(const lv_obj_t * obj, lv_part_t part, lv_sty
 
         if(part_act != part) continue;
         if((obj_style->style->has_group & group) == 0) continue;
-        found = lv_style_get_prop(obj_style->style, prop, &value_tmp);
+        found = lv_style_get_prop_inlined(obj_style->style, prop, &value_tmp);
         if(found == LV_STYLE_RES_FOUND) {
             *v = value_tmp;
             return LV_STYLE_RES_FOUND;
