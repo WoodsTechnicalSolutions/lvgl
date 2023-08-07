@@ -160,6 +160,7 @@ void lv_sdl_quit()
 
 static void flush_cb(lv_disp_t * disp, const lv_area_t * area, uint8_t * px_map)
 {
+
 #if LV_SDL_PARTIAL_MODE
     int32_t y;
     lv_sdl_window_t * dsc = lv_disp_get_driver_data(disp);
@@ -178,7 +179,6 @@ static void flush_cb(lv_disp_t * disp, const lv_area_t * area, uint8_t * px_map)
     LV_UNUSED(area);
     LV_UNUSED(px_map);
 #endif
-
 
     /* TYPICALLY YOU DO NOT NEED THIS
      * If it was the last part to refresh update the texture of the window.*/

@@ -216,9 +216,16 @@ void lv_obj_fade_in(struct _lv_obj_t * obj, uint32_t time, uint32_t delay);
  */
 void lv_obj_fade_out(struct _lv_obj_t * obj, uint32_t time, uint32_t delay);
 
-lv_state_t lv_obj_style_get_selector_state(lv_style_selector_t selector);
 
-lv_part_t lv_obj_style_get_selector_part(lv_style_selector_t selector);
+static inline lv_state_t lv_obj_style_get_selector_state(lv_style_selector_t selector)
+{
+    return selector & 0xFFFF;
+}
+
+static inline lv_part_t lv_obj_style_get_selector_part(lv_style_selector_t selector)
+{
+    return selector & 0xFF0000;
+}
 
 #include "lv_obj_style_gen.h"
 
