@@ -55,23 +55,21 @@ LV_EXPORT_CONST_INT(LV_ZOOM_NONE);
 #define LV_STYLE_CONST_INIT(var_name, prop_array)                       \
     const lv_style_t var_name = {                                       \
         .sentinel = LV_STYLE_SENTINEL_VALUE,                            \
-        .v_p = { .const_props = prop_array },                           \
-        .has_group = 0xFF,                                              \
-        .prop1 = _LV_STYLE_PROP_CONST,                                     \
-        .prop_cnt = (sizeof(prop_array) / sizeof((prop_array)[0])),     \
+        .values_and_props = (void*)prop_array,                                      \
+        .has_group = 0xFFFFFFFF,                                        \
+        .prop_cnt = 255                                               \
     }
 #else
 #define LV_STYLE_CONST_INIT(var_name, prop_array)                       \
     const lv_style_t var_name = {                                       \
-        .v_p = { .const_props = prop_array },                           \
-        .has_group = 0xFF,                                              \
-        .prop1 = _LV_STYLE_PROP_CONST,                                     \
-        .prop_cnt = (sizeof(prop_array) / sizeof((prop_array)[0])),     \
+        .values_and_props = prop_array,                                      \
+        .has_group = 0xFFFFFFFF,                                        \
+        .prop_cnt = 255,                                               \
     }
 #endif
 // *INDENT-ON*
 
-#define LV_STYLE_CONST_PROPS_END { .prop_ptr = &lv_style_const_prop_id_inv, .value = { .num = 0 } }
+#define LV_STYLE_CONST_PROPS_END { .prop_ptr = NULL, .value = { .num = 0 } }
 
 /**********************
  *      TYPEDEFS
@@ -327,8 +325,8 @@ enum _lv_style_prop_t {
     _LV_STYLE_LAST_BUILT_IN_PROP     = 111,
     _LV_STYLE_NUM_BUILT_IN_PROPS     = _LV_STYLE_LAST_BUILT_IN_PROP + 1,
 
-    LV_STYLE_PROP_ANY                = 0xFFFF,
-    _LV_STYLE_PROP_CONST             = 0xFFFF /* magic value for const styles */
+    LV_STYLE_PROP_ANY                = 0xFF,
+    _LV_STYLE_PROP_CONST             = 0xFF /* magic value for const styles */
 };
 
 #ifdef DOXYGEN
@@ -377,11 +375,10 @@ typedef struct {
     uint32_t sentinel;
 #endif
 
-    uint8_t * values_and_props;
-    //    const lv_style_const_prop_t * const_props;
+    void * values_and_props;
 
     uint32_t has_group;
-    uint8_t prop_cnt;
+    uint8_t prop_cnt;   /**< 255 means it's a constant style*/
 } lv_style_t;
 
 /**********************
@@ -443,15 +440,6 @@ bool lv_style_remove_prop(lv_style_t * style, lv_style_prop_t prop);
 void lv_style_set_prop(lv_style_t * style, lv_style_prop_t prop, lv_style_value_t value);
 
 /**
- * Set a special meta state for a property in a style.
- * This function shouldn't be used directly by the user.
- * @param style pointer to style
- * @param prop the ID of a property (e.g. `LV_STYLE_BG_COLOR`)
- * @param meta the meta value to attach to the property in the style
- */
-void lv_style_set_prop_meta(lv_style_t * style, lv_style_prop_t prop, uint16_t meta);
-
-/**
  * Get the value of a property
  * @param style pointer to a style
  * @param prop  the ID of a property
@@ -498,13 +486,25 @@ lv_style_value_t lv_style_prop_get_default(lv_style_prop_t prop);
 static inline lv_style_res_t lv_style_get_prop_inlined(const lv_style_t * style, lv_style_prop_t prop,
                                                        lv_style_value_t * value)
 {
-	lv_style_prop_t * props = style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
-    uint32_t i;
-    for(i = 0; i < style->prop_cnt; i++) {
-        if(props[i] == prop) {
-            lv_style_value_t * values = (lv_style_value_t *)style->values_and_props;
-            *value = values[i];
-            return LV_STYLE_RES_FOUND;
+    if(style->prop_cnt == 255) {
+        lv_style_const_prop_t * props = style->values_and_props;
+        uint32_t i;
+        for(i = 0; props[i].prop_ptr; i++) {
+            if(*props[i].prop_ptr == prop) {
+                *value = props[i].value;
+                return LV_STYLE_RES_FOUND;
+            }
+        }
+    }
+    else {
+        lv_style_prop_t * props = (lv_style_prop_t *)style->values_and_props + style->prop_cnt * sizeof(lv_style_value_t);
+        uint32_t i;
+        for(i = 0; i < style->prop_cnt; i++) {
+            if(props[i] == prop) {
+                lv_style_value_t * values = (lv_style_value_t *)style->values_and_props;
+                *value = values[i];
+                return LV_STYLE_RES_FOUND;
+            }
         }
     }
     return LV_STYLE_RES_NOT_FOUND;
@@ -521,13 +521,13 @@ bool lv_style_is_empty(const lv_style_t * style);
  * Tell the group of a property. If the a property from a group is set in a style the (1 << group) bit of style->has_group is set.
  * It allows early skipping the style if the property is not exists in the style at all.
  * @param prop a style property
- * @return the group [0..7] 7 means all the custom properties with index > 112
+ * @return the group [0..30] 30 means all the custom properties with index > 120
  */
 static inline uint32_t _lv_style_get_prop_group(lv_style_prop_t prop)
 {
-	uint32_t group = prop >> 2;
-	if(group > 30) group = 31;    /*The MSB marks all the custom properties*/
-	return group;
+    uint32_t group = prop >> 2;
+    if(group > 30) group = 31;    /*The MSB marks all the custom properties*/
+    return group;
 
 }
 
