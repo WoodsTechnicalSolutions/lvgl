@@ -689,19 +689,17 @@
     #endif
 #endif
 
-/*Default image cache size. Image caching keeps some images opened.
- *If only the built-in image formats are used there is no real advantage of caching.
- *With other image decoders (e.g. PNG or JPG) caching save the continuous open/decode of images.
- *However the opened images consume additional RAM.
- *0: to disable caching*/
-#ifndef LV_IMG_CACHE_DEF_SIZE
-    #ifdef CONFIG_LV_IMG_CACHE_DEF_SIZE
-        #define LV_IMG_CACHE_DEF_SIZE CONFIG_LV_IMG_CACHE_DEF_SIZE
+/*Default cache size in bytes.
+ *Used by image decoders such as `lv_png` to keep the decoded image in the memory.
+ *Data larger than the size of the cache also can be allocated but
+ *will be dropped immediately after usage.*/
+#ifndef LV_CACHE_DEF_SIZE
+    #ifdef CONFIG_LV_CACHE_DEF_SIZE
+        #define LV_CACHE_DEF_SIZE CONFIG_LV_CACHE_DEF_SIZE
     #else
-        #define LV_IMG_CACHE_DEF_SIZE 0
+        #define LV_CACHE_DEF_SIZE       0
     #endif
 #endif
-
 
 /*Number of stops allowed per gradient. Increase this to allow more stops.
  *This adds (sizeof(lv_color_t) + 1) bytes per additional stop*/
@@ -2226,11 +2224,11 @@
     #endif
 
     /*1: Use img cache to buffer header information*/
-    #ifndef LV_IMGFONT_USE_IMG_CACHE_HEADER
-        #ifdef CONFIG_LV_IMGFONT_USE_IMG_CACHE_HEADER
-            #define LV_IMGFONT_USE_IMG_CACHE_HEADER CONFIG_LV_IMGFONT_USE_IMG_CACHE_HEADER
+    #ifndef LV_IMGFONT_USE_IMAGE_CACHE_HEADER
+        #ifdef CONFIG_LV_IMGFONT_USE_IMAGE_CACHE_HEADER
+            #define LV_IMGFONT_USE_IMAGE_CACHE_HEADER CONFIG_LV_IMGFONT_USE_IMAGE_CACHE_HEADER
         #else
-            #define LV_IMGFONT_USE_IMG_CACHE_HEADER 0
+            #define LV_IMGFONT_USE_IMAGE_CACHE_HEADER 0
         #endif
     #endif
 #endif
