@@ -322,10 +322,10 @@ void lv_keyboard_def_event_cb(lv_event_t * e)
 
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_keyboard_t * keyboard = (lv_keyboard_t *)obj;
-    uint16_t btn_id   = lv_buttonmatrix_get_selected_button(obj);
+    uint16_t btn_id = lv_buttonmatrix_get_selected_button(obj);
     if(btn_id == LV_BUTTONMATRIX_BUTTON_NONE) return;
 
-    const char * txt = lv_buttonmatrix_get_button_text(obj, lv_buttonmatrix_get_selected_button(obj));
+    const char * txt = lv_buttonmatrix_get_button_text(obj, btn_id);
     if(txt == NULL) return;
 
     if(strcmp(txt, "abc") == 0) {
