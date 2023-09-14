@@ -23,6 +23,8 @@ extern "C" {
  *      TYPEDEFS
  **********************/
 
+typedef lv_image_dsc_t lv_img_dsc_t;
+
 /**********************
  * GLOBAL PROTOTYPES
  **********************/

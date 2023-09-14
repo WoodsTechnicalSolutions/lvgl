@@ -398,7 +398,7 @@ static lv_obj_t * create_cont(lv_obj_t * parent)
 #else
     lv_obj_set_size(player, LV_HOR_RES, LV_VER_RES + LV_DEMO_MUSIC_HANDLE_SIZE * 2);
 #endif
-    lv_obj_clear_flag(player, LV_OBJ_FLAG_SNAPABLE);
+    lv_obj_clear_flag(player, LV_OBJ_FLAG_SNAPPABLE);
 
     lv_obj_set_style_bg_color(player, lv_color_hex(0xffffff), 0);
     lv_obj_set_style_border_width(player, 0, 0);
@@ -565,39 +565,39 @@ static lv_obj_t * create_ctrl_box(lv_obj_t * parent)
     static const lv_coord_t grid_row[] = {LV_GRID_CONTENT, LV_GRID_CONTENT, LV_GRID_TEMPLATE_LAST};
     lv_obj_set_grid_dsc_array(cont, grid_col, grid_row);
 
-    LV_IMAGE_DECLARE(img_lv_demo_music_button_loop);
-    LV_IMAGE_DECLARE(img_lv_demo_music_button_rnd);
-    LV_IMAGE_DECLARE(img_lv_demo_music_button_next);
-    LV_IMAGE_DECLARE(img_lv_demo_music_button_prev);
-    LV_IMAGE_DECLARE(img_lv_demo_music_button_play);
-    LV_IMAGE_DECLARE(img_lv_demo_music_button_pause);
+    LV_IMAGE_DECLARE(img_lv_demo_music_btn_loop);
+    LV_IMAGE_DECLARE(img_lv_demo_music_btn_rnd);
+    LV_IMAGE_DECLARE(img_lv_demo_music_btn_next);
+    LV_IMAGE_DECLARE(img_lv_demo_music_btn_prev);
+    LV_IMAGE_DECLARE(img_lv_demo_music_btn_play);
+    LV_IMAGE_DECLARE(img_lv_demo_music_btn_pause);
 
     lv_obj_t * icon;
     icon = lv_image_create(cont);
-    lv_image_set_src(icon, &img_lv_demo_music_button_rnd);
+    lv_image_set_src(icon, &img_lv_demo_music_btn_rnd);
     lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_CENTER, 0, 1);
 
     icon = lv_image_create(cont);
-    lv_image_set_src(icon, &img_lv_demo_music_button_loop);
+    lv_image_set_src(icon, &img_lv_demo_music_btn_loop);
     lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_END, 5, 1, LV_GRID_ALIGN_CENTER, 0, 1);
 
     icon = lv_image_create(cont);
-    lv_image_set_src(icon, &img_lv_demo_music_button_prev);
+    lv_image_set_src(icon, &img_lv_demo_music_btn_prev);
     lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 0, 1);
     lv_obj_add_event(icon, prev_click_event_cb, LV_EVENT_CLICKED, NULL);
 
     play_obj = lv_imgbtn_create(cont);
-    lv_imgbtn_set_src(play_obj, LV_IMGBTN_STATE_RELEASED, NULL, &img_lv_demo_music_button_play, NULL);
-    lv_imgbtn_set_src(play_obj, LV_IMGBTN_STATE_CHECKED_RELEASED, NULL, &img_lv_demo_music_button_pause, NULL);
+    lv_imgbtn_set_src(play_obj, LV_IMGBTN_STATE_RELEASED, NULL, &img_lv_demo_music_btn_play, NULL);
+    lv_imgbtn_set_src(play_obj, LV_IMGBTN_STATE_CHECKED_RELEASED, NULL, &img_lv_demo_music_btn_pause, NULL);
     lv_obj_add_flag(play_obj, LV_OBJ_FLAG_CHECKABLE);
     lv_obj_set_grid_cell(play_obj, LV_GRID_ALIGN_CENTER, 3, 1, LV_GRID_ALIGN_CENTER, 0, 1);
 
     lv_obj_add_event(play_obj, play_event_click_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_add_flag(play_obj, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_set_width(play_obj, img_lv_demo_music_button_play.header.w);
+    lv_obj_set_width(play_obj, img_lv_demo_music_btn_play.header.w);
 
     icon = lv_image_create(cont);
-    lv_image_set_src(icon, &img_lv_demo_music_button_next);
+    lv_image_set_src(icon, &img_lv_demo_music_btn_next);
     lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_CENTER, 4, 1, LV_GRID_ALIGN_CENTER, 0, 1);
     lv_obj_add_event(icon, next_click_event_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_add_flag(icon, LV_OBJ_FLAG_CLICKABLE);

@@ -39,8 +39,8 @@ static lv_style_t style_button_dis;
 static lv_style_t style_title;
 static lv_style_t style_artist;
 static lv_style_t style_time;
-LV_IMAGE_DECLARE(img_lv_demo_music_button_list_play);
-LV_IMAGE_DECLARE(img_lv_demo_music_button_list_pause);
+LV_IMAGE_DECLARE(img_lv_demo_music_btn_list_play);
+LV_IMAGE_DECLARE(img_lv_demo_music_btn_list_pause);
 
 /**********************
  *      MACROS
@@ -156,12 +156,12 @@ void _lv_demo_music_list_button_check(uint32_t track_id, bool state)
 
     if(state) {
         lv_obj_add_state(btn, LV_STATE_CHECKED);
-        lv_image_set_src(icon, &img_lv_demo_music_button_list_pause);
+        lv_image_set_src(icon, &img_lv_demo_music_btn_list_pause);
         lv_obj_scroll_to_view(btn, LV_ANIM_ON);
     }
     else {
         lv_obj_clear_state(btn, LV_STATE_CHECKED);
-        lv_image_set_src(icon, &img_lv_demo_music_button_list_play);
+        lv_image_set_src(icon, &img_lv_demo_music_btn_list_play);
     }
 }
 
@@ -196,7 +196,7 @@ static lv_obj_t * add_list_button(lv_obj_t * parent, uint32_t track_id)
     }
 
     lv_obj_t * icon = lv_image_create(btn);
-    lv_image_set_src(icon, &img_lv_demo_music_button_list_play);
+    lv_image_set_src(icon, &img_lv_demo_music_btn_list_play);
     lv_obj_set_grid_cell(icon, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_CENTER, 0, 2);
 
     lv_obj_t * title_label = lv_label_create(btn);
@@ -229,7 +229,7 @@ static void btn_click_event_cb(lv_event_t * e)
 {
     lv_obj_t * btn = lv_event_get_target(e);
 
-    uint32_t idx = lv_obj_get_child_id(btn);
+    uint32_t idx = lv_obj_get_index(btn);
 
     _lv_demo_music_play(idx);
 }

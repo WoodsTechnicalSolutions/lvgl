@@ -182,7 +182,7 @@ static void msgbox_event_cb(lv_event_t * e)
     lv_obj_t * msgbox = lv_event_get_current_target(e);
 
     if(code == LV_EVENT_VALUE_CHANGED) {
-        const char * txt = lv_msgbox_get_active_btn_text(msgbox);
+        const char * txt = lv_msgbox_get_active_button_text(msgbox);
         if(txt) {
             lv_msgbox_close(msgbox);
             lv_group_focus_freeze(g, false);
