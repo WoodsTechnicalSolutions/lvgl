@@ -88,10 +88,10 @@ static void canvas_basic_render(uint8_t * canvas_buf, lv_color_format_t render_c
 }
 
 
-void canvas_blend_test(lv_obj_t  * canvas_large, lv_draw_img_dsc_t * img_dsc, const char * name_main,
+void canvas_blend_test(lv_obj_t  * canvas_large, lv_draw_image_dsc_t * img_dsc, const char * name_main,
                        const char * name_sub, lv_color_format_t small_render_cf, uint32_t idx)
 {
-    lv_img_dsc_t * img = (lv_img_dsc_t *)img_dsc->src;
+    lv_image_dsc_t * img = (lv_image_dsc_t *)img_dsc->src;
     img->header.cf = small_render_cf;
     canvas_basic_render((uint8_t *)img->data, small_render_cf, name_main, name_sub);
 
@@ -105,14 +105,14 @@ void canvas_blend_test(lv_obj_t  * canvas_large, lv_draw_img_dsc_t * img_dsc, co
 
     img_dsc->opa = LV_OPA_COVER;
     lv_canvas_init_layer(canvas_large, &layer);
-    lv_draw_img(&layer, img_dsc, &area);
+    lv_draw_image(&layer, img_dsc, &area);
     lv_canvas_finish_layer(canvas_large, &layer);
 
     lv_area_move(&area, 190, 0);
 
     img_dsc->opa = LV_OPA_50;
     lv_canvas_init_layer(canvas_large, &layer);
-    lv_draw_img(&layer, img_dsc, &area);
+    lv_draw_image(&layer, img_dsc, &area);
     lv_canvas_finish_layer(canvas_large, &layer);
 }
 
@@ -135,8 +135,8 @@ static void canvas_draw(const char * name, lv_color_format_t large_render_cf)
     img.header.always_zero = 0;
     img.data = canvas_buf;
 
-    lv_draw_img_dsc_t img_dsc;
-    lv_draw_img_dsc_init(&img_dsc);
+    lv_draw_image_dsc_t img_dsc;
+    lv_draw_image_dsc_init(&img_dsc);
     img_dsc.src = &img;
 
     canvas_blend_test(canvas2, &img_dsc, "rgb565", name, LV_COLOR_FORMAT_RGB565, 0);
