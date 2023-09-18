@@ -56,7 +56,7 @@ static bool char_is_accepted(lv_obj_t * obj, uint32_t c);
 static void start_cursor_blink(lv_obj_t * obj);
 static void refr_cursor_area(lv_obj_t * obj);
 static void update_cursor_position_on_click(lv_event_t * e);
-static lv_res_t insert_handler(lv_obj_t * obj, const char * txt);
+static lv_result_t insert_handler(lv_obj_t * obj, const char * txt);
 static void draw_placeholder(lv_event_t * e);
 static void draw_cursor(lv_event_t * e);
 static void auto_hide_characters(lv_obj_t * obj);
@@ -119,8 +119,8 @@ void lv_textarea_add_char(lv_obj_t * obj, uint32_t c)
     if(c != 0) while(*letter_buf == 0) ++letter_buf;
 #endif
 
-    lv_res_t res = insert_handler(obj, letter_buf);
-    if(res != LV_RES_OK) return;
+    lv_result_t res = insert_handler(obj, letter_buf);
+    if(res != LV_RESULT_OK) return;
 
     uint32_t c_uni = _lv_txt_encoded_next((const char *)&c, NULL);
 
@@ -178,8 +178,8 @@ void lv_textarea_add_text(lv_obj_t * obj, const char * txt)
         return;
     }
 
-    lv_res_t res = insert_handler(obj, txt);
-    if(res != LV_RES_OK) return;
+    lv_result_t res = insert_handler(obj, txt);
+    if(res != LV_RESULT_OK) return;
 
     /*If the textarea is empty, invalidate it to hide the placeholder*/
     if(ta->placeholder_txt) {
@@ -220,8 +220,8 @@ void lv_textarea_del_char(lv_obj_t * obj)
 
     char del_buf[2]   = {LV_KEY_DEL, '\0'};
 
-    lv_res_t res = insert_handler(obj, del_buf);
-    if(res != LV_RES_OK) return;
+    lv_result_t res = insert_handler(obj, del_buf);
+    if(res != LV_RESULT_OK) return;
 
     char * label_txt = lv_label_get_text(ta->label);
 
@@ -873,10 +873,10 @@ static void lv_textarea_event(const lv_obj_class_t * class_p, lv_event_t * e)
 {
     LV_UNUSED(class_p);
 
-    lv_res_t res;
+    lv_result_t res;
     /*Call the ancestor's event handler*/
     res = lv_obj_event_base(MY_CLASS, e);
-    if(res != LV_RES_OK) return;
+    if(res != LV_RESULT_OK) return;
 
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);
@@ -1256,26 +1256,26 @@ static void update_cursor_position_on_click(lv_event_t * e)
 #endif
 }
 
-/* Returns LV_RES_OK when no operation were performed
- * Returns LV_RES_INV when a user defined text was inserted */
-static lv_res_t insert_handler(lv_obj_t * obj, const char * txt)
+/* Returns LV_RESULT_OK when no operation were performed
+ * Returns LV_RESULT_INVALID when a user defined text was inserted */
+static lv_result_t insert_handler(lv_obj_t * obj, const char * txt)
 {
     ta_insert_replace = NULL;
     lv_obj_send_event(obj, LV_EVENT_INSERT, (char *)txt);
 
     /* Drop txt if insert replace is set to '\0' */
     if(ta_insert_replace && ta_insert_replace[0] == '\0')
-        return LV_RES_INV;
+        return LV_RESULT_INVALID;
 
     if(ta_insert_replace) {
         /*Add the replaced text directly it's different from the original*/
         if(strcmp(ta_insert_replace, txt)) {
             lv_textarea_add_text(obj, ta_insert_replace);
-            return LV_RES_INV;
+            return LV_RESULT_INVALID;
         }
     }
 
-    return LV_RES_OK;
+    return LV_RESULT_OK;
 }
 
 static void draw_placeholder(lv_event_t * e)

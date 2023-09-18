@@ -39,7 +39,7 @@ static lv_coord_t get_row_height(lv_obj_t * obj, uint16_t row_id, const lv_font_
                                  lv_coord_t cell_left, lv_coord_t cell_right, lv_coord_t cell_top, lv_coord_t cell_bottom);
 static void refr_size_form_row(lv_obj_t * obj, uint32_t start_row);
 static void refr_cell_size(lv_obj_t * obj, uint32_t row, uint32_t col);
-static lv_res_t get_pressed_cell(lv_obj_t * obj, uint16_t * row, uint16_t * col);
+static lv_result_t get_pressed_cell(lv_obj_t * obj, uint16_t * row, uint16_t * col);
 static size_t get_cell_txt_len(const char * txt);
 static void copy_cell_txt(char * dst, const char * txt);
 static void get_cell_area(lv_obj_t * obj, uint16_t row, uint16_t col, lv_area_t * area);
@@ -457,11 +457,11 @@ static void lv_table_event(const lv_obj_class_t * class_p, lv_event_t * e)
 {
     LV_UNUSED(class_p);
 
-    lv_res_t res;
+    lv_result_t res;
 
     /*Call the ancestor's event handler*/
     res = lv_obj_event_base(MY_CLASS, e);
-    if(res != LV_RES_OK) return;
+    if(res != LV_RESULT_OK) return;
 
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);
@@ -485,9 +485,9 @@ static void lv_table_event(const lv_obj_class_t * class_p, lv_event_t * e)
     else if(code == LV_EVENT_PRESSED || code == LV_EVENT_PRESSING) {
         uint16_t col;
         uint16_t row;
-        lv_res_t pr_res = get_pressed_cell(obj, &row, &col);
+        lv_result_t pr_res = get_pressed_cell(obj, &row, &col);
 
-        if(pr_res == LV_RES_OK && (table->col_act != col || table->row_act != row)) {
+        if(pr_res == LV_RESULT_OK && (table->col_act != col || table->row_act != row)) {
             table->col_act = col;
             table->row_act = row;
             lv_obj_invalidate(obj);
@@ -499,7 +499,7 @@ static void lv_table_event(const lv_obj_class_t * class_p, lv_event_t * e)
         lv_obj_t * scroll_obj = lv_indev_get_scroll_obj(indev);
         if(table->col_act != LV_TABLE_CELL_NONE && table->row_act != LV_TABLE_CELL_NONE && scroll_obj == NULL) {
             res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
-            if(res != LV_RES_OK) return;
+            if(res != LV_RESULT_OK) return;
         }
 
         lv_indev_type_t indev_type = lv_indev_get_type(lv_indev_get_act());
@@ -566,7 +566,7 @@ static void lv_table_event(const lv_obj_class_t * class_p, lv_event_t * e)
             scroll_to_selected_cell(obj);
             res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, NULL);
 
-            if(res != LV_RES_OK) return;
+            if(res != LV_RESULT_OK) return;
         }
     }
     else if(code == LV_EVENT_DRAW_MAIN) {
@@ -891,7 +891,7 @@ static lv_coord_t get_row_height(lv_obj_t * obj, uint16_t row_id, const lv_font_
     return h_max;
 }
 
-static lv_res_t get_pressed_cell(lv_obj_t * obj, uint16_t * row, uint16_t * col)
+static lv_result_t get_pressed_cell(lv_obj_t * obj, uint16_t * row, uint16_t * col)
 {
     lv_table_t * table = (lv_table_t *)obj;
 
@@ -899,7 +899,7 @@ static lv_res_t get_pressed_cell(lv_obj_t * obj, uint16_t * row, uint16_t * col)
     if(type != LV_INDEV_TYPE_POINTER && type != LV_INDEV_TYPE_BUTTON) {
         if(col) *col = LV_TABLE_CELL_NONE;
         if(row) *row = LV_TABLE_CELL_NONE;
-        return LV_RES_INV;
+        return LV_RESULT_INVALID;
     }
 
     lv_point_t p;
@@ -939,7 +939,7 @@ static lv_res_t get_pressed_cell(lv_obj_t * obj, uint16_t * row, uint16_t * col)
         }
     }
 
-    return LV_RES_OK;
+    return LV_RESULT_OK;
 }
 
 /* Returns number of bytes to allocate based on chars configuration */

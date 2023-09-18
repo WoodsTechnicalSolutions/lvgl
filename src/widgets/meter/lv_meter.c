@@ -299,8 +299,8 @@ static void lv_meter_event(const lv_obj_class_t * class_p, lv_event_t * e)
 {
     LV_UNUSED(class_p);
 
-    lv_res_t res = lv_obj_event_base(MY_CLASS, e);
-    if(res != LV_RES_OK) return;
+    lv_result_t res = lv_obj_event_base(MY_CLASS, e);
+    if(res != LV_RESULT_OK) return;
 
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);

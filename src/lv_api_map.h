@@ -45,6 +45,7 @@ extern "C" {
 /**********************
  *      TYPEDEFS
  **********************/
+typedef lv_result_t lv_res_t ;
 typedef lv_image_dsc_t lv_img_dsc_t;
 typedef lv_display_rotation_t lv_disp_rotation_t;
 typedef lv_display_render_mode_t lv_disp_render_t;
@@ -57,7 +58,6 @@ static inline LV_ATTRIBUTE_TIMER_HANDLER uint32_t lv_task_handler(void)
 {
     return lv_timer_handler();
 }
-
 
 /**
  * Move the object to the foreground.
@@ -91,6 +91,9 @@ static inline void lv_obj_move_background(lv_obj_t * obj)
 /**********************
  *      MACROS
  **********************/
+#define LV_RES_OK         LV_RESULT_OK
+#define LV_RES_INV        LV_RESULT_INVALID
+
 
 #define lv_disp_create                   lv_display_create
 #define lv_disp_remove                   lv_display_remove

@@ -100,7 +100,7 @@ static void benchmark_event_remove(void);
 
 static void show_scene_report(void);
 static void calc_scene_statistics(void);
-static lv_res_t load_next_scene(void);
+static lv_result_t load_next_scene(void);
 static void next_scene_timer_cb(lv_timer_t * timer);
 static void single_scene_finsih_timer_cb(lv_timer_t * timer);
 static void dummy_flush_cb(lv_display_t * drv, const lv_area_t * area, uint8_t * pxmap);
@@ -666,7 +666,7 @@ void lv_demo_benchmark(lv_demo_benchmark_mode_t _mode)
     benchmark_init();
 
     if(mode == LV_DEMO_BENCHMARK_MODE_RENDER_ONLY) {
-        while(load_next_scene() == LV_RES_OK) {
+        while(load_next_scene() == LV_RESULT_OK) {
             uint32_t i;
             for(i = 0; i < RENDER_REPEAT_CNT; i++) {
                 /*Wait a little to be sure something happens with the animations*/
@@ -827,9 +827,9 @@ static void calc_scene_statistics(void)
     }
 }
 
-static lv_res_t load_next_scene(void)
+static lv_result_t load_next_scene(void)
 {
-    if(scene_act >= 0 && scenes[scene_act].create_cb == NULL) return LV_RES_INV;
+    if(scene_act >= 0 && scenes[scene_act].create_cb == NULL) return LV_RESULT_INVALID;
 
     lv_obj_clean(scene_bg);
 
@@ -841,14 +841,14 @@ static lv_res_t load_next_scene(void)
         scene_with_opa = true;
     }
 
-    if(scene_act >= 0 && scenes[scene_act].create_cb == NULL) return LV_RES_INV;
+    if(scene_act >= 0 && scenes[scene_act].create_cb == NULL) return LV_RESULT_INVALID;
 
     last_flush_cb_call = 0;
     rnd_reset();
     scenes[scene_act].create_cb();
 
     lv_label_set_text_fmt(title, "%s%s", scenes[scene_act].name, scene_with_opa ? " + opa" : "");
-    return LV_RES_OK;
+    return LV_RESULT_OK;
 }
 
 static void next_scene_timer_cb(lv_timer_t * timer)
@@ -857,9 +857,9 @@ static void next_scene_timer_cb(lv_timer_t * timer)
 
     calc_scene_statistics();
     show_scene_report();
-    lv_res_t res = load_next_scene();
+    lv_result_t res = load_next_scene();
 
-    if(res == LV_RES_INV) {
+    if(res == LV_RESULT_INVALID) {
         lv_timer_del(timer);
         generate_report();
     }

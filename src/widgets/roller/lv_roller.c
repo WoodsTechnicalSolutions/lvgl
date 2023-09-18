@@ -38,7 +38,7 @@ static void draw_main(lv_event_t * e);
 static void draw_label(lv_event_t * e);
 static void get_sel_area(lv_obj_t * obj, lv_area_t * sel_area);
 static void refr_position(lv_obj_t * obj, lv_anim_enable_t animen);
-static lv_res_t release_handler(lv_obj_t * obj);
+static lv_result_t release_handler(lv_obj_t * obj);
 static void inf_normalize(lv_obj_t * obj_scrl);
 static lv_obj_t * get_label(const lv_obj_t * obj);
 static lv_coord_t get_selected_label_width(const lv_obj_t * obj);
@@ -327,11 +327,11 @@ static void lv_roller_event(const lv_obj_class_t * class_p, lv_event_t * e)
 {
     LV_UNUSED(class_p);
 
-    lv_res_t res;
+    lv_result_t res;
 
     /*Call the ancestor's event handler*/
     res = lv_obj_event_base(MY_CLASS, e);
-    if(res != LV_RES_OK) return;
+    if(res != LV_RESULT_OK) return;
 
     const lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);
@@ -432,14 +432,14 @@ static void lv_roller_label_event(const lv_obj_class_t * class_p, lv_event_t * e
 {
     LV_UNUSED(class_p);
 
-    lv_res_t res;
+    lv_result_t res;
 
     lv_event_code_t code = lv_event_get_code(e);
     /*LV_EVENT_DRAW_MAIN will be called in the draw function*/
     if(code != LV_EVENT_DRAW_MAIN) {
         /* Call the ancestor's event handler */
         res = lv_obj_event_base(MY_CLASS_LABEL, e);
-        if(res != LV_RES_OK) return;
+        if(res != LV_RESULT_OK) return;
     }
 
     lv_obj_t * label = lv_event_get_target(e);
@@ -671,10 +671,10 @@ static void refr_position(lv_obj_t * obj, lv_anim_enable_t anim_en)
     }
 }
 
-static lv_res_t release_handler(lv_obj_t * obj)
+static lv_result_t release_handler(lv_obj_t * obj)
 {
     lv_obj_t * label = get_label(obj);
-    if(label == NULL) return LV_RES_OK;
+    if(label == NULL) return LV_RESULT_OK;
 
     lv_indev_t * indev = lv_indev_get_act();
     lv_roller_t * roller = (lv_roller_t *)obj;
@@ -752,7 +752,7 @@ static lv_res_t release_handler(lv_obj_t * obj)
     }
 
     uint32_t id  = roller->sel_opt_id; /*Just to use uint32_t in event data*/
-    lv_res_t res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, &id);
+    lv_result_t res = lv_obj_send_event(obj, LV_EVENT_VALUE_CHANGED, &id);
     return res;
 }
 

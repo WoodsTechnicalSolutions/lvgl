@@ -476,8 +476,8 @@ void lv_style_set_prop(lv_style_t * style, lv_style_prop_t prop, lv_style_value_
  * @param style pointer to a style
  * @param prop  the ID of a property
  * @param value pointer to a `lv_style_value_t` variable to store the value
- * @return LV_RES_INV: the property wasn't found in the style (`value` is unchanged)
- *         LV_RES_OK: the property was fond, and `value` is set accordingly
+ * @return LV_RESULT_INVALID: the property wasn't found in the style (`value` is unchanged)
+ *         LV_RESULT_OK: the property was fond, and `value` is set accordingly
  * @note For performance reasons there are no sanity check on `style`
  */
 lv_style_res_t lv_style_get_prop(const lv_style_t * style, lv_style_prop_t prop, lv_style_value_t * value);
@@ -510,8 +510,8 @@ lv_style_value_t lv_style_prop_get_default(lv_style_prop_t prop);
  * @param style pointer to a style
  * @param prop  the ID of a property
  * @param value pointer to a `lv_style_value_t` variable to store the value
- * @return LV_RES_INV: the property wasn't found in the style (`value` is unchanged)
- *         LV_RES_OK: the property was fond, and `value` is set accordingly
+ * @return LV_RESULT_INVALID: the property wasn't found in the style (`value` is unchanged)
+ *         LV_RESULT_OK: the property was fond, and `value` is set accordingly
  * @note For performance reasons there are no sanity check on `style`
  * @note This function is the same as ::lv_style_get_prop but inlined. Use it only on performance critical places
  */

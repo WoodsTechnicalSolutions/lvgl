@@ -497,8 +497,8 @@ bool lv_obj_remove_local_style_prop(lv_obj_t * obj, lv_style_prop_t prop, lv_sty
     /*The style is not found*/
     if(i == obj->style_cnt) return false;
 
-    lv_res_t res = lv_style_remove_prop((lv_style_t *)obj->styles[i].style, prop);
-    if(res == LV_RES_OK) {
+    lv_result_t res = lv_style_remove_prop((lv_style_t *)obj->styles[i].style, prop);
+    if(res == LV_RESULT_OK) {
         full_cache_refresh(obj, lv_obj_style_get_selector_part(selector));
         lv_obj_refresh_style(obj, selector, prop);
     }

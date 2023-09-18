@@ -54,12 +54,12 @@ void lv_obj_set_x(lv_obj_t * obj, lv_coord_t x)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_res_t res_x;
+    lv_result_t res_x;
     lv_style_value_t v_x;
 
     res_x = lv_obj_get_local_style_prop(obj, LV_STYLE_X, &v_x, 0);
 
-    if((res_x == LV_RES_OK && v_x.num != x) || res_x == LV_RES_INV) {
+    if((res_x == LV_RESULT_OK && v_x.num != x) || res_x == LV_RESULT_INVALID) {
         lv_obj_set_style_x(obj, x, 0);
     }
 }
@@ -68,12 +68,12 @@ void lv_obj_set_y(lv_obj_t * obj, lv_coord_t y)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_res_t res_y;
+    lv_result_t res_y;
     lv_style_value_t v_y;
 
     res_y = lv_obj_get_local_style_prop(obj, LV_STYLE_Y, &v_y, 0);
 
-    if((res_y == LV_RES_OK && v_y.num != y) || res_y == LV_RES_INV) {
+    if((res_y == LV_RESULT_OK && v_y.num != y) || res_y == LV_RESULT_INVALID) {
         lv_obj_set_style_y(obj, y, 0);
     }
 }
@@ -215,12 +215,12 @@ void lv_obj_set_size(lv_obj_t * obj, lv_coord_t w, lv_coord_t h)
 void lv_obj_set_width(lv_obj_t * obj, lv_coord_t w)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
-    lv_res_t res_w;
+    lv_result_t res_w;
     lv_style_value_t v_w;
 
     res_w = lv_obj_get_local_style_prop(obj, LV_STYLE_WIDTH, &v_w, 0);
 
-    if((res_w == LV_RES_OK && v_w.num != w) || res_w == LV_RES_INV) {
+    if((res_w == LV_RESULT_OK && v_w.num != w) || res_w == LV_RESULT_INVALID) {
         lv_obj_set_style_width(obj, w, 0);
     }
 }
@@ -228,12 +228,12 @@ void lv_obj_set_width(lv_obj_t * obj, lv_coord_t w)
 void lv_obj_set_height(lv_obj_t * obj, lv_coord_t h)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
-    lv_res_t res_h;
+    lv_result_t res_h;
     lv_style_value_t v_h;
 
     res_h = lv_obj_get_local_style_prop(obj, LV_STYLE_HEIGHT, &v_h, 0);
 
-    if((res_h == LV_RES_OK && v_h.num != h) || res_h == LV_RES_INV) {
+    if((res_h == LV_RESULT_OK && v_h.num != h) || res_h == LV_RESULT_INVALID) {
         lv_obj_set_style_height(obj, h, 0);
     }
 }

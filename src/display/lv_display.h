@@ -435,9 +435,9 @@ bool lv_display_remove_event(lv_display_t * disp, uint32_t index);
  * @param disp          pointer to a display
  * @param code          an event code. LV_EVENT_...
  * @param param         optional param
- * @return              LV_RES_OK: disp wasn't deleted in the event.
+ * @return              LV_RESULT_OK: disp wasn't deleted in the event.
  */
-lv_res_t lv_display_send_event(lv_display_t * disp, lv_event_code_t code, void * param);
+lv_result_t lv_display_send_event(lv_display_t * disp, lv_event_code_t code, void * param);
 
 /**
  * Set the theme of a display. If there are no user created widgets yet the screens' theme will be updated

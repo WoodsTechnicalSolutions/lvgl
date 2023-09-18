@@ -169,8 +169,8 @@ LV_ATTRIBUTE_FAST_MEM void lv_draw_sw_image(lv_draw_unit_t * draw_unit, const lv
     }
 
     lv_image_decoder_dsc_t decoder_dsc;
-    lv_res_t res = lv_image_decoder_open(&decoder_dsc, draw_dsc->src, draw_dsc->recolor, -1);
-    if(res != LV_RES_OK) {
+    lv_result_t res = lv_image_decoder_open(&decoder_dsc, draw_dsc->src, draw_dsc->recolor, -1);
+    if(res != LV_RESULT_OK) {
         LV_LOG_ERROR("Failed to open image");
         return;
     }
@@ -195,13 +195,13 @@ LV_ATTRIBUTE_FAST_MEM void lv_draw_sw_image(lv_draw_unit_t * draw_unit, const lv
         relative_decoded_area.y1 = LV_COORD_MIN;
         relative_decoded_area.x2 = LV_COORD_MIN;
         relative_decoded_area.y2 = LV_COORD_MIN;
-        res = LV_RES_OK;
-        while(res == LV_RES_OK) {
+        res = LV_RESULT_OK;
+        while(res == LV_RESULT_OK) {
             res = lv_image_decoder_get_area(&decoder_dsc, &relative_full_area_to_decode, &relative_decoded_area);
 
             lv_area_t absolute_decoded_area = relative_decoded_area;
             lv_area_move(&absolute_decoded_area, coords->x1, coords->y1);
-            if(res == LV_RES_OK) {
+            if(res == LV_RESULT_OK) {
                 /*Limit draw area to the current decoded area and draw the image*/
                 lv_area_t draw_area_sub;
                 if(_lv_area_intersect(&draw_area_sub, &draw_area, &absolute_decoded_area)) {

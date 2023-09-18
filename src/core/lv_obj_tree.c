@@ -378,8 +378,8 @@ static void obj_del_core(lv_obj_t * obj)
     obj->is_deleting = true;
 
     /*Let the user free the resources used in `LV_EVENT_DELETE`*/
-    lv_res_t res = lv_obj_send_event(obj, LV_EVENT_DELETE, NULL);
-    if(res == LV_RES_INV) {
+    lv_result_t res = lv_obj_send_event(obj, LV_EVENT_DELETE, NULL);
+    if(res == LV_RESULT_INVALID) {
         obj->is_deleting = false;
         return;
     }
@@ -416,8 +416,8 @@ static void obj_del_core(lv_obj_t * obj)
     }
 
     /*Delete all pending async del-s*/
-    lv_res_t async_cancel_res = LV_RES_OK;
-    while(async_cancel_res == LV_RES_OK) {
+    lv_result_t async_cancel_res = LV_RESULT_OK;
+    while(async_cancel_res == LV_RESULT_OK) {
         async_cancel_res = lv_async_call_cancel(lv_obj_del_async_cb, obj);
     }
 

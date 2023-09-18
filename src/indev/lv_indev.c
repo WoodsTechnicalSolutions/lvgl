@@ -589,7 +589,7 @@ static void indev_keypad_proc(lv_indev_t * i, lv_indev_data_t * data)
     i->keypad.last_key = data->key;
 
     /*Save the previous state so we can detect state changes below and also set the last state now
-     *so if any event handler on the way returns `LV_RES_INV` the last state is remembered
+     *so if any event handler on the way returns `LV_RESULT_INVALID` the last state is remembered
      *for the next time*/
     uint32_t prev_state             = i->keypad.last_state;
     i->keypad.last_state = data->state;
@@ -980,7 +980,7 @@ static void indev_button_proc(lv_indev_t * i, lv_indev_data_t * data)
 /**
  * Process the pressed state of LV_INDEV_TYPE_POINTER input devices
  * @param indev pointer to an input device 'proc'
- * @return LV_RES_OK: no indev reset required; LV_RES_INV: indev reset is required
+ * @return LV_RESULT_OK: no indev reset required; LV_RESULT_INVALID: indev reset is required
  */
 static void indev_proc_press(lv_indev_t * indev)
 {

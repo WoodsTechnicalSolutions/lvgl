@@ -558,7 +558,7 @@ static void lv_spangroup_event(const lv_obj_class_t * class_p, lv_event_t * e)
     LV_UNUSED(class_p);
 
     /* Call the ancestor's event handler */
-    if(lv_obj_event_base(MY_CLASS, e) != LV_RES_OK) return;
+    if(lv_obj_event_base(MY_CLASS, e) != LV_RESULT_OK) return;
 
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);
@@ -680,8 +680,8 @@ static const lv_font_t * lv_span_get_style_text_font(lv_obj_t * par, lv_span_t *
 {
     const lv_font_t * font;
     lv_style_value_t value;
-    lv_res_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_FONT, &value);
-    if(res != LV_RES_OK) {
+    lv_result_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_FONT, &value);
+    if(res != LV_RESULT_OK) {
         font = lv_obj_get_style_text_font(par, LV_PART_MAIN);
     }
     else {
@@ -694,8 +694,8 @@ static lv_coord_t lv_span_get_style_text_letter_space(lv_obj_t * par, lv_span_t 
 {
     lv_coord_t letter_space;
     lv_style_value_t value;
-    lv_res_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_LETTER_SPACE, &value);
-    if(res != LV_RES_OK) {
+    lv_result_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_LETTER_SPACE, &value);
+    if(res != LV_RESULT_OK) {
         letter_space = lv_obj_get_style_text_letter_space(par, LV_PART_MAIN);
     }
     else {
@@ -707,8 +707,8 @@ static lv_coord_t lv_span_get_style_text_letter_space(lv_obj_t * par, lv_span_t 
 static lv_color_t lv_span_get_style_text_color(lv_obj_t * par, lv_span_t * span)
 {
     lv_style_value_t value;
-    lv_res_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_COLOR, &value);
-    if(res != LV_RES_OK) {
+    lv_result_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_COLOR, &value);
+    if(res != LV_RESULT_OK) {
         value.color = lv_obj_get_style_text_color(par, LV_PART_MAIN);
     }
     return value.color;
@@ -718,8 +718,8 @@ static lv_opa_t lv_span_get_style_text_opa(lv_obj_t * par, lv_span_t * span)
 {
     lv_opa_t opa;
     lv_style_value_t value;
-    lv_res_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_OPA, &value);
-    if(res != LV_RES_OK) {
+    lv_result_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_OPA, &value);
+    if(res != LV_RESULT_OK) {
         opa = (lv_opa_t)lv_obj_get_style_text_opa(par, LV_PART_MAIN);
     }
     else {
@@ -732,8 +732,8 @@ static lv_blend_mode_t lv_span_get_style_text_blend_mode(lv_obj_t * par, lv_span
 {
     lv_blend_mode_t mode;
     lv_style_value_t value;
-    lv_res_t res = lv_style_get_prop(&span->style, LV_STYLE_BLEND_MODE, &value);
-    if(res != LV_RES_OK) {
+    lv_result_t res = lv_style_get_prop(&span->style, LV_STYLE_BLEND_MODE, &value);
+    if(res != LV_RESULT_OK) {
         mode = (lv_blend_mode_t)lv_obj_get_style_blend_mode(par, LV_PART_MAIN);
     }
     else {
@@ -746,8 +746,8 @@ static int32_t lv_span_get_style_text_decor(lv_obj_t * par, lv_span_t * span)
 {
     int32_t decor;
     lv_style_value_t value;
-    lv_res_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_DECOR, &value);
-    if(res != LV_RES_OK) {
+    lv_result_t res = lv_style_get_prop(&span->style, LV_STYLE_TEXT_DECOR, &value);
+    if(res != LV_RESULT_OK) {
         decor = (lv_text_decor_t)lv_obj_get_style_text_decor(par, LV_PART_MAIN);;
     }
     else {

@@ -77,8 +77,8 @@ void lv_draw_image(lv_layer_t * layer, const lv_draw_image_dsc_t * dsc, const lv
 
     lv_draw_image_dsc_t * new_image_dsc = lv_malloc(sizeof(*dsc));
     lv_memcpy(new_image_dsc, dsc, sizeof(*dsc));
-    lv_res_t res = lv_image_decoder_get_info(new_image_dsc->src, &new_image_dsc->header);
-    if(res != LV_RES_OK) {
+    lv_result_t res = lv_image_decoder_get_info(new_image_dsc->src, &new_image_dsc->header);
+    if(res != LV_RESULT_OK) {
         LV_LOG_WARN("Couldn't get info about the image");
         lv_free(new_image_dsc);
         return;
