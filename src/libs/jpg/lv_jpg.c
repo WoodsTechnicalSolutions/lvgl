@@ -49,7 +49,7 @@
 #if LV_USE_SJPG
 
 #include "tjpgd.h"
-#include "lv_sjpg.h"
+#include "lv_jpg.h"
 #include "../../misc/lv_fs.h"
 
 /*********************

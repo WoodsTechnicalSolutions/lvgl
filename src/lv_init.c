@@ -17,7 +17,7 @@
 #include "libs/fsdrv/lv_fsdrv.h"
 #include "libs/gif/lv_gif.h"
 #include "libs/png/lv_png.h"
-#include "libs/sjpg/lv_sjpg.h"
+#include "libs/jpg/lv_jpg.h"
 #include "draw/lv_draw.h"
 #include "misc/lv_cache.h"
 #include "misc/lv_cache_builtin.h"
