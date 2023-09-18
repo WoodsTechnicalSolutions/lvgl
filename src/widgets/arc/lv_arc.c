@@ -389,7 +389,7 @@ void lv_arc_rotate_obj_to_angle(const lv_obj_t * obj, lv_obj_t * obj_to_rotate, 
     lv_coord_t pivot_y = obj_to_rotate->coords.y1 - center.y;
     lv_obj_set_style_transform_pivot_x(obj_to_rotate, -pivot_x, 0);
     lv_obj_set_style_transform_pivot_y(obj_to_rotate, -pivot_y, 0);
-    lv_obj_set_style_transform_angle(obj_to_rotate, angle * 10 + 900, 0);
+    lv_obj_set_style_transform_rotation(obj_to_rotate, angle * 10 + 900, 0);
 }
 
 

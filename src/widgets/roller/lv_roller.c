@@ -825,8 +825,8 @@ static void transform_vect_recursive(lv_obj_t * roller, lv_point_t * vect)
     int32_t zoom = 256;
     lv_obj_t * parent = roller;
     while(parent) {
-        angle += lv_obj_get_style_transform_angle(parent, 0);
-        int32_t zoom_act = lv_obj_get_style_transform_zoom_safe(parent, 0);
+        angle += lv_obj_get_style_transform_rotation(parent, 0);
+        int32_t zoom_act = lv_obj_get_style_transform_scale_safe(parent, 0);
         zoom = (zoom * zoom_act) >> 8;
         parent = lv_obj_get_parent(parent);
     }

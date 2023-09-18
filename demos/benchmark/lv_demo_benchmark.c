@@ -1114,7 +1114,7 @@ static void img_create(lv_style_t * style, const void * src, bool rotate, bool z
         lv_image_set_src(obj, src);
         lv_obj_set_style_image_recolor(obj, lv_color_hex(rnd_next(0, 0xFFFFF0)), 0);
 
-        if(rotate) lv_image_set_angle(obj, rnd_next(0, 3599));
+        if(rotate) lv_image_set_rotation(obj, rnd_next(0, 3599));
         if(zoom) lv_image_set_zoom(obj, rnd_next(IMG_ZOOM_MIN, IMG_ZOOM_MAX));
         lv_image_set_antialias(obj, aa);
 

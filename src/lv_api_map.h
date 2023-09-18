@@ -191,6 +191,19 @@ static inline void lv_obj_move_background(lv_obj_t * obj)
 
 #define lv_msgbox_get_btns                   lv_msgbox_get_buttons
 
+#define lv_image_set_angle                  lv_image_set_rotation
+#define lv_image_get_angle                  lv_image_get_rotation
+#define lv_image_set_zoom                   lv_image_set_scale
+#define lv_image_get_zoom                   lv_image_get_scale
+
+#define lv_obj_get_style_transform_zoom     lv_obj_get_style_transform_scale
+#define lv_obj_get_style_transform_angle    lv_obj_get_style_transform_rotation
+#define lv_obj_set_style_transform_zoom     lv_obj_set_style_transform_scale
+#define lv_obj_set_style_transform_angle    lv_obj_set_style_transform_rotation
+#define lv_style_set_transform_angle        lv_style_set_transform_rotation
+#define lv_style_set_transform_zoom         lv_style_set_transform_scale
+#define LV_ZOOM_NONE             LV_SCALE_NONE
+
 /**********************
  *      MACROS
  **********************/

@@ -148,14 +148,14 @@ static void arc_event_cb(lv_event_t * e)
     lv_obj_t * arc = lv_event_get_target(e);
 
     int32_t v = lv_arc_get_angle_end(arc);
-    lv_obj_set_style_transform_angle(card_to_transform, v * 10, 0);
+    lv_obj_set_style_transform_rotation(card_to_transform, v * 10, 0);
 }
 
 static void slider_event_cb(lv_event_t * e)
 {
     lv_obj_t * slider = lv_event_get_target(e);
     int32_t v = lv_slider_get_value(slider);
-    lv_obj_set_style_transform_zoom(card_to_transform, v, 0);
+    lv_obj_set_style_transform_scale(card_to_transform, v, 0);
 }
 
 #endif

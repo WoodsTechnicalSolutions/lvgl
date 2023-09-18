@@ -188,7 +188,7 @@ void lv_chart_set_zoom_x(lv_obj_t * obj, uint16_t zoom_x)
 
     lv_chart_t * chart  = (lv_chart_t *)obj;
     if(chart->zoom_x == zoom_x) return;
-    if(LV_ZOOM_NONE > zoom_x) zoom_x = LV_ZOOM_NONE;
+    if(LV_SCALE_NONE > zoom_x) zoom_x = LV_SCALE_NONE;
 
     chart->zoom_x = zoom_x;
     lv_obj_refresh_self_size(obj);
@@ -203,7 +203,7 @@ void lv_chart_set_zoom_y(lv_obj_t * obj, uint16_t zoom_y)
 
     lv_chart_t * chart  = (lv_chart_t *)obj;
     if(chart->zoom_y == zoom_y) return;
-    if(LV_ZOOM_NONE > zoom_y) zoom_y = LV_ZOOM_NONE;
+    if(LV_SCALE_NONE > zoom_y) zoom_y = LV_SCALE_NONE;
 
     chart->zoom_y = zoom_y;
     lv_obj_refresh_self_size(obj);
@@ -683,8 +683,8 @@ static void lv_chart_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
     chart->pressed_point_id  = LV_CHART_POINT_NONE;
     chart->type        = LV_CHART_TYPE_LINE;
     chart->update_mode = LV_CHART_UPDATE_MODE_SHIFT;
-    chart->zoom_x      = LV_ZOOM_NONE;
-    chart->zoom_y      = LV_ZOOM_NONE;
+    chart->zoom_x      = LV_SCALE_NONE;
+    chart->zoom_y      = LV_SCALE_NONE;
 
     LV_TRACE_OBJ_CREATE("finished");
 }

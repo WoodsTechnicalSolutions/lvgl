@@ -48,8 +48,8 @@ extern "C" {
 /**
  * Other constants
  */
-#define LV_ZOOM_NONE            256        /*Value for not zooming the image*/
-LV_EXPORT_CONST_INT(LV_ZOOM_NONE);
+#define LV_SCALE_NONE            256        /*Value for not zooming the image*/
+LV_EXPORT_CONST_INT(LV_SCALE_NONE);
 
 // *INDENT-OFF*
 #if LV_USE_ASSERT_STYLE
@@ -315,8 +315,8 @@ enum _lv_style_prop_t {
     LV_STYLE_TRANSFORM_HEIGHT       = 106,
     LV_STYLE_TRANSLATE_X            = 107,
     LV_STYLE_TRANSLATE_Y            = 108,
-    LV_STYLE_TRANSFORM_ZOOM         = 109,
-    LV_STYLE_TRANSFORM_ANGLE        = 110,
+    LV_STYLE_TRANSFORM_SCALE        = 109,
+    LV_STYLE_TRANSFORM_ROTATION     = 110,
     LV_STYLE_TRANSFORM_PIVOT_X      = 111,
     LV_STYLE_TRANSFORM_PIVOT_Y      = 112,
 

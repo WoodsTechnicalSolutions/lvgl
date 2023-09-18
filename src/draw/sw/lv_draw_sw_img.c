@@ -71,11 +71,11 @@ void lv_draw_sw_layer(lv_draw_unit_t * draw_unit, const lv_draw_image_dsc_t * dr
 #if LV_USE_LAYER_DEBUG || LV_USE_PARALLEL_DRAW_DEBUG
     lv_area_t area_rot;
     lv_area_copy(&area_rot, coords);
-    if(draw_dsc->angle || draw_dsc->zoom != LV_ZOOM_NONE) {
+    if(draw_dsc->rotation || draw_dsc->zoom != LV_SCALE_NONE) {
         int32_t w = lv_area_get_width(coords);
         int32_t h = lv_area_get_height(coords);
 
-        _lv_image_buf_get_transformed_area(&area_rot, w, h, draw_dsc->angle, draw_dsc->zoom, &draw_dsc->pivot);
+        _lv_image_buf_get_transformed_area(&area_rot, w, h, draw_dsc->rotation, draw_dsc->zoom, &draw_dsc->pivot);
 
         area_rot.x1 += coords->x1;
         area_rot.y1 += coords->y1;
@@ -150,11 +150,11 @@ LV_ATTRIBUTE_FAST_MEM void lv_draw_sw_image(lv_draw_unit_t * draw_unit, const lv
 {
     lv_area_t transformed_area;
     lv_area_copy(&transformed_area, coords);
-    if(draw_dsc->angle || draw_dsc->zoom != LV_ZOOM_NONE) {
+    if(draw_dsc->rotation || draw_dsc->zoom != LV_SCALE_NONE) {
         int32_t w = lv_area_get_width(coords);
         int32_t h = lv_area_get_height(coords);
 
-        _lv_image_buf_get_transformed_area(&transformed_area, w, h, draw_dsc->angle, draw_dsc->zoom, &draw_dsc->pivot);
+        _lv_image_buf_get_transformed_area(&transformed_area, w, h, draw_dsc->rotation, draw_dsc->zoom, &draw_dsc->pivot);
 
         transformed_area.x1 += coords->x1;
         transformed_area.y1 += coords->y1;
@@ -219,7 +219,7 @@ LV_ATTRIBUTE_FAST_MEM void lv_draw_sw_image(lv_draw_unit_t * draw_unit, const lv
 static void img_draw_core(lv_draw_unit_t * draw_unit, const lv_draw_image_dsc_t * draw_dsc, const lv_area_t * draw_area,
                           const lv_image_decoder_dsc_t * src, lv_draw_image_sup_t * sup, const lv_area_t * img_coords)
 {
-    bool transformed = draw_dsc->angle != 0 || draw_dsc->zoom != LV_ZOOM_NONE ? true : false;
+    bool transformed = draw_dsc->rotation != 0 || draw_dsc->zoom != LV_SCALE_NONE ? true : false;
 
     lv_draw_sw_blend_dsc_t blend_dsc;
     const uint8_t * src_buf = src->img_data;

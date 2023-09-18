@@ -535,7 +535,7 @@ static void draw_needles(lv_obj_t * obj, lv_layer_t * layer, const lv_area_t * s
             img_dsc.pivot.y = indic->type_data.needle_img.pivot.y;
             angle = angle * 10;
             if(angle > 3600) angle -= 3600;
-            img_dsc.angle = angle;
+            img_dsc.rotation = angle;
 
             img_dsc.src = indic->type_data.needle_img.src;
             lv_draw_image(layer, &img_dsc, &a);
@@ -611,7 +611,7 @@ static void inv_line(lv_obj_t * obj, lv_meter_indicator_t * indic, int32_t value
         scale_center.x -= indic->type_data.needle_img.pivot.x;
         scale_center.y -= indic->type_data.needle_img.pivot.y;
         lv_area_t a;
-        _lv_image_buf_get_transformed_area(&a, info.w, info.h, angle, LV_ZOOM_NONE, &indic->type_data.needle_img.pivot);
+        _lv_image_buf_get_transformed_area(&a, info.w, info.h, angle, LV_SCALE_NONE, &indic->type_data.needle_img.pivot);
         a.x1 += scale_center.x - 2;
         a.y1 += scale_center.y - 2;
         a.x2 += scale_center.x + 2;
