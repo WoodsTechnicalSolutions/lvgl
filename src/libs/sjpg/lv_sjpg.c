@@ -84,6 +84,7 @@ static int is_jpg(const uint8_t * raw_data, size_t len);
 /**********************
  *   GLOBAL FUNCTIONS
  **********************/
+
 void lv_jpeg_init(void)
 {
     lv_image_decoder_t * dec = lv_image_decoder_create();
@@ -96,13 +97,7 @@ void lv_jpeg_init(void)
 /**********************
  *   STATIC FUNCTIONS
  **********************/
-/**
- * Get info about an SJPG / JPG image
- * @param decoder pointer to the decoder where this function belongs
- * @param src can be file name or pointer to a C array
- * @param header store the info here
- * @return LV_RES_OK: no error; LV_RES_INV: can't get the info
- */
+
 static lv_res_t decoder_info(lv_image_decoder_t * decoder, const void * src, lv_image_header_t * header)
 {
     LV_UNUSED(decoder);
@@ -127,20 +122,27 @@ static lv_res_t decoder_info(lv_image_decoder_t * decoder, const void * src, lv_
     else if(src_type == LV_IMAGE_SRC_FILE) {
         const char * fn = src;
         if((strcmp(lv_fs_get_ext(fn), "jpg") == 0) || (strcmp(lv_fs_get_ext(fn), "jpeg") == 0)) {
-//            uint8_t buff[22];
-//            memset(buff, 0, sizeof(buff));
-//
-//            lv_fs_file_t file;
-//            lv_fs_res_t res = lv_fs_open(&file, fn, LV_FS_MODE_RD);
-//            if(res != LV_FS_RES_OK) return LV_RES_INV;
-//
-//            uint32_t rn;
-//            res = lv_fs_read(&file, buff, 8, &rn);
-//            if(res != LV_FS_RES_OK || rn != 8) {
-//                lv_fs_close(&file);
-//                return LV_RES_INV;
-//            }
-            return LV_RES_INV;
+            lv_fs_file_t f;
+            lv_fs_res_t res;
+            res = lv_fs_open(&f, fn, LV_FS_MODE_RD);
+            if(res != LV_FS_RES_OK) return LV_RES_INV;
+
+            uint8_t workb[TJPGD_WORKBUFF_SIZE];
+            JDEC jd;
+            JRESULT rc = jd_prepare(&jd, input_func, workb, TJPGD_WORKBUFF_SIZE, &f);
+            if(rc) {
+                LV_LOG_WARN("jd_prepare error: %d", rc);
+                lv_fs_close(&f);
+                return LV_RES_INV;
+            }
+            header->always_zero = 0;
+            header->cf = LV_COLOR_FORMAT_RAW;
+            header->w = jd.width;
+            header->h = jd.height;
+            header->stride = jd.width * 3;
+
+            lv_fs_close(&f);
+            return LV_RES_OK;
         }
     }
     return LV_RES_INV;
@@ -165,90 +167,61 @@ static size_t input_func(JDEC * jd, uint8_t * buff, size_t ndata)
     return 0;
 }
 
-/**
- * Open SJPG image and return the decided image
- * @param decoder pointer to the decoder where this function belongs
- * @param dsc pointer to a descriptor which describes this decoding session
- * @return LV_RES_OK: no error; LV_RES_INV: can't get the info
- */
 static lv_res_t decoder_open(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc)
 {
     LV_UNUSED(decoder);
+    lv_fs_file_t * f = lv_malloc(sizeof(lv_fs_file_t));
     if(dsc->src_type == LV_IMAGE_SRC_VARIABLE) {
         const lv_image_dsc_t * img_dsc = dsc->src;
         if(is_jpg(img_dsc->data, img_dsc->data_size) == true) {
-
-            lv_fs_file_t * f = lv_malloc(sizeof(lv_fs_file_t));
             lv_fs_path_ex_t path;
             lv_fs_make_path_from_buffer(&path, LV_FS_MEMFS_LETTER, img_dsc->data, img_dsc->data_size);
             lv_fs_res_t res;
-            res = lv_fs_open(f, &path, LV_FS_MODE_RD);
-            if(res != LV_FS_RES_OK) return LV_RES_INV;
-
-            uint8_t * workb_temp = lv_malloc(TJPGD_WORKBUFF_SIZE);
-            JDEC * jd = lv_malloc(sizeof(JDEC));
-            dsc->user_data = jd;
-            JRESULT rc = jd_prepare(jd, input_func, workb_temp, (size_t)TJPGD_WORKBUFF_SIZE, f);
-            if(rc) return rc;
-
-            dsc->header.always_zero = 0;
-            dsc->header.cf = LV_COLOR_FORMAT_RGB888;
-            dsc->header.w = img_dsc->header.w;
-            dsc->header.h = img_dsc->header.h;
-            dsc->header.stride = img_dsc->header.w * 3;
-
-            if(rc != JDR_OK) {
-                lv_free(workb_temp);
-                lv_free(jd);
+            res = lv_fs_open(f, (const char *)&path, LV_FS_MODE_RD);
+            if(res != LV_FS_RES_OK) {
+                lv_free(f);
                 return LV_RES_INV;
             }
-
-            return LV_RES_OK;
         }
     }
     else if(dsc->src_type == LV_IMAGE_SRC_FILE) {
+        const char * fn = dsc->src;
+        if((strcmp(lv_fs_get_ext(fn), "jpg") == 0) || (strcmp(lv_fs_get_ext(fn), "jpeg") == 0)) {
+            lv_fs_res_t res;
+            res = lv_fs_open(f, fn, LV_FS_MODE_RD);
+            if(res != LV_FS_RES_OK) {
+                lv_free(f);
+                return LV_RES_INV;
+            }
+        }
+    }
+
+    uint8_t * workb_temp = lv_malloc(TJPGD_WORKBUFF_SIZE);
+    JDEC * jd = lv_malloc(sizeof(JDEC));
+    dsc->user_data = jd;
+    JRESULT rc = jd_prepare(jd, input_func, workb_temp, (size_t)TJPGD_WORKBUFF_SIZE, f);
+    if(rc) return rc;
+
+    dsc->header.always_zero = 0;
+    dsc->header.cf = LV_COLOR_FORMAT_RGB888;
+    dsc->header.w = jd->width;
+    dsc->header.h = jd->height;
+    dsc->header.stride = jd->width * 3;
+
+    if(rc != JDR_OK) {
+        lv_free(workb_temp);
+        lv_free(jd);
         return LV_RES_INV;
     }
 
-    return LV_RES_INV;
+    return LV_RES_OK;
 }
 
-
-JRESULT mcu_load (
-    JDEC* jd        /* Pointer to the decompressor object */
-);
-
-
-JRESULT mcu_output (
-    JDEC* jd,           /* Pointer to the decompressor object */
-    int (*outfunc)(JDEC*, void*, JRECT*),   /* RGB output function */
-    unsigned int x,     /* MCU location in the image */
-    unsigned int y      /* MCU location in the image */
-);
-
-JRESULT restart (
-    JDEC* jd,       /* Pointer to the decompressor object */
-    uint16_t rstn   /* Expected restert sequense number */
-);
-
-/**
- * Decode `len` pixels starting from the given `x`, `y` coordinates and store them in `buf`.
- * Required only if the "open" function can't open the whole decoded pixel array. (dsc->img_data == NULL)
- * @param decoder pointer to the decoder the function associated with
- * @param dsc pointer to decoder descriptor
- * @param x start x coordinate
- * @param y start y coordinate
- * @param len number of pixels to decode
- * @param buf a buffer to store the decoded pixels
- * @return LV_RES_OK: ok; LV_RES_INV: failed
- */
 static lv_res_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc,
         const lv_area_t * full_area, lv_area_t * decoded_area)
 {
-
-
     LV_UNUSED(decoder);
-
+    LV_UNUSED(full_area);
 
     JDEC * jd = dsc->user_data;
 
@@ -268,12 +241,9 @@ static lv_res_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decoder_
         dsc->header.stride = mx * 3;
     }
 
-
-
     decoded_area->x1 += mx;
     decoded_area->x2 += mx;
 
-//    if(decoded_area->x1 >= 7) return LV_RES_INV;
     if(decoded_area->x1 >= jd->width) {
         decoded_area->x1 = 0;
         decoded_area->x2 = 7;
@@ -283,13 +253,13 @@ static lv_res_t decoder_get_area(lv_image_decoder_t * decoder, lv_image_decoder_
 
     JRESULT rc;
     if (jd->nrst && jd->rst++ == jd->nrst) {    /* Process restart interval if enabled */
-        rc = restart(jd, jd->rsc++);
+        rc = jd_restart(jd, jd->rsc++);
         if (rc != JDR_OK) return rc;
         jd->rst = 1;
     }
-    rc = mcu_load(jd);                  /* Load an MCU (decompress huffman coded stream, dequantize and apply IDCT) */
+    rc = jd_mcu_load(jd);                  /* Load an MCU (decompress huffman coded stream, dequantize and apply IDCT) */
     if (rc != JDR_OK) return rc;
-    rc = mcu_output(jd, NULL, decoded_area->x1,  decoded_area->y1); /* Output the MCU (YCbCr to RGB, scaling and output) */
+    rc = jd_mcu_output(jd, NULL, decoded_area->x1,  decoded_area->y1); /* Output the MCU (YCbCr to RGB, scaling and output) */
     if (rc != JDR_OK) return rc;
 
     return LV_RES_OK;

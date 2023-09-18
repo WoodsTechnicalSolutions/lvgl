@@ -115,7 +115,7 @@ typedef struct {
 /* Extended path object to specify the buffer for memory-mapped files */
 typedef struct {
     char path[4];   /* This is needed to make it compatible with a normal path */
-    void * buffer;
+    const void * buffer;
     uint32_t size;
 } lv_fs_path_ex_t;
 

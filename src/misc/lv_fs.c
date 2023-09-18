@@ -106,7 +106,7 @@ lv_fs_res_t lv_fs_open(lv_fs_file_t * file_p, const char * path, lv_fs_mode_t mo
         /* If this is a memory-mapped file, then set "cache" to the memory buffer */
         if(drv->cache_size == LV_FS_CACHE_FROM_BUFFER) {
             lv_fs_path_ex_t * path_ex = (lv_fs_path_ex_t *)path;
-            file_p->cache->buffer = path_ex->buffer;
+            file_p->cache->buffer = (void *)path_ex->buffer;
             file_p->cache->start = 0;
             file_p->cache->file_position = 0;
             file_p->cache->end = path_ex->size;

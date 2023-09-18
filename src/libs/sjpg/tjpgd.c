@@ -505,7 +505,7 @@ static int bitext ( /* >=0: extracted data, <0: error code */
 /* Process restart interval                                              */
 /*-----------------------------------------------------------------------*/
 
-JRESULT restart (
+JRESULT jd_restart (
     JDEC* jd,       /* Pointer to the decompressor object */
     uint16_t rstn   /* Expected restert sequense number */
 )
@@ -699,7 +699,7 @@ static void block_idct (
 /* Load all blocks in an MCU into working buffer                         */
 /*-----------------------------------------------------------------------*/
 
-JRESULT mcu_load (
+JRESULT jd_mcu_load (
     JDEC* jd        /* Pointer to the decompressor object */
 )
 {
@@ -785,7 +785,7 @@ JRESULT mcu_load (
 /* Output an MCU: Convert YCrCb to RGB and output it in RGB form         */
 /*-----------------------------------------------------------------------*/
 
-JRESULT mcu_output (
+JRESULT jd_mcu_output (
     JDEC* jd,           /* Pointer to the decompressor object */
     int (*outfunc)(JDEC*, void*, JRECT*),   /* RGB output function */
     unsigned int x,     /* MCU location in the image */
@@ -847,11 +847,11 @@ JRESULT mcu_output (
     mx >>= jd->scale;
     if (rx < mx) {  /* Is the MCU spans rigit edge? */
         uint8_t *s, *d;
-        unsigned int x, y;
+        unsigned int xi, yi;
 
         s = d = (uint8_t*)jd->workbuf;
-        for (y = 0; y < ry; y++) {
-            for (x = 0; x < rx; x++) {  /* Copy effective pixels */
+        for (yi = 0; yi < ry; yi++) {
+            for (xi = 0; xi < rx; xi++) {  /* Copy effective pixels */
                 *d++ = *s++;
                 if (JD_FORMAT != 2) {
                     *d++ = *s++;
@@ -1071,13 +1071,13 @@ JRESULT jd_decomp (
     for (y = 0; y < jd->height; y += my) {      /* Vertical loop of MCUs */
         for (x = 0; x < jd->width; x += mx) {   /* Horizontal loop of MCUs */
             if (jd->nrst && rst++ == jd->nrst) {    /* Process restart interval if enabled */
-                rc = restart(jd, rsc++);
+                rc = jd_restart(jd, rsc++);
                 if (rc != JDR_OK) return rc;
                 rst = 1;
             }
-            rc = mcu_load(jd);                  /* Load an MCU (decompress huffman coded stream, dequantize and apply IDCT) */
+            rc = jd_mcu_load(jd);                  /* Load an MCU (decompress huffman coded stream, dequantize and apply IDCT) */
             if (rc != JDR_OK) return rc;
-            rc = mcu_output(jd, outfunc, x, y); /* Output the MCU (YCbCr to RGB, scaling and output) */
+            rc = jd_mcu_output(jd, outfunc, x, y); /* Output the MCU (YCbCr to RGB, scaling and output) */
             if (rc != JDR_OK) return rc;
         }
     }
