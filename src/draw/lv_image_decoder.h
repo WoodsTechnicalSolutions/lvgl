@@ -242,9 +242,6 @@ lv_result_t lv_image_decoder_built_in_info(lv_image_decoder_t * decoder, const v
 lv_result_t lv_image_decoder_built_in_get_area(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc,
                                                const lv_area_t * full_area, lv_area_t * decoded_area);
 
-lv_result_t lv_img_decoder_built_in_get_area(lv_image_decoder_t * decoder, lv_image_decoder_dsc_t * dsc,
-                                             const lv_area_t * full_area, lv_area_t * decoded_area);
-
 /**
  * Open a built in image
  * @param decoder the decoder where this function belongs
