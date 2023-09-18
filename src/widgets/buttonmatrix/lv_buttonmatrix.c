@@ -14,8 +14,8 @@
 #include "../../core/lv_group.h"
 #include "../../draw/lv_draw.h"
 #include "../../core/lv_refr.h"
-#include "../../misc/lv_txt.h"
-#include "../../misc/lv_txt_ap.h"
+#include "../../misc/lv_text.h"
+#include "../../misc/lv_text_ap.h"
 #include "../../stdlib/lv_string.h"
 
 /*********************
@@ -777,15 +777,15 @@ static void draw_main(lv_event_t * e)
 
 #if LV_USE_ARABIC_PERSIAN_CHARS
         /*Get the size of the Arabic text and process it*/
-        size_t len_ap = _lv_txt_ap_calc_bytes_cnt(txt);
+        size_t len_ap = _lv_text_ap_calc_bytes_cnt(txt);
         if(len_ap < sizeof(txt_ap)) {
-            _lv_txt_ap_proc(txt, txt_ap);
+            _lv_text_ap_proc(txt, txt_ap);
             txt = txt_ap;
         }
 #endif
         lv_point_t txt_size;
-        lv_txt_get_size(&txt_size, txt, font, letter_space,
-                        line_space, lv_area_get_width(&area_obj), draw_label_dsc_act.flag);
+        lv_text_get_size(&txt_size, txt, font, letter_space,
+                         line_space, lv_area_get_width(&area_obj), draw_label_dsc_act.flag);
 
         btn_area.x1 += (lv_area_get_width(&btn_area) - txt_size.x) / 2;
         btn_area.y1 += (lv_area_get_height(&btn_area) - txt_size.y) / 2;

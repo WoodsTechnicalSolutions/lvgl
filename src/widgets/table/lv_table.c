@@ -11,8 +11,8 @@
 
 #include "../../indev/lv_indev.h"
 #include "../../misc/lv_assert.h"
-#include "../../misc/lv_txt.h"
-#include "../../misc/lv_txt_ap.h"
+#include "../../misc/lv_text.h"
+#include "../../misc/lv_text_ap.h"
 #include "../../misc/lv_math.h"
 #include "../../stdlib/lv_sprintf.h"
 #include "../../draw/lv_draw.h"
@@ -154,14 +154,14 @@ void lv_table_set_cell_value_fmt(lv_obj_t * obj, uint16_t row, uint16_t col, con
     lv_vsnprintf(raw_txt, len + 1, fmt, ap2);
 
     /*Get the size of the Arabic text and process it*/
-    size_t len_ap = _lv_txt_ap_calc_bytes_cnt(raw_txt);
+    size_t len_ap = _lv_text_ap_calc_bytes_cnt(raw_txt);
     table->cell_data[cell] = lv_realloc(table->cell_data[cell], len_ap + 1);
     LV_ASSERT_MALLOC(table->cell_data[cell]);
     if(table->cell_data[cell] == NULL) {
         va_end(ap2);
         return;
     }
-    _lv_txt_ap_proc(raw_txt, &table->cell_data[cell][1]);
+    _lv_text_ap_proc(raw_txt, &table->cell_data[cell][1]);
 
     lv_free(raw_txt);
 #else
@@ -735,9 +735,9 @@ static void draw_main(lv_event_t * e)
                 bool crop = ctrl & LV_TABLE_CELL_CTRL_TEXT_CROP;
                 if(crop) txt_flags = LV_TEXT_FLAG_EXPAND;
 
-                lv_txt_get_size(&txt_size, table->cell_data[cell] + 1, label_dsc_def.font,
-                                label_dsc_act.letter_space, label_dsc_act.line_space,
-                                lv_area_get_width(&txt_area), txt_flags);
+                lv_text_get_size(&txt_size, table->cell_data[cell] + 1, label_dsc_def.font,
+                                 label_dsc_act.letter_space, label_dsc_act.line_space,
+                                 lv_area_get_width(&txt_area), txt_flags);
 
                 /*Align the content to the middle if not cropped*/
                 if(!crop) {
@@ -878,8 +878,8 @@ static lv_coord_t get_row_height(lv_obj_t * obj, uint16_t row_id, const lv_font_
             lv_point_t txt_size;
             txt_w -= cell_left + cell_right;
 
-            lv_txt_get_size(&txt_size, table->cell_data[cell] + 1, font,
-                            letter_space, line_space, txt_w, LV_TEXT_FLAG_NONE);
+            lv_text_get_size(&txt_size, table->cell_data[cell] + 1, font,
+                             letter_space, line_space, txt_w, LV_TEXT_FLAG_NONE);
 
             h_max = LV_MAX(txt_size.y + cell_top + cell_bottom, h_max);
             /*Skip until one element after the last merged column*/
@@ -948,7 +948,7 @@ static size_t get_cell_txt_len(const char * txt)
     size_t retval = 0;
 
 #if LV_USE_ARABIC_PERSIAN_CHARS
-    retval = _lv_txt_ap_calc_bytes_cnt(txt) + 1;
+    retval = _lv_text_ap_calc_bytes_cnt(txt) + 1;
 #else
     /* cell_data layout: [ctrl][txt][trailing '\0' terminator]
      * +2 because of the trailing '\0' and the ctrl */
@@ -962,7 +962,7 @@ static size_t get_cell_txt_len(const char * txt)
 static void copy_cell_txt(char * dst, const char * txt)
 {
 #if LV_USE_ARABIC_PERSIAN_CHARS
-    _lv_txt_ap_proc(txt, &dst[1]);
+    _lv_text_ap_proc(txt, &dst[1]);
 #else
     lv_strcpy(&dst[1], txt);
 #endif

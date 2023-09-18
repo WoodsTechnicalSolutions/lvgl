@@ -133,7 +133,7 @@ void lv_image_set_src(lv_obj_t * obj, const void * src)
         lv_coord_t letter_space = lv_obj_get_style_text_letter_space(obj, LV_PART_MAIN);
         lv_coord_t line_space = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
         lv_point_t size;
-        lv_txt_get_size(&size, src, font, letter_space, line_space, LV_COORD_MAX, LV_TEXT_FLAG_NONE);
+        lv_text_get_size(&size, src, font, letter_space, line_space, LV_COORD_MAX, LV_TEXT_FLAG_NONE);
         header.w = size.x;
         header.h = size.y;
     }

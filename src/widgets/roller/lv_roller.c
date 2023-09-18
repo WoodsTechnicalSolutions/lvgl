@@ -494,8 +494,8 @@ static void draw_main(lv_event_t * e)
 
             /*Get the size of the "selected text"*/
             lv_point_t res_p;
-            lv_txt_get_size(&res_p, lv_label_get_text(label), label_dsc.font, label_dsc.letter_space, label_dsc.line_space,
-                            lv_obj_get_width(obj), LV_TEXT_FLAG_EXPAND);
+            lv_text_get_size(&res_p, lv_label_get_text(label), label_dsc.font, label_dsc.letter_space, label_dsc.line_space,
+                             lv_obj_get_width(obj), LV_TEXT_FLAG_EXPAND);
 
             /*Move the selected label proportionally with the background label*/
             lv_coord_t roller_h = lv_obj_get_height(obj);
@@ -710,7 +710,7 @@ static lv_result_t release_handler(lv_obj_t * obj)
 
             uint32_t letter_cnt = 0;
             for(letter_cnt = 0; letter_cnt < letter_i; letter_cnt++) {
-                uint32_t letter = _lv_txt_encoded_next(txt, &i);
+                uint32_t letter = _lv_text_encoded_next(txt, &i);
                 /*Count he lines to reach the clicked letter. But ignore the last '\n' because it
                  * still belongs to the clicked line*/
                 if(letter == '\n' && i_prev != letter_i) new_opt++;
@@ -803,7 +803,7 @@ static lv_coord_t get_selected_label_width(const lv_obj_t * obj)
     lv_coord_t letter_space = lv_obj_get_style_text_letter_space(obj, LV_PART_SELECTED);
     const char * txt = lv_label_get_text(label);
     lv_point_t size;
-    lv_txt_get_size(&size, txt, font, letter_space, 0, LV_COORD_MAX,  LV_TEXT_FLAG_NONE);
+    lv_text_get_size(&size, txt, font, letter_space, 0, LV_COORD_MAX,  LV_TEXT_FLAG_NONE);
     return size.x;
 }
 

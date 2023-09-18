@@ -971,8 +971,8 @@ static void scale_get_label_coords(lv_obj_t * obj, lv_draw_label_dsc_t * label_d
 
     /* Reserve appropriate size for the tick label */
     lv_point_t label_size;
-    lv_txt_get_size(&label_size, label_dsc->text,
-                    label_dsc->font, label_dsc->letter_space, label_dsc->line_space, LV_COORD_MAX, LV_TEXT_FLAG_NONE);
+    lv_text_get_size(&label_size, label_dsc->text,
+                     label_dsc->font, label_dsc->letter_space, label_dsc->line_space, LV_COORD_MAX, LV_TEXT_FLAG_NONE);
 
     /* Set the label draw area at some distance of the major tick */
     if((LV_SCALE_MODE_HORIZONTAL_BOTTOM == scale->mode) || (LV_SCALE_MODE_HORIZONTAL_TOP == scale->mode)) {

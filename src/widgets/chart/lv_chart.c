@@ -1369,8 +1369,8 @@ static void draw_y_ticks(lv_obj_t * obj, lv_layer_t * layer, lv_chart_axis_t axi
 
             /*reserve appropriate area*/
             lv_point_t size;
-            lv_txt_get_size(&size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
-                            LV_TEXT_FLAG_NONE);
+            lv_text_get_size(&size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
+                             LV_TEXT_FLAG_NONE);
 
             /*set the area at some distance of the major tick len left of the tick*/
             lv_area_t a;
@@ -1489,8 +1489,8 @@ static void draw_x_ticks(lv_obj_t * obj, lv_layer_t * layer, lv_chart_axis_t axi
             label_dsc.text_local = true;
             /*reserve appropriate area*/
             lv_point_t size;
-            lv_txt_get_size(&size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
-                            LV_TEXT_FLAG_NONE);
+            lv_text_get_size(&size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
+                             LV_TEXT_FLAG_NONE);
 
             /*set the area at some distance of the major tick len under of the tick*/
             lv_area_t a;

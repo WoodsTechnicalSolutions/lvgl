@@ -18,7 +18,7 @@
 #include "../../font/lv_symbol_def.h"
 #include "../../misc/lv_anim.h"
 #include "../../misc/lv_math.h"
-#include "../../misc/lv_txt_ap.h"
+#include "../../misc/lv_text_ap.h"
 #include "../../stdlib/lv_string.h"
 #include <string.h>
 
@@ -133,7 +133,7 @@ void lv_dropdown_set_options(lv_obj_t * obj, const char * options)
 #if LV_USE_ARABIC_PERSIAN_CHARS == 0
     size_t len = lv_strlen(options) + 1;
 #else
-    size_t len = _lv_txt_ap_calc_bytes_cnt(options) + 1;
+    size_t len = _lv_text_ap_calc_bytes_cnt(options) + 1;
 #endif
 
     if(dropdown->options != NULL && dropdown->static_txt == 0) {
@@ -149,7 +149,7 @@ void lv_dropdown_set_options(lv_obj_t * obj, const char * options)
 #if LV_USE_ARABIC_PERSIAN_CHARS == 0
     lv_strcpy(dropdown->options, options);
 #else
-    _lv_txt_ap_proc(options, dropdown->options);
+    _lv_text_ap_proc(options, dropdown->options);
 #endif
 
     /*Now the text is dynamically allocated*/
@@ -209,7 +209,7 @@ void lv_dropdown_add_option(lv_obj_t * obj, const char * option, uint32_t pos)
 #if LV_USE_ARABIC_PERSIAN_CHARS == 0
     size_t ins_len = lv_strlen(option) + 1;
 #else
-    size_t ins_len = _lv_txt_ap_calc_bytes_cnt(option) + 1;
+    size_t ins_len = _lv_text_ap_calc_bytes_cnt(option) + 1;
 #endif
 
     size_t new_len = ins_len + old_len + 2; /*+2 for terminating NULL and possible \n*/
@@ -233,7 +233,7 @@ void lv_dropdown_add_option(lv_obj_t * obj, const char * option, uint32_t pos)
 
     /*Add delimiter to existing options*/
     if((insert_pos > 0) && (pos >= dropdown->option_cnt))
-        _lv_txt_ins(dropdown->options, _lv_txt_encoded_get_char_id(dropdown->options, insert_pos++), "\n");
+        _lv_text_ins(dropdown->options, _lv_text_encoded_get_char_id(dropdown->options, insert_pos++), "\n");
 
     /*Insert the new option, adding \n if necessary*/
     char * ins_buf = lv_malloc(ins_len + 2); /*+ 2 for terminating NULL and possible \n*/
@@ -242,11 +242,11 @@ void lv_dropdown_add_option(lv_obj_t * obj, const char * option, uint32_t pos)
 #if LV_USE_ARABIC_PERSIAN_CHARS == 0
     lv_strcpy(ins_buf, option);
 #else
-    _lv_txt_ap_proc(option, ins_buf);
+    _lv_text_ap_proc(option, ins_buf);
 #endif
     if(pos < dropdown->option_cnt) strcat(ins_buf, "\n");
 
-    _lv_txt_ins(dropdown->options, _lv_txt_encoded_get_char_id(dropdown->options, insert_pos), ins_buf);
+    _lv_text_ins(dropdown->options, _lv_text_encoded_get_char_id(dropdown->options, insert_pos), ins_buf);
     lv_free(ins_buf);
 
     dropdown->option_cnt++;
@@ -809,8 +809,8 @@ static void draw_main(lv_event_t * e)
         lv_coord_t symbol_h;
         if(symbol_type == LV_IMAGE_SRC_SYMBOL) {
             lv_point_t size;
-            lv_txt_get_size(&size, dropdown->symbol, symbol_dsc.font, symbol_dsc.letter_space, symbol_dsc.line_space, LV_COORD_MAX,
-                            symbol_dsc.flag);
+            lv_text_get_size(&size, dropdown->symbol, symbol_dsc.font, symbol_dsc.letter_space, symbol_dsc.line_space, LV_COORD_MAX,
+                             symbol_dsc.flag);
             symbol_w = size.x;
             symbol_h = size.y;
         }
@@ -862,8 +862,8 @@ static void draw_main(lv_event_t * e)
     lv_obj_init_draw_label_dsc(obj, LV_PART_MAIN, &label_dsc);
 
     lv_point_t size;
-    lv_txt_get_size(&size, opt_txt, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
-                    label_dsc.flag);
+    lv_text_get_size(&size, opt_txt, label_dsc.font, label_dsc.letter_space, label_dsc.line_space, LV_COORD_MAX,
+                     label_dsc.flag);
 
     lv_area_t txt_area;
     txt_area.y1 = obj->coords.y1 + top;

@@ -463,8 +463,8 @@ static void draw_ticks_and_labels(lv_obj_t * obj, lv_layer_t * layer, const lv_a
 
             lv_point_t label_size;
             label_dsc_tmp.text = buf;
-            lv_txt_get_size(&label_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space,
-                            LV_COORD_MAX, LV_TEXT_FLAG_NONE);
+            lv_text_get_size(&label_size, buf, label_dsc.font, label_dsc.letter_space, label_dsc.line_space,
+                             LV_COORD_MAX, LV_TEXT_FLAG_NONE);
 
             lv_area_t label_cord;
             label_cord.x1 = p.x - label_size.x / 2;

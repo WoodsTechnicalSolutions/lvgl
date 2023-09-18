@@ -139,11 +139,13 @@ static inline void lv_obj_move_background(lv_obj_t * obj)
 #define lv_disp_trig_activity            lv_display_trig_activity
 #define lv_disp_enable_invalidation      lv_display_enable_invalidation
 #define lv_disp_is_invalidation_enabled  lv_display_is_invalidation_enabled
-#define _lv_disp_get_refr_timer          _lv_display_get_refr_timer
 #define lv_disp_set_user_data            lv_display_set_user_data
 #define lv_disp_set_driver_data          lv_display_set_driver_data
 #define lv_disp_get_user_data            lv_display_get_user_data
 #define lv_disp_get_driver_data          lv_display_get_driver_data
+
+#define lv_txt_get_size       lv_text_get_size
+#define lv_txt_get_width      lv_text_get_width
 
 #define lv_img_create         lv_image_create
 #define lv_img_set_src        lv_image_set_src

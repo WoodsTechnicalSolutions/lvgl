@@ -121,7 +121,7 @@ void lv_draw_sw_layer(lv_draw_unit_t * draw_unit, const lv_draw_image_dsc_t * dr
     lv_draw_sw_rect(draw_unit, &rect_dsc, &area_rot);
 
     lv_point_t txt_size;
-    lv_txt_get_size(&txt_size, "W", LV_FONT_DEFAULT, 0, 0, 100, LV_TEXT_FLAG_NONE);
+    lv_text_get_size(&txt_size, "W", LV_FONT_DEFAULT, 0, 0, 100, LV_TEXT_FLAG_NONE);
 
     lv_area_t txt_area;
     txt_area.x1 = draw_area.x1;
