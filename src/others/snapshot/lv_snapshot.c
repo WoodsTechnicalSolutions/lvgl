@@ -10,9 +10,9 @@
 #if LV_USE_SNAPSHOT
 
 #include <stdbool.h>
-#include "../../disp/lv_disp.h"
+#include "../../display/lv_display.h"
 #include "../../core/lv_refr.h"
-#include "../../disp/lv_disp_private.h"
+#include "../../display/lv_display_private.h"
 #include "../../stdlib/lv_string.h"
 
 /*********************

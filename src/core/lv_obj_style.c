@@ -7,8 +7,8 @@
  *      INCLUDES
  *********************/
 #include "lv_obj.h"
-#include "../disp/lv_disp.h"
-#include "../disp/lv_disp_private.h"
+#include "../display/lv_display.h"
+#include "../display/lv_display_private.h"
 #include "../misc/lv_color.h"
 #include "../stdlib/lv_string.h"
 #include "../core/lv_global.h"
@@ -246,14 +246,14 @@ void lv_obj_remove_style_all(struct _lv_obj_t * obj)
 void lv_obj_report_style_change(lv_style_t * style)
 {
     if(!style_refr) return;
-    lv_disp_t * d = lv_disp_get_next(NULL);
+    lv_display_t * d = lv_display_get_next(NULL);
 
     while(d) {
         uint32_t i;
         for(i = 0; i < d->screen_cnt; i++) {
             report_style_change_core(style, d->screens[i]);
         }
-        d = lv_disp_get_next(d);
+        d = lv_display_get_next(d);
     }
 }
 

@@ -14,7 +14,7 @@
 #include "../../misc/lv_math.h"
 #include "../../misc/lv_anim.h"
 #include "../../indev/lv_indev.h"
-#include "../../disp/lv_disp.h"
+#include "../../display/lv_display.h"
 
 /*********************
  *      DEFINES

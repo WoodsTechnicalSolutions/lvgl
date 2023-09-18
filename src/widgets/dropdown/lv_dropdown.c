@@ -14,7 +14,7 @@
 #include "../../draw/lv_draw.h"
 #include "../../core/lv_group.h"
 #include "../../indev/lv_indev.h"
-#include "../../disp/lv_disp.h"
+#include "../../display/lv_display.h"
 #include "../../font/lv_symbol_def.h"
 #include "../../misc/lv_anim.h"
 #include "../../misc/lv_math.h"

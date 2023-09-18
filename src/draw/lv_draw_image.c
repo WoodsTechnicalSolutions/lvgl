@@ -7,7 +7,7 @@
  *      INCLUDES
  *********************/
 #include "lv_draw_image.h"
-#include "../disp/lv_disp.h"
+#include "../display/lv_display.h"
 #include "../misc/lv_log.h"
 #include "../misc/lv_math.h"
 #include "../core/lv_refr.h"

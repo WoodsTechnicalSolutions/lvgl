@@ -9,7 +9,7 @@
 #include "lv_draw_sw.h"
 #if LV_USE_DRAW_SW
 
-#include "../../disp/lv_disp.h"
+#include "../../display/lv_display.h"
 #include "../../misc/lv_math.h"
 #include "../../misc/lv_assert.h"
 #include "../../misc/lv_area.h"

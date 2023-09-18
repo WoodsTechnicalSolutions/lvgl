@@ -8,7 +8,7 @@
  *********************/
 #include "lv_obj_draw.h"
 #include "lv_obj.h"
-#include "../disp/lv_disp.h"
+#include "../display/lv_display.h"
 #include "../indev/lv_indev.h"
 #include "../stdlib/lv_string.h"
 

@@ -9,8 +9,8 @@
 #include "lv_draw_sw.h"
 #if LV_USE_DRAW_SW
 
-#include "../../disp/lv_disp.h"
-#include "../../disp/lv_disp_private.h"
+#include "../../display/lv_display.h"
+#include "../../display/lv_display_private.h"
 #include "../../misc/lv_log.h"
 #include "../../core/lv_refr.h"
 #include "../../stdlib/lv_mem.h"
@@ -22,7 +22,7 @@
 /*********************
  *      DEFINES
  *********************/
-#define MAX_BUF_SIZE (uint32_t) 4 * lv_draw_buf_width_to_stride(lv_disp_get_hor_res(_lv_refr_get_disp_refreshing()), lv_disp_get_color_format(_lv_refr_get_disp_refreshing()))
+#define MAX_BUF_SIZE (uint32_t) 4 * lv_draw_buf_width_to_stride(lv_display_get_hor_res(_lv_refr_get_disp_refreshing()), lv_display_get_color_format(_lv_refr_get_disp_refreshing()))
 
 /**********************
  *      TYPEDEFS
@@ -104,7 +104,7 @@ void lv_draw_sw_layer(lv_draw_unit_t * draw_unit, const lv_draw_image_dsc_t * dr
 
 #if LV_USE_PARALLEL_DRAW_DEBUG
     uint32_t idx = 0;
-    lv_disp_t * disp = _lv_refr_get_disp_refreshing();
+    lv_display_t * disp = _lv_refr_get_disp_refreshing();
     lv_draw_unit_t * draw_unit_tmp = disp->draw_unit_head;
     while(draw_unit_tmp != draw_unit) {
         draw_unit_tmp = draw_unit_tmp->next;

@@ -11,8 +11,8 @@
 #include "../indev/lv_indev_private.h"
 #include "lv_refr.h"
 #include "lv_group.h"
-#include "../disp/lv_disp.h"
-#include "../disp/lv_disp_private.h"
+#include "../display/lv_display.h"
+#include "../display/lv_display_private.h"
 #include "../themes/lv_theme.h"
 #include "../misc/lv_assert.h"
 #include "../misc/lv_math.h"
@@ -259,7 +259,7 @@ const lv_obj_class_t * lv_obj_get_class(const lv_obj_t * obj)
 
 bool lv_obj_is_valid(const lv_obj_t * obj)
 {
-    lv_disp_t * disp = lv_disp_get_next(NULL);
+    lv_display_t * disp = lv_display_get_next(NULL);
     while(disp) {
         uint32_t i;
         for(i = 0; i < disp->screen_cnt; i++) {
@@ -268,7 +268,7 @@ bool lv_obj_is_valid(const lv_obj_t * obj)
             if(found) return true;
         }
 
-        disp = lv_disp_get_next(disp);
+        disp = lv_display_get_next(disp);
     }
 
     return false;

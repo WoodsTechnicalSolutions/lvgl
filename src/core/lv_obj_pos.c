@@ -7,8 +7,8 @@
  *      INCLUDES
  *********************/
 #include "lv_obj.h"
-#include "../disp/lv_disp.h"
-#include "../disp/lv_disp_private.h"
+#include "../display/lv_display.h"
+#include "../display/lv_display_private.h"
 #include "lv_refr.h"
 #include "../core/lv_global.h"
 
@@ -282,8 +282,8 @@ void lv_obj_mark_layout_as_dirty(lv_obj_t * obj)
     scr->scr_layout_inv = 1;
 
     /*Make the display refreshing*/
-    lv_disp_t * disp = lv_obj_get_disp(scr);
-    lv_disp_send_event(disp, LV_EVENT_REFR_REQUEST, NULL);
+    lv_display_t * disp = lv_obj_get_disp(scr);
+    lv_display_send_event(disp, LV_EVENT_REFR_REQUEST, NULL);
 }
 
 void lv_obj_update_layout(const lv_obj_t * obj)
@@ -802,8 +802,8 @@ void lv_obj_invalidate_area(const lv_obj_t * obj, const lv_area_t * area)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
-    lv_disp_t * disp   = lv_obj_get_disp(obj);
-    if(!lv_disp_is_invalidation_enabled(disp)) return;
+    lv_display_t * disp   = lv_obj_get_disp(obj);
+    if(!lv_display_is_invalidation_enabled(disp)) return;
 
     lv_area_t area_tmp;
     lv_area_copy(&area_tmp, area);
@@ -834,12 +834,12 @@ bool lv_obj_area_is_visible(const lv_obj_t * obj, lv_area_t * area)
 
     /*Invalidate the object only if it belongs to the current or previous or one of the layers'*/
     lv_obj_t * obj_scr = lv_obj_get_screen(obj);
-    lv_disp_t * disp   = lv_obj_get_disp(obj_scr);
-    if(obj_scr != lv_disp_get_scr_act(disp) &&
-       obj_scr != lv_disp_get_scr_prev(disp) &&
-       obj_scr != lv_disp_get_layer_bottom(disp) &&
-       obj_scr != lv_disp_get_layer_top(disp) &&
-       obj_scr != lv_disp_get_layer_sys(disp)) {
+    lv_display_t * disp   = lv_obj_get_disp(obj_scr);
+    if(obj_scr != lv_display_get_scr_act(disp) &&
+       obj_scr != lv_display_get_scr_prev(disp) &&
+       obj_scr != lv_display_get_layer_bottom(disp) &&
+       obj_scr != lv_display_get_layer_top(disp) &&
+       obj_scr != lv_display_get_layer_sys(disp)) {
         return false;
     }
 

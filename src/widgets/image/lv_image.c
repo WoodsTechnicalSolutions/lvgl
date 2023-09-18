@@ -202,10 +202,10 @@ void lv_image_set_angle(lv_obj_t * obj, int16_t angle)
 
     /* Disable invalidations because lv_obj_refresh_ext_draw_size would invalidate
      * the whole ext draw area */
-    lv_disp_t * disp = lv_obj_get_disp(obj);
-    lv_disp_enable_invalidation(disp, false);
+    lv_display_t * disp = lv_obj_get_disp(obj);
+    lv_display_enable_invalidation(disp, false);
     lv_obj_refresh_ext_draw_size(obj);
-    lv_disp_enable_invalidation(disp, true);
+    lv_display_enable_invalidation(disp, true);
 
     _lv_image_buf_get_transformed_area(&a, w, h, img->angle, img->zoom, &pivot_px);
     a.x1 += obj->coords.x1;
@@ -245,10 +245,10 @@ void lv_image_set_pivot(lv_obj_t * obj, lv_coord_t x, lv_coord_t y)
 
     /* Disable invalidations because lv_obj_refresh_ext_draw_size would invalidate
      * the whole ext draw area */
-    lv_disp_t * disp = lv_obj_get_disp(obj);
-    lv_disp_enable_invalidation(disp, false);
+    lv_display_t * disp = lv_obj_get_disp(obj);
+    lv_display_enable_invalidation(disp, false);
     lv_obj_refresh_ext_draw_size(obj);
-    lv_disp_enable_invalidation(disp, true);
+    lv_display_enable_invalidation(disp, true);
 
     lv_image_get_pivot(obj, &pivot_px);
     _lv_image_buf_get_transformed_area(&a, w, h, img->angle, img->zoom, &pivot_px);
@@ -289,10 +289,10 @@ void lv_image_set_zoom(lv_obj_t * obj, uint16_t zoom)
 
     /* Disable invalidations because lv_obj_refresh_ext_draw_size would invalidate
      * the whole ext draw area */
-    lv_disp_t * disp = lv_obj_get_disp(obj);
-    lv_disp_enable_invalidation(disp, false);
+    lv_display_t * disp = lv_obj_get_disp(obj);
+    lv_display_enable_invalidation(disp, false);
     lv_obj_refresh_ext_draw_size(obj);
-    lv_disp_enable_invalidation(disp, true);
+    lv_display_enable_invalidation(disp, true);
 
     _lv_image_buf_get_transformed_area(&a, w, h, img->angle, img->zoom, &pivot_px);
     a.x1 += obj->coords.x1 - 1;

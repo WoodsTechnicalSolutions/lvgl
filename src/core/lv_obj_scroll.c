@@ -10,7 +10,7 @@
 #include "lv_obj.h"
 #include "../indev/lv_indev.h"
 #include "../indev/lv_indev_scroll.h"
-#include "../disp/lv_disp.h"
+#include "../display/lv_display.h"
 
 /*********************
  *      DEFINES
@@ -306,14 +306,14 @@ void lv_obj_scroll_by(lv_obj_t * obj, lv_coord_t dx, lv_coord_t dy, lv_anim_enab
 {
     if(dx == 0 && dy == 0) return;
     if(anim_en == LV_ANIM_ON) {
-        lv_disp_t * d = lv_obj_get_disp(obj);
+        lv_display_t * d = lv_obj_get_disp(obj);
         lv_anim_t a;
         lv_anim_init(&a);
         lv_anim_set_var(&a, obj);
         lv_anim_set_ready_cb(&a, scroll_anim_ready_cb);
 
         if(dx) {
-            uint32_t t = lv_anim_speed_to_time((lv_disp_get_hor_res(d) * 2) >> 2, 0, dx);
+            uint32_t t = lv_anim_speed_to_time((lv_display_get_hor_res(d) * 2) >> 2, 0, dx);
             if(t < SCROLL_ANIM_TIME_MIN) t = SCROLL_ANIM_TIME_MIN;
             if(t > SCROLL_ANIM_TIME_MAX) t = SCROLL_ANIM_TIME_MAX;
             lv_anim_set_time(&a, t);
@@ -329,7 +329,7 @@ void lv_obj_scroll_by(lv_obj_t * obj, lv_coord_t dx, lv_coord_t dy, lv_anim_enab
         }
 
         if(dy) {
-            uint32_t t = lv_anim_speed_to_time((lv_disp_get_ver_res(d) * 2) >> 2, 0, dy);
+            uint32_t t = lv_anim_speed_to_time((lv_display_get_ver_res(d) * 2) >> 2, 0, dy);
             if(t < SCROLL_ANIM_TIME_MIN) t = SCROLL_ANIM_TIME_MIN;
             if(t > SCROLL_ANIM_TIME_MAX) t = SCROLL_ANIM_TIME_MAX;
             lv_anim_set_time(&a, t);

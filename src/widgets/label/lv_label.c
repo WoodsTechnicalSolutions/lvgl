@@ -11,7 +11,7 @@
 #include "../../core/lv_obj.h"
 #include "../../misc/lv_assert.h"
 #include "../../core/lv_group.h"
-#include "../../disp/lv_disp.h"
+#include "../../display/lv_display.h"
 #include "../../draw/lv_draw.h"
 #include "../../misc/lv_color.h"
 #include "../../misc/lv_math.h"
@@ -25,7 +25,7 @@
  *********************/
 #define MY_CLASS &lv_label_class
 
-#define LV_LABEL_DEF_SCROLL_SPEED   (lv_disp_get_dpi(lv_obj_get_disp(obj)) / 3)
+#define LV_LABEL_DEF_SCROLL_SPEED   (lv_display_get_dpi(lv_obj_get_disp(obj)) / 3)
 #define LV_LABEL_SCROLL_DELAY       300
 #define LV_LABEL_DOT_END_INV 0xFFFFFFFF
 #define LV_LABEL_HINT_HEIGHT_LIMIT 1024 /*Enable "hint" to buffer info about labels larger than this. (Speed up drawing)*/
