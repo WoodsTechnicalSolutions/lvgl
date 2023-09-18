@@ -62,6 +62,7 @@ typedef enum {
     LV_EVENT_DEFOCUSED,           /**< The object is defocused*/
     LV_EVENT_LEAVE,               /**< The object is defocused but still selected*/
     LV_EVENT_HIT_TEST,            /**< Perform advanced hit-testing*/
+    LV_EVENT_INDEV_RESET,         /**< Indev has been reseted*/
 
     /** Drawing events*/
     LV_EVENT_COVER_CHECK,        /**< Check if the object fully covers an area. The event parameter is `lv_cover_check_info_t *`.*/
@@ -162,6 +163,8 @@ lv_event_cb_t lv_event_dsc_get_cb(lv_event_dsc_t * dsc);
 void * lv_event_dsc_get_user_data(lv_event_dsc_t * dsc);
 
 bool lv_event_remove(lv_event_list_t * list, uint32_t index);
+
+void lv_event_remove_all(lv_event_list_t * list);
 
 /**
  * Get the object originally targeted by the event. It's the same even if the event is bubbled.
