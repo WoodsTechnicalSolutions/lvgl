@@ -220,7 +220,7 @@ void lv_init(void)
 #endif
 
 #if LV_USE_SJPG
-    lv_split_jpeg_init();
+    lv_jpeg_init();
 #endif
 
 #if LV_USE_BMP
