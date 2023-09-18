@@ -22,7 +22,7 @@
 /*********************
  *      DEFINES
  *********************/
-#define MAX_BUF_SIZE (uint32_t) 4 * lv_draw_buf_width_to_stride(lv_display_get_hor_res(_lv_refr_get_disp_refreshing()), lv_display_get_color_format(_lv_refr_get_disp_refreshing()))
+#define MAX_BUF_SIZE (uint32_t) 4 * lv_draw_buf_width_to_stride(lv_display_get_horizontal_resolution(_lv_refr_get_disp_refreshing()), lv_display_get_color_format(_lv_refr_get_disp_refreshing()))
 
 /**********************
  *      TYPEDEFS

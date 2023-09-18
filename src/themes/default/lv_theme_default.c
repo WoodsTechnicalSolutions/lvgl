@@ -680,7 +680,7 @@ lv_theme_t * lv_theme_default_init(lv_display_t * disp, lv_color_t color_primary
 
     lv_display_t * new_disp = disp == NULL ? lv_display_get_default() : disp;
     lv_coord_t new_dpi = lv_display_get_dpi(new_disp);
-    lv_coord_t hor_res = lv_display_get_hor_res(new_disp);
+    lv_coord_t hor_res = lv_display_get_horizontal_resolution(new_disp);
     disp_size_t new_size;
 
     if(hor_res <= 320) new_size = DISP_SMALL;

@@ -269,8 +269,8 @@ lv_draw_task_t * lv_draw_get_next_available_task(lv_layer_t * layer, lv_draw_tas
     LV_PROFILER_BEGIN;
     /*If the first task is screen sized, there cannot be independent areas*/
     if(layer->draw_task_head) {
-        lv_coord_t hor_res = lv_display_get_hor_res(_lv_refr_get_disp_refreshing());
-        lv_coord_t ver_res = lv_display_get_ver_res(_lv_refr_get_disp_refreshing());
+        lv_coord_t hor_res = lv_display_get_horizontal_resolution(_lv_refr_get_disp_refreshing());
+        lv_coord_t ver_res = lv_display_get_vertical_resolution(_lv_refr_get_disp_refreshing());
         lv_draw_task_t * t = layer->draw_task_head;
         if(t->state != LV_DRAW_TASK_STATE_QUEUED &&
            t->area.x1 <= 0 && t->area.x2 >= hor_res - 1 &&

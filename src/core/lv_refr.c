@@ -265,8 +265,8 @@ void _lv_inv_area(lv_display_t * disp, const lv_area_t * area_p)
     lv_area_t scr_area;
     scr_area.x1 = 0;
     scr_area.y1 = 0;
-    scr_area.x2 = lv_display_get_hor_res(disp) - 1;
-    scr_area.y2 = lv_display_get_ver_res(disp) - 1;
+    scr_area.x2 = lv_display_get_horizontal_resolution(disp) - 1;
+    scr_area.y2 = lv_display_get_vertical_resolution(disp) - 1;
 
     lv_area_t com_area;
     bool suc;
@@ -390,7 +390,7 @@ void _lv_display_refr_timer(lv_timer_t * tmr)
                            ? disp_refr->buf_2
                            : disp_refr->buf_1;
 
-    lv_coord_t stride = lv_draw_buf_width_to_stride(lv_display_get_hor_res(disp_refr),
+    lv_coord_t stride = lv_draw_buf_width_to_stride(lv_display_get_horizontal_resolution(disp_refr),
                                                     lv_display_get_color_format(disp_refr));
     uint32_t i;
     for(i = 0; i < disp_refr->inv_p; i++) {
@@ -512,13 +512,13 @@ static void refr_area(const lv_area_t * area_p)
     /*With full refresh just redraw directly into the buffer*/
     /*In direct mode draw directly on the absolute coordinates of the buffer*/
     if(disp_refr->render_mode != LV_DISPLAY_RENDER_MODE_PARTIAL) {
-        layer->draw_buf.width = lv_display_get_hor_res(disp_refr);
-        layer->draw_buf.height = lv_display_get_ver_res(disp_refr);
+        layer->draw_buf.width = lv_display_get_horizontal_resolution(disp_refr);
+        layer->draw_buf.height = lv_display_get_vertical_resolution(disp_refr);
         layer->draw_buf_ofs.x = 0;
         layer->draw_buf_ofs.y = 0;
         lv_area_t disp_area;
-        lv_area_set(&disp_area, 0, 0, lv_display_get_hor_res(disp_refr) - 1,
-                    lv_display_get_ver_res(disp_refr) - 1);
+        lv_area_set(&disp_area, 0, 0, lv_display_get_horizontal_resolution(disp_refr) - 1,
+                    lv_display_get_vertical_resolution(disp_refr) - 1);
 
         if(disp_refr->render_mode == LV_DISPLAY_RENDER_MODE_FULL) {
             disp_refr->last_part = 1;
@@ -537,8 +537,8 @@ static void refr_area(const lv_area_t * area_p)
     /*Calculate the max row num*/
     lv_coord_t w = lv_area_get_width(area_p);
     lv_coord_t h = lv_area_get_height(area_p);
-    lv_coord_t y2 = area_p->y2 >= lv_display_get_ver_res(disp_refr) ?
-                    lv_display_get_ver_res(disp_refr) - 1 : area_p->y2;
+    lv_coord_t y2 = area_p->y2 >= lv_display_get_vertical_resolution(disp_refr) ?
+                    lv_display_get_vertical_resolution(disp_refr) - 1 : area_p->y2;
 
     int32_t max_row = get_max_row(disp_refr, w, h);
 

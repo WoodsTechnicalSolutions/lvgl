@@ -97,15 +97,15 @@ static inline void lv_obj_move_background(lv_obj_t * obj)
 #define lv_disp_set_default              lv_display_set_default
 #define lv_disp_get_default              lv_display_get_default
 #define lv_disp_get_next                 lv_display_get_next
-#define lv_disp_set_res                  lv_display_set_res
+#define lv_disp_set_res                  lv_display_set_resolution
 #define lv_disp_set_physical_res         lv_display_set_physical_res
 #define lv_disp_set_offset               lv_display_set_offset
 #define lv_disp_set_rotation             lv_display_set_rotation
 #define lv_disp_set_dpi                  lv_display_set_dpi
-#define lv_disp_get_hor_res              lv_display_get_hor_res
-#define lv_disp_get_ver_res              lv_display_get_ver_res
-#define lv_disp_get_physical_hor_res     lv_display_get_physical_hor_res
-#define lv_disp_get_physical_ver_res     lv_display_get_physical_ver_res
+#define lv_disp_get_hor_res              lv_display_get_horizontal_resolution
+#define lv_disp_get_ver_res              lv_display_get_vertical_resolution
+#define lv_disp_get_physical_hor_res     lv_display_get_physical_horizontal_resolution
+#define lv_disp_get_physical_ver_res     lv_display_get_physical_vertical_resolution
 #define lv_disp_get_offset_x             lv_display_get_offset_x
 #define lv_disp_get_offset_y             lv_display_get_offset_y
 #define lv_disp_get_rotation             lv_display_get_rotation
@@ -141,7 +141,6 @@ static inline void lv_obj_move_background(lv_obj_t * obj)
 #define lv_disp_set_driver_data          lv_display_set_driver_data
 #define lv_disp_get_user_data            lv_display_get_user_data
 #define lv_disp_get_driver_data          lv_display_get_driver_data
-
 
 #define lv_img_create         lv_image_create
 #define lv_img_set_src        lv_image_set_src

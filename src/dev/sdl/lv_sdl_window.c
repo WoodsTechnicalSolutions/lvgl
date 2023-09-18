@@ -104,8 +104,10 @@ lv_display_t * lv_sdl_window_create(lv_coord_t hor_res, lv_coord_t ver_res)
     }
     /*LV_DISPLAY_RENDER_MODE_DIRECT or FULL */
     else {
-        uint32_t stride = lv_draw_buf_width_to_stride(lv_display_get_hor_res(disp), lv_display_get_color_format(disp));
-        lv_display_set_draw_buffers(disp, dsc->fb1, dsc->fb2, stride * lv_display_get_ver_res(disp), LV_SDL_RENDER_MODE);
+        uint32_t stride = lv_draw_buf_width_to_stride(lv_display_get_horizontal_resolution(disp),
+                                                      lv_display_get_color_format(disp));
+        lv_display_set_draw_buffers(disp, dsc->fb1, dsc->fb2, stride * lv_display_get_vertical_resolution(disp),
+                                    LV_SDL_RENDER_MODE);
     }
     lv_display_add_event(disp, res_chg_event_cb, LV_EVENT_RESOLUTION_CHANGED, NULL);
 
@@ -169,7 +171,7 @@ static void flush_cb(lv_display_t * disp, const lv_area_t * area, uint8_t * px_m
         uint8_t * fb_tmp = dsc->fb_act;
         uint32_t px_size = lv_color_format_get_size(lv_display_get_color_format(disp));
         uint32_t px_map_stride = lv_area_get_width(area) * px_size;
-        lv_coord_t fb_stride = lv_display_get_hor_res(disp) * px_size;
+        lv_coord_t fb_stride = lv_display_get_horizontal_resolution(disp) * px_size;
         fb_tmp += area->y1 * fb_stride;
         fb_tmp += area->x1 * px_size;
         for(y = area->y1; y <= area->y2; y++) {
@@ -221,7 +223,7 @@ static void sdl_event_handler(lv_timer_t * t)
                     break;
                 case SDL_WINDOWEVENT_RESIZED:
                     dsc->ignore_size_chg = 1;
-                    lv_display_set_res(disp, event.window.data1 / dsc->zoom, event.window.data2 / dsc->zoom);
+                    lv_display_set_resolution(disp, event.window.data1 / dsc->zoom, event.window.data2 / dsc->zoom);
                     dsc->ignore_size_chg = 0;
                     lv_refr_now(disp);
                     break;
@@ -263,8 +265,8 @@ static void window_create(lv_display_t * disp)
     flag |= SDL_WINDOW_FULLSCREEN;
 #endif
 
-    lv_coord_t hor_res = lv_display_get_hor_res(disp);
-    lv_coord_t ver_res = lv_display_get_ver_res(disp);
+    lv_coord_t hor_res = lv_display_get_horizontal_resolution(disp);
+    lv_coord_t ver_res = lv_display_get_vertical_resolution(disp);
     dsc->window = SDL_CreateWindow("LVGL Simulator",
                                    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                    hor_res * dsc->zoom, ver_res * dsc->zoom, flag);       /*last param. SDL_WINDOW_BORDERLESS to hide borders*/
@@ -284,7 +286,7 @@ static void window_create(lv_display_t * disp)
 static void window_update(lv_display_t * disp)
 {
     lv_sdl_window_t * dsc = lv_display_get_driver_data(disp);
-    lv_coord_t hor_res = lv_display_get_hor_res(disp);
+    lv_coord_t hor_res = lv_display_get_horizontal_resolution(disp);
     uint32_t stride = lv_draw_buf_width_to_stride(hor_res, lv_display_get_color_format(disp));
     SDL_UpdateTexture(dsc->texture, NULL, dsc->fb_act, stride);
 
@@ -297,8 +299,8 @@ static void window_update(lv_display_t * disp)
 
 static void texture_resize(lv_display_t * disp)
 {
-    lv_coord_t hor_res = lv_display_get_hor_res(disp);
-    lv_coord_t ver_res = lv_display_get_ver_res(disp);
+    lv_coord_t hor_res = lv_display_get_horizontal_resolution(disp);
+    lv_coord_t ver_res = lv_display_get_vertical_resolution(disp);
     uint32_t stride = lv_draw_buf_width_to_stride(hor_res, lv_display_get_color_format(disp));
     lv_sdl_window_t * dsc = lv_display_get_driver_data(disp);
 
@@ -337,8 +339,8 @@ static void res_chg_event_cb(lv_event_t * e)
 {
     lv_display_t * disp = lv_event_get_target(e);
 
-    int32_t hor_res = lv_display_get_hor_res(disp);
-    int32_t ver_res = lv_display_get_ver_res(disp);
+    int32_t hor_res = lv_display_get_horizontal_resolution(disp);
+    int32_t ver_res = lv_display_get_vertical_resolution(disp);
     lv_sdl_window_t * dsc = lv_display_get_driver_data(disp);
     if(dsc->ignore_size_chg == false) {
         SDL_SetWindowSize(dsc->window, hor_res * dsc->zoom, ver_res * dsc->zoom);

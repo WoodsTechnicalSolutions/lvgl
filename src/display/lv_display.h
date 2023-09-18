@@ -135,7 +135,7 @@ lv_display_t * lv_display_get_next(lv_display_t * disp);
  * @param hor_res   the new horizontal resolution
  * @param ver_res   the new vertical resolution
  */
-void lv_display_set_res(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_res);
+void lv_display_set_resolution(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_res);
 
 /**
  * It's not mandatory to use the whole display for LVGL, however in some cases physical resolution is important.
@@ -145,7 +145,7 @@ void lv_display_set_res(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_
  * @param hor_res   the new physical horizontal resolution, or -1 to assume it's the same as the normal hor. res.
  * @param ver_res   the new physical vertical resolution, or -1 to assume it's the same as the normal hor. res.
  */
-void lv_display_set_physical_res(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_res);
+void lv_display_set_physical_resolution(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_res);
 
 /**
  * If physical resolution is not the same as the normal resolution
@@ -178,28 +178,28 @@ void lv_display_set_dpi(lv_display_t * disp, lv_coord_t dpi);
  * @param disp      pointer to a display (NULL to use the default display)
  * @return          the horizontal resolution of the display.
  */
-lv_coord_t lv_display_get_hor_res(const lv_display_t * disp);
+lv_coord_t lv_display_get_horizontal_resolution(const lv_display_t * disp);
 
 /**
  * Get the vertical resolution of a display
  * @param disp      pointer to a display (NULL to use the default display)
  * @return          the vertical resolution of the display
  */
-lv_coord_t lv_display_get_ver_res(const lv_display_t * disp);
+lv_coord_t lv_display_get_vertical_resolution(const lv_display_t * disp);
 
 /**
  * Get the physical horizontal resolution of a display
  * @param disp      pointer to a display (NULL to use the default display)
  * @return the      physical horizontal resolution of the display
  */
-lv_coord_t lv_display_get_physical_hor_res(const lv_display_t * disp);
+lv_coord_t lv_display_get_physical_horizontal_resolution(const lv_display_t * disp);
 
 /**
  * Get the physical vertical resolution of a display
  * @param disp      pointer to a display (NULL to use the default display)
  * @return          the physical vertical resolution of the display
  */
-lv_coord_t lv_display_get_physical_ver_res(const lv_display_t * disp);
+lv_coord_t lv_display_get_physical_vertical_resolution(const lv_display_t * disp);
 
 /**
  * Get the horizontal offset from the full / physical display
@@ -506,14 +506,14 @@ void * lv_display_get_driver_data(lv_display_t * disp);
 /**
  * The horizontal resolution of the currently active display.
  */
-#define LV_HOR_RES lv_display_get_hor_res(lv_display_get_default())
+#define LV_HOR_RES lv_display_get_horizontal_resolution(lv_display_get_default())
 #endif
 
 #ifndef LV_VER_RES
 /**
  * The vertical resolution of the currently active display.
  */
-#define LV_VER_RES lv_display_get_ver_res(lv_display_get_default())
+#define LV_VER_RES lv_display_get_vertical_resolution(lv_display_get_default())
 #endif
 
 

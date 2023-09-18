@@ -198,7 +198,7 @@ lv_display_t * lv_display_get_next(lv_display_t * disp)
  * RESOLUTION
  *--------------------*/
 
-void lv_display_set_res(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_res)
+void lv_display_set_resolution(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_res)
 {
     if(disp == NULL) disp = lv_display_get_default();
     if(disp == NULL) return;
@@ -211,7 +211,7 @@ void lv_display_set_res(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_
     update_resolution(disp);
 }
 
-void lv_display_set_physical_res(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_res)
+void lv_display_set_physical_resolution(lv_display_t * disp, lv_coord_t hor_res, lv_coord_t ver_res)
 {
     if(disp == NULL) disp = lv_display_get_default();
     if(disp == NULL) return;
@@ -243,7 +243,7 @@ void lv_display_set_dpi(lv_display_t * disp, lv_coord_t dpi)
     disp->dpi = dpi;
 }
 
-lv_coord_t lv_display_get_hor_res(const lv_display_t * disp)
+lv_coord_t lv_display_get_horizontal_resolution(const lv_display_t * disp)
 {
     if(disp == NULL) disp = lv_display_get_default();
 
@@ -261,7 +261,7 @@ lv_coord_t lv_display_get_hor_res(const lv_display_t * disp)
     }
 }
 
-lv_coord_t lv_display_get_ver_res(const lv_display_t * disp)
+lv_coord_t lv_display_get_vertical_resolution(const lv_display_t * disp)
 {
     if(disp == NULL) disp = lv_display_get_default();
 
@@ -279,7 +279,7 @@ lv_coord_t lv_display_get_ver_res(const lv_display_t * disp)
     }
 }
 
-lv_coord_t lv_display_get_physical_hor_res(const lv_display_t * disp)
+lv_coord_t lv_display_get_physical_horizontal_resolution(const lv_display_t * disp)
 {
     if(disp == NULL) disp = lv_display_get_default();
 
@@ -297,7 +297,7 @@ lv_coord_t lv_display_get_physical_hor_res(const lv_display_t * disp)
     }
 }
 
-lv_coord_t lv_display_get_physical_ver_res(const lv_display_t * disp)
+lv_coord_t lv_display_get_physical_vertical_resolution(const lv_display_t * disp)
 {
     if(disp == NULL) disp = lv_display_get_default();
 
@@ -327,9 +327,9 @@ lv_coord_t lv_display_get_offset_x(const lv_display_t * disp)
             case LV_DISPLAY_ROTATION_90:
                 return disp->offset_y;
             case LV_DISPLAY_ROTATION_180:
-                return lv_display_get_physical_hor_res(disp) - disp->offset_x;
+                return lv_display_get_physical_horizontal_resolution(disp) - disp->offset_x;
             case LV_DISPLAY_ROTATION_270:
-                return lv_display_get_physical_hor_res(disp) - disp->offset_y;
+                return lv_display_get_physical_horizontal_resolution(disp) - disp->offset_y;
             default:
                 return disp->offset_x;
         }
@@ -348,9 +348,9 @@ lv_coord_t lv_display_get_offset_y(const lv_display_t * disp)
             case LV_DISPLAY_ROTATION_90:
                 return disp->offset_x;
             case LV_DISPLAY_ROTATION_180:
-                return lv_display_get_physical_ver_res(disp) - disp->offset_y;
+                return lv_display_get_physical_vertical_resolution(disp) - disp->offset_y;
             case LV_DISPLAY_ROTATION_270:
-                return lv_display_get_physical_ver_res(disp) - disp->offset_x;
+                return lv_display_get_physical_vertical_resolution(disp) - disp->offset_x;
             default:
                 return disp->offset_y;
         }
@@ -578,47 +578,47 @@ void lv_scr_load_anim(lv_obj_t * new_scr, lv_scr_load_anim_t anim_type, uint32_t
             break;
         case LV_SCR_LOAD_ANIM_OVER_LEFT:
             lv_anim_set_exec_cb(&a_new, set_x_anim);
-            lv_anim_set_values(&a_new, lv_display_get_hor_res(d), 0);
+            lv_anim_set_values(&a_new, lv_display_get_horizontal_resolution(d), 0);
             break;
         case LV_SCR_LOAD_ANIM_OVER_RIGHT:
             lv_anim_set_exec_cb(&a_new, set_x_anim);
-            lv_anim_set_values(&a_new, -lv_display_get_hor_res(d), 0);
+            lv_anim_set_values(&a_new, -lv_display_get_horizontal_resolution(d), 0);
             break;
         case LV_SCR_LOAD_ANIM_OVER_TOP:
             lv_anim_set_exec_cb(&a_new, set_y_anim);
-            lv_anim_set_values(&a_new, lv_display_get_ver_res(d), 0);
+            lv_anim_set_values(&a_new, lv_display_get_vertical_resolution(d), 0);
             break;
         case LV_SCR_LOAD_ANIM_OVER_BOTTOM:
             lv_anim_set_exec_cb(&a_new, set_y_anim);
-            lv_anim_set_values(&a_new, -lv_display_get_ver_res(d), 0);
+            lv_anim_set_values(&a_new, -lv_display_get_vertical_resolution(d), 0);
             break;
         case LV_SCR_LOAD_ANIM_MOVE_LEFT:
             lv_anim_set_exec_cb(&a_new, set_x_anim);
-            lv_anim_set_values(&a_new, lv_display_get_hor_res(d), 0);
+            lv_anim_set_values(&a_new, lv_display_get_horizontal_resolution(d), 0);
 
             lv_anim_set_exec_cb(&a_old, set_x_anim);
-            lv_anim_set_values(&a_old, 0, -lv_display_get_hor_res(d));
+            lv_anim_set_values(&a_old, 0, -lv_display_get_horizontal_resolution(d));
             break;
         case LV_SCR_LOAD_ANIM_MOVE_RIGHT:
             lv_anim_set_exec_cb(&a_new, set_x_anim);
-            lv_anim_set_values(&a_new, -lv_display_get_hor_res(d), 0);
+            lv_anim_set_values(&a_new, -lv_display_get_horizontal_resolution(d), 0);
 
             lv_anim_set_exec_cb(&a_old, set_x_anim);
-            lv_anim_set_values(&a_old, 0, lv_display_get_hor_res(d));
+            lv_anim_set_values(&a_old, 0, lv_display_get_horizontal_resolution(d));
             break;
         case LV_SCR_LOAD_ANIM_MOVE_TOP:
             lv_anim_set_exec_cb(&a_new, set_y_anim);
-            lv_anim_set_values(&a_new, lv_display_get_ver_res(d), 0);
+            lv_anim_set_values(&a_new, lv_display_get_vertical_resolution(d), 0);
 
             lv_anim_set_exec_cb(&a_old, set_y_anim);
-            lv_anim_set_values(&a_old, 0, -lv_display_get_ver_res(d));
+            lv_anim_set_values(&a_old, 0, -lv_display_get_vertical_resolution(d));
             break;
         case LV_SCR_LOAD_ANIM_MOVE_BOTTOM:
             lv_anim_set_exec_cb(&a_new, set_y_anim);
-            lv_anim_set_values(&a_new, -lv_display_get_ver_res(d), 0);
+            lv_anim_set_values(&a_new, -lv_display_get_vertical_resolution(d), 0);
 
             lv_anim_set_exec_cb(&a_old, set_y_anim);
-            lv_anim_set_values(&a_old, 0, lv_display_get_ver_res(d));
+            lv_anim_set_values(&a_old, 0, lv_display_get_vertical_resolution(d));
             break;
         case LV_SCR_LOAD_ANIM_FADE_IN:
             lv_anim_set_exec_cb(&a_new, opa_scale_anim);
@@ -630,19 +630,19 @@ void lv_scr_load_anim(lv_obj_t * new_scr, lv_scr_load_anim_t anim_type, uint32_t
             break;
         case LV_SCR_LOAD_ANIM_OUT_LEFT:
             lv_anim_set_exec_cb(&a_old, set_x_anim);
-            lv_anim_set_values(&a_old, 0, -lv_display_get_hor_res(d));
+            lv_anim_set_values(&a_old, 0, -lv_display_get_horizontal_resolution(d));
             break;
         case LV_SCR_LOAD_ANIM_OUT_RIGHT:
             lv_anim_set_exec_cb(&a_old, set_x_anim);
-            lv_anim_set_values(&a_old, 0, lv_display_get_hor_res(d));
+            lv_anim_set_values(&a_old, 0, lv_display_get_horizontal_resolution(d));
             break;
         case LV_SCR_LOAD_ANIM_OUT_TOP:
             lv_anim_set_exec_cb(&a_old, set_y_anim);
-            lv_anim_set_values(&a_old, 0, -lv_display_get_ver_res(d));
+            lv_anim_set_values(&a_old, 0, -lv_display_get_vertical_resolution(d));
             break;
         case LV_SCR_LOAD_ANIM_OUT_BOTTOM:
             lv_anim_set_exec_cb(&a_old, set_y_anim);
-            lv_anim_set_values(&a_old, 0, lv_display_get_ver_res(d));
+            lv_anim_set_values(&a_old, 0, lv_display_get_vertical_resolution(d));
             break;
     }
 
@@ -837,8 +837,8 @@ void * lv_display_get_driver_data(lv_display_t * disp)
 
 static void update_resolution(lv_display_t * disp)
 {
-    lv_coord_t hor_res = lv_display_get_hor_res(disp);
-    lv_coord_t ver_res = lv_display_get_ver_res(disp);
+    lv_coord_t hor_res = lv_display_get_horizontal_resolution(disp);
+    lv_coord_t ver_res = lv_display_get_vertical_resolution(disp);
 
     lv_area_t prev_coords;
     lv_obj_get_coords(disp->sys_layer, &prev_coords);
