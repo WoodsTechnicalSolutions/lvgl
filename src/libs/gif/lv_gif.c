@@ -31,11 +31,13 @@ static void next_frame_task_cb(lv_timer_t * t);
 /**********************
  *  STATIC VARIABLES
  **********************/
+
 const lv_obj_class_t lv_gif_class = {
     .constructor_cb = lv_gif_constructor,
     .destructor_cb = lv_gif_destructor,
     .instance_size = sizeof(lv_gif_t),
-    .base_class = &lv_image_class
+    .base_class = &lv_image_class,
+    .name = "gif",
 };
 
 /**********************
@@ -147,7 +149,7 @@ static void next_frame_task_cb(lv_timer_t * t)
     int has_next = gd_get_frame(gifobj->gif);
     if(has_next == 0) {
         /*It was the last repeat*/
-        lv_res_t res = lv_obj_send_event(obj, LV_EVENT_READY, NULL);
+        lv_result_t res = lv_obj_send_event(obj, LV_EVENT_READY, NULL);
         lv_timer_pause(t);
         if(res != LV_FS_RES_OK) return;
     }

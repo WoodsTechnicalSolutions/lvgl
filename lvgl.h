@@ -40,7 +40,7 @@ extern "C" {
 #include "src/core/lv_group.h"
 #include "src/indev/lv_indev.h"
 #include "src/core/lv_refr.h"
-#include "src/disp/lv_disp.h"
+#include "src/display/lv_display.h"
 
 #include "src/font/lv_font.h"
 #include "src/font/lv_font_loader.h"
@@ -92,10 +92,12 @@ extern "C" {
 #include "src/libs/barcode/lv_barcode.h"
 #include "src/libs/bmp/lv_bmp.h"
 #include "src/libs/fsdrv/lv_fsdrv.h"
-#include "src/libs/png/lv_png.h"
+#include "src/libs/lodepng/lv_lodepng.h"
+#include "src/libs/libpng/lv_libpng.h"
 #include "src/libs/gif/lv_gif.h"
 #include "src/libs/qrcode/lv_qrcode.h"
-#include "src/libs/sjpg/lv_sjpg.h"
+#include "src/libs/tjpgd/lv_tjpgd.h"
+#include "src/libs/libjpeg_turbo/lv_libjpeg_turbo.h"
 #include "src/libs/freetype/lv_freetype.h"
 #include "src/libs/rlottie/lv_rlottie.h"
 #include "src/libs/ffmpeg/lv_ffmpeg.h"
@@ -114,9 +116,10 @@ extern "C" {
 #include "src/dev/sdl/lv_sdl_mousewheel.h"
 #include "src/dev/sdl/lv_sdl_keyboard.h"
 
-#include "src/dev/disp/drm/lv_linux_drm.h"
-#include "src/dev/disp/fb/lv_linux_fbdev.h"
-#include "src/dev/disp/lcd/lv_nuttx_lcd.h"
+#include "src/dev/display/drm/lv_linux_drm.h"
+#include "src/dev/display/fb/lv_linux_fbdev.h"
+#include "src/dev/display/fb/lv_nuttx_fbdev.h"
+#include "src/dev/display/lcd/lv_nuttx_lcd.h"
 
 #include "src/dev/input/touchscreen/lv_nuttx_touchscreen.h"
 

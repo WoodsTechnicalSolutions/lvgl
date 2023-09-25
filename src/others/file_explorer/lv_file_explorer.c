@@ -53,7 +53,8 @@ const lv_obj_class_t lv_file_explorer_class = {
     .width_def      = LV_SIZE_CONTENT,
     .height_def     = LV_SIZE_CONTENT,
     .instance_size  = sizeof(lv_file_explorer_t),
-    .base_class     = &lv_obj_class
+    .base_class     = &lv_obj_class,
+    .name = "file-explorer",
 };
 
 /**********************
@@ -484,8 +485,8 @@ static void browser_file_event_handler(lv_event_t * e)
     if(code == LV_EVENT_VALUE_CHANGED) {
         char file_name[LV_FILE_EXPLORER_PATH_MAX_LEN];
         const char * str_fn = NULL;
-        uint16_t row;
-        uint16_t col;
+        uint32_t row;
+        uint32_t col;
 
         lv_memzero(file_name, sizeof(file_name));
         lv_table_get_selected_cell(explorer->file_table, &row, &col);

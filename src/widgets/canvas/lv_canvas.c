@@ -12,7 +12,7 @@
 #include "../../misc/lv_math.h"
 #include "../../draw/lv_draw.h"
 #include "../../core/lv_refr.h"
-#include "../../disp/lv_disp.h"
+#include "../../display/lv_display.h"
 #include "../../draw/sw/lv_draw_sw.h"
 #include "../../stdlib/lv_string.h"
 
@@ -34,11 +34,13 @@ static void lv_canvas_destructor(const lv_obj_class_t * class_p, lv_obj_t * obj)
 /**********************
  *  STATIC VARIABLES
  **********************/
+
 const lv_obj_class_t lv_canvas_class = {
     .constructor_cb = lv_canvas_constructor,
     .destructor_cb = lv_canvas_destructor,
     .instance_size = sizeof(lv_canvas_t),
-    .base_class = &lv_image_class
+    .base_class = &lv_image_class,
+    .name = "canvas",
 };
 
 /**********************

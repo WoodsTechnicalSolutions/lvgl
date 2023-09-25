@@ -13,7 +13,7 @@
 #include "../button/lv_button.h"
 #include "../buttonmatrix/lv_buttonmatrix.h"
 #include "../../misc/lv_assert.h"
-#include "../../disp/lv_disp.h"
+#include "../../display/lv_display.h"
 #include "../../layouts/flex/lv_flex.h"
 #include "../../stdlib/lv_string.h"
 
@@ -39,21 +39,24 @@ const lv_obj_class_t lv_msgbox_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_DPI_DEF * 2,
     .height_def = LV_SIZE_CONTENT,
-    .instance_size = sizeof(lv_msgbox_t)
+    .instance_size = sizeof(lv_msgbox_t),
+    .name = "msgbox",
 };
 
 const lv_obj_class_t lv_msgbox_content_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_PCT(100),
     .height_def = LV_SIZE_CONTENT,
-    .instance_size = sizeof(lv_obj_t)
+    .instance_size = sizeof(lv_obj_t),
+    .name = "msgbox-content",
 };
 
 const lv_obj_class_t lv_msgbox_backdrop_class = {
     .base_class = &lv_obj_class,
     .width_def = LV_PCT(100),
     .height_def = LV_PCT(100),
-    .instance_size = sizeof(lv_obj_t)
+    .instance_size = sizeof(lv_obj_t),
+    .name = "msgbox-backdrop",
 };
 
 /**********************
@@ -180,7 +183,7 @@ lv_obj_t * lv_msgbox_get_buttons(lv_obj_t * obj)
     return mbox->buttons;
 }
 
-uint16_t lv_msgbox_get_active_button(lv_obj_t * mbox)
+uint32_t lv_msgbox_get_active_button(lv_obj_t * mbox)
 {
     lv_obj_t * btnm = lv_msgbox_get_buttons(mbox);
     return lv_buttonmatrix_get_selected_button(btnm);
