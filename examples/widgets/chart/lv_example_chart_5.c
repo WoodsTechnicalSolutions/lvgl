@@ -50,14 +50,14 @@ static void slider_x_event_cb(lv_event_t * e)
 {
     lv_obj_t * obj = lv_event_get_target(e);
     int32_t v = lv_slider_get_value(obj);
-    lv_chart_set_zoom_x(chart, v);
+    //    lv_chart_set_zoom_x(chart, v);
 }
 
 static void slider_y_event_cb(lv_event_t * e)
 {
     lv_obj_t * obj = lv_event_get_target(e);
     int32_t v = lv_slider_get_value(obj);
-    lv_chart_set_zoom_y(chart, v);
+    //    lv_chart_set_zoom_y(chart, v);
 }
 
 /**

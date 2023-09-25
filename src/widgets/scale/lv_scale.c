@@ -182,7 +182,7 @@ void lv_scale_set_round_props(lv_obj_t * obj, uint32_t angle_range, int32_t rota
     lv_obj_invalidate(obj);
 }
 
-void lv_scale_set_text_src(lv_obj_t * obj, char * txt_src[])
+void lv_scale_set_text_src(lv_obj_t * obj, const char * txt_src[])
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_scale_t * scale = (lv_scale_t *)obj;

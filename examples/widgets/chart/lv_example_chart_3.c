@@ -17,7 +17,6 @@
  */
 void lv_example_chart_3(void)
 {
-
     lv_obj_t * main_cont = lv_obj_create(lv_scr_act());
     lv_obj_set_size(main_cont, 200, 150);
 
@@ -41,19 +40,10 @@ void lv_example_chart_3(void)
     lv_obj_set_size(scale_bottom, lv_pct(100), 25);
     lv_scale_set_total_tick_count(scale_bottom, 12);
     lv_scale_set_major_tick_every(scale_bottom, 1);
-    lv_obj_set_style_margin_hor(scale_bottom, 50, 0);
-
+    lv_obj_set_style_pad_hor(scale_bottom, 50, 0);
 
     static const char * month[] = {"Jan", "Febr", "March", "Apr", "May", "Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec", NULL};
     lv_scale_set_text_src(scale_bottom, month);
-
-    //    /*Add ticks and label to every axis*/
-    //    lv_chart_set_axis_tick(chart, LV_CHART_AXIS_PRIMARY_X, 10, 5, 12, 3, true, 40);
-    //    lv_chart_set_axis_tick(chart, LV_CHART_AXIS_PRIMARY_Y, 10, 5, 6, 2, true, 50);
-    //    lv_chart_set_axis_tick(chart, LV_CHART_AXIS_SECONDARY_Y, 10, 5, 3, 4, true, 50);
-    //
-    //    /*Zoom in a little in X*/
-    //    lv_chart_set_zoom_x(chart, 800);
 
     /*Add two data series*/
     lv_chart_series_t * ser1 = lv_chart_add_series(chart, lv_palette_lighten(LV_PALETTE_GREEN, 2), LV_CHART_AXIS_PRIMARY_Y);
