@@ -529,60 +529,76 @@ static void profile_create(lv_obj_t * parent)
 }
 
 
-static void create_chart_with_scales(lv_obj_t * parent, const char * hor_text[],, const char * ver_text[])
+static lv_obj_t * create_chart_with_scales(lv_obj_t * parent, const char * title,  const char * hor_text[],
+                                           const char * ver_text[])
 {
-    lv_obj_get_style_flex_flow(parent, LV_FLEX_FLOW_ROW);
+    static const lv_coord_t col_dsc[] = {40, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+    static const lv_coord_t row_dsc[] = {LV_GRID_CONTENT, LV_GRID_FR(1), 40, LV_GRID_TEMPLATE_LAST};
 
-    lv_obj_t * scale;
-    scale = lv_scale_create(parent);
-    lv_scale_set_mode(scale, LV_SCALE_MODE_VERTICAL_LEFT);
-    lv_obj_set_grid_cell(scale, LV_GRID_ALIGN_END, 0, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+    lv_obj_set_grid_dsc_array(parent, col_dsc, row_dsc);
+    lv_obj_set_style_pad_column(parent, 0, 0);
+    lv_obj_set_style_pad_row(parent, 0, 0);
 
-    chart1 = lv_chart_create(chart1_cont);
-    lv_group_add_obj(lv_group_get_default(), chart1);
-    lv_obj_set_flex_grow(chart1, 1);
-    lv_obj_add_flag(chart1, LV_OBJ_FLAG_SCROLL_ON_FOCUS | LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
-    lv_chart_set_div_line_count(chart1, 0, 12);
-    lv_chart_set_point_count(chart1, 12);
+    lv_obj_t * label = lv_label_create(parent);
+    lv_label_set_text(label, title);
+    lv_obj_add_style(label, &style_title, 0);
+    lv_obj_set_grid_cell(label, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    lv_obj_t * scale_ver = lv_scale_create(parent);
+    lv_scale_set_mode(scale_ver, LV_SCALE_MODE_VERTICAL_LEFT);
+    lv_obj_set_grid_cell(scale_ver, LV_GRID_ALIGN_END, 0, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+    lv_scale_set_total_tick_count(scale_ver, 10);
+    lv_scale_set_major_tick_every(scale_ver, 2);
+    lv_scale_set_range(scale_ver, 0, 100);
+    lv_obj_set_style_bg_opa(scale_ver, 40, 0);
+
+    lv_obj_t * wrapper = lv_obj_create(parent);
+    lv_obj_remove_style(wrapper, NULL, LV_PART_MAIN);
+    lv_obj_set_grid_dsc_array(wrapper, NULL, NULL);
+    lv_obj_set_grid_cell(wrapper, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 2);
+    lv_obj_t * chart = lv_chart_create(wrapper);
+    lv_group_add_obj(lv_group_get_default(), chart);
+    lv_obj_add_flag(chart, LV_OBJ_FLAG_SCROLL_ON_FOCUS | LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
+    lv_chart_set_div_line_count(chart, 0, 12);
+    lv_chart_set_point_count(chart, 12);
+    lv_obj_set_grid_cell(chart, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
+
+    lv_obj_t * scale_hor = lv_scale_create(wrapper);
+    lv_scale_set_mode(scale_hor, LV_SCALE_MODE_HORIZONTAL_BOTTOM);
+    lv_obj_set_grid_cell(scale_hor, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 1, 1);
+    lv_scale_set_total_tick_count(scale_hor, 11);
+    lv_scale_set_text_src(scale_hor, hor_text);
+    lv_scale_set_major_tick_every(scale_hor, 1);
 
     //    lv_obj_add_event(chart1, chart_event_cb, LV_EVENT_ALL, NULL);
-    if(disp_size == DISP_SMALL) lv_obj_set_width(chart1, lv_pct(300));
-    else if(disp_size == DISP_MEDIUM) lv_obj_set_width(chart1, lv_pct(200));
-    else if(disp_size == DISP_LARGE) lv_obj_set_width(chart1, lv_pct(300));
+    if(disp_size == DISP_SMALL) lv_obj_set_width(chart, lv_pct(300));
+    else if(disp_size == DISP_MEDIUM) lv_obj_set_width(chart, lv_pct(200));
+    else if(disp_size == DISP_LARGE) lv_obj_set_width(chart, lv_pct(300));
 
-    lv_obj_set_style_border_side(chart1, LV_BORDER_SIDE_LEFT | LV_BORDER_SIDE_BOTTOM, 0);
-    lv_obj_set_style_radius(chart1, 0, 0);
+    lv_obj_set_style_radius(chart, 0, 0);
 
-    scale = lv_scale_create(chart1);
-    lv_scale_set_mode(scale, LV_SCALE_MODE_HORIZONTAL_BOTTOM);
-    lv_obj_align(scale, LV_ALIGN_BOTTOM_MID, 0, 0);
-    lv_obj_set_width(scale, lv_pct(100));
-    lv_obj_set_height(scale, 20);
-
+    //    scale = lv_scale_create(chart);
+    //    lv_scale_set_mode(scale, LV_SCALE_MODE_HORIZONTAL_BOTTOM);
+    //    lv_obj_align(scale, LV_ALIGN_BOTTOM_MID, 0, 0);
+    lv_obj_set_width(scale_hor, lv_pct(300));
+    lv_obj_set_width(chart, lv_pct(300));
+    lv_obj_set_style_pad_hor(scale_hor, lv_obj_get_style_pad_left(chart, 0), 0);
+    lv_obj_set_style_pad_ver(scale_ver, lv_obj_get_style_pad_top(chart, 0), 0);
+    return chart;
 }
 
 static void analytics_create(lv_obj_t * parent)
 {
-    lv_obj_set_flex_flow(parent, LV_FLEX_FLOW_ROW_WRAP);
-
-    static lv_coord_t grid_chart_row_dsc[] = {LV_GRID_CONTENT, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-    static lv_coord_t grid_chart_col_dsc[] = {40, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+    lv_obj_set_flex_flow(parent, LV_FLEX_FLOW_ROW);
 
     lv_obj_t * chart1_cont = lv_obj_create(parent);
     lv_obj_set_flex_grow(chart1_cont, 1);
-    lv_obj_set_grid_dsc_array(chart1_cont, grid_chart_col_dsc, grid_chart_row_dsc);
 
-    lv_obj_set_height(chart1_cont, LV_PCT(100));
+    lv_obj_set_height(chart1_cont, lv_pct(100));
     lv_obj_set_style_max_height(chart1_cont, 300, 0);
 
-    lv_obj_t * title = lv_label_create(chart1_cont);
-    lv_label_set_text(title, "Unique visitors");
-    lv_obj_add_style(title, &style_title, 0);
-    lv_obj_set_grid_cell(title, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_START, 0, 1);
-
-
-    lv_obj_set_grid_cell(chart1, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
-    create_chart_with_scales(chart1_cont);
+    static const char * chart1_texts[] = {"Jan", "Feb", "March", "April", "May", "Jun", "July", "Aug", "Sept", "Oct", "Nov", "Dec", NULL};
+    chart1 = create_chart_with_scales(chart1_cont, "Unique visitors", chart1_texts, NULL);
 
     //    lv_obj_set_style_bg_opa(obj, value, selector)
 
@@ -600,71 +616,71 @@ static void analytics_create(lv_obj_t * parent)
     lv_chart_set_next_value(chart1, ser1, lv_rand(10, 80));
     lv_chart_set_next_value(chart1, ser1, lv_rand(10, 80));
 
-    lv_obj_t * chart2_cont = lv_obj_create(parent);
-    lv_obj_add_flag(chart2_cont, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
-    lv_obj_set_flex_grow(chart2_cont, 1);
-
-    lv_obj_set_height(chart2_cont, LV_PCT(100));
-    lv_obj_set_style_max_height(chart2_cont, 300, 0);
-
-    lv_obj_set_grid_dsc_array(chart2_cont, grid_chart_col_dsc, grid_chart_row_dsc);
-
-    title = lv_label_create(chart2_cont);
-    lv_label_set_text(title, "Monthly revenue");
-    lv_obj_add_style(title, &style_title, 0);
-    lv_obj_set_grid_cell(title, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_START, 0, 1);
-
-    chart2 = lv_chart_create(chart2_cont);
-    lv_group_add_obj(lv_group_get_default(), chart2);
-    lv_obj_add_flag(chart2, LV_OBJ_FLAG_SCROLL_ON_FOCUS | LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
-
-    lv_obj_set_grid_cell(chart2, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
-    //    lv_chart_set_axis_tick(chart2, LV_CHART_AXIS_PRIMARY_Y, 0, 0, 5, 1, true, 80);
-    //    lv_chart_set_axis_tick(chart2, LV_CHART_AXIS_PRIMARY_X, 0, 0, 12, 1, true, 50);
-    lv_obj_set_size(chart2, LV_PCT(100), LV_PCT(100));
-    lv_chart_set_type(chart2, LV_CHART_TYPE_BAR);
-    lv_chart_set_div_line_count(chart2, 6, 0);
-    lv_chart_set_point_count(chart2, 12);
-    lv_obj_add_event(chart2, chart_event_cb, LV_EVENT_ALL, NULL);
-    //    lv_chart_set_zoom_x(chart2, 256 * 2);
-    lv_obj_set_style_border_side(chart2, LV_BORDER_SIDE_LEFT | LV_BORDER_SIDE_BOTTOM, 0);
-    lv_obj_set_style_radius(chart2, 0, 0);
-
-    if(disp_size == DISP_SMALL) {
-        lv_obj_set_style_pad_gap(chart2, 0, LV_PART_ITEMS);
-        lv_obj_set_style_pad_gap(chart2, 2, LV_PART_MAIN);
-    }
-    else if(disp_size == DISP_LARGE) {
-        lv_obj_set_style_pad_gap(chart2, 16, 0);
-    }
-
-    ser2 = lv_chart_add_series(chart2, lv_palette_lighten(LV_PALETTE_GREY, 1), LV_CHART_AXIS_PRIMARY_Y);
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
-
-    ser3 = lv_chart_add_series(chart2, lv_theme_get_color_primary(chart1), LV_CHART_AXIS_PRIMARY_Y);
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
-    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_obj_t * chart2_cont = lv_obj_create(parent);
+    //    lv_obj_add_flag(chart2_cont, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+    //    lv_obj_set_flex_grow(chart2_cont, 1);
+    //
+    //    lv_obj_set_height(chart2_cont, LV_PCT(100));
+    //    lv_obj_set_style_max_height(chart2_cont, 300, 0);
+    //
+    //    lv_obj_set_grid_dsc_array(chart2_cont, grid_chart_col_dsc, grid_chart_row_dsc);
+    //
+    //    title = lv_label_create(chart2_cont);
+    //    lv_label_set_text(title, "Monthly revenue");
+    //    lv_obj_add_style(title, &style_title, 0);
+    //    lv_obj_set_grid_cell(title, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_START, 0, 1);
+    //
+    //    chart2 = lv_chart_create(chart2_cont);
+    //    lv_group_add_obj(lv_group_get_default(), chart2);
+    //    lv_obj_add_flag(chart2, LV_OBJ_FLAG_SCROLL_ON_FOCUS | LV_OBJ_FLAG_SEND_DRAW_TASK_EVENTS);
+    //
+    //    lv_obj_set_grid_cell(chart2, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+    //    //    lv_chart_set_axis_tick(chart2, LV_CHART_AXIS_PRIMARY_Y, 0, 0, 5, 1, true, 80);
+    //    //    lv_chart_set_axis_tick(chart2, LV_CHART_AXIS_PRIMARY_X, 0, 0, 12, 1, true, 50);
+    //    lv_obj_set_size(chart2, LV_PCT(100), LV_PCT(100));
+    //    lv_chart_set_type(chart2, LV_CHART_TYPE_BAR);
+    //    lv_chart_set_div_line_count(chart2, 6, 0);
+    //    lv_chart_set_point_count(chart2, 12);
+    //    lv_obj_add_event(chart2, chart_event_cb, LV_EVENT_ALL, NULL);
+    //    //    lv_chart_set_zoom_x(chart2, 256 * 2);
+    //    lv_obj_set_style_border_side(chart2, LV_BORDER_SIDE_LEFT | LV_BORDER_SIDE_BOTTOM, 0);
+    //    lv_obj_set_style_radius(chart2, 0, 0);
+    //
+    //    if(disp_size == DISP_SMALL) {
+    //        lv_obj_set_style_pad_gap(chart2, 0, LV_PART_ITEMS);
+    //        lv_obj_set_style_pad_gap(chart2, 2, LV_PART_MAIN);
+    //    }
+    //    else if(disp_size == DISP_LARGE) {
+    //        lv_obj_set_style_pad_gap(chart2, 16, 0);
+    //    }
+    //
+    //    ser2 = lv_chart_add_series(chart2, lv_palette_lighten(LV_PALETTE_GREY, 1), LV_CHART_AXIS_PRIMARY_Y);
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
+    //
+    //    ser3 = lv_chart_add_series(chart2, lv_theme_get_color_primary(chart1), LV_CHART_AXIS_PRIMARY_Y);
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
+    //    lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
 
     //    lv_meter_indicator_t * indic;
     scale1 = create_scale_box(parent, "Monthly Target", "Revenue: 63%", "Sales: 44%", "Costs: 58%");

@@ -616,7 +616,7 @@ static void scale_draw_main(lv_obj_t * obj, lv_event_t * event)
             main_line_point_a.x = x_ofs - 1U;
             main_line_point_a.y = y_ofs;
             main_line_point_b.x = x_ofs - 1U;
-            main_line_point_b.y = obj->coords.y2 - pad_left;
+            main_line_point_b.y = obj->coords.y2 - pad_bottom;
 
             /* Adjust main line with initial and last tick width */
             main_line_point_a.y -= scale->last_tick_width / 2U;

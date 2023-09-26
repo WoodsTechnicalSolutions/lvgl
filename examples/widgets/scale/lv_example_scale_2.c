@@ -19,7 +19,7 @@ void lv_example_scale_2(void)
     lv_scale_set_minor_tick_length(scale, 5);
     lv_scale_set_range(scale, 0, 100);
 
-    static char * custom_labels[] = {"0 °C", "25 °C", "50 °C", "75 °C", "100 °C", NULL};
+    static const char * custom_labels[] = {"0 °C", "25 °C", "50 °C", "75 °C", "100 °C", NULL};
     lv_scale_set_text_src(scale, custom_labels);
 
     static lv_style_t indicator_style;
@@ -78,6 +78,10 @@ void lv_example_scale_2(void)
     lv_scale_section_set_style(section, LV_PART_INDICATOR, &section_label_style);
     lv_scale_section_set_style(section, LV_PART_ITEMS, &section_minor_tick_style);
     lv_scale_section_set_style(section, LV_PART_MAIN, &section_main_line_style);
+
+
+    lv_obj_set_style_bg_opa(scale, 40, 0);
+    lv_obj_set_style_pad_ver(scale, 20, 0);
 }
 
 #endif
