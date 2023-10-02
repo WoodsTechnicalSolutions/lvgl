@@ -188,11 +188,12 @@ void lv_scale_set_text_src(lv_obj_t * obj, const char * txt_src[])
     lv_scale_t * scale = (lv_scale_t *)obj;
 
     scale->txt_src = txt_src;
-
     scale->custom_label_cnt = 0;
-    lv_coord_t idx;
-    for(idx = 0; txt_src[idx]; ++idx) {
-        scale->custom_label_cnt++;
+    if(scale->txt_src) {
+        lv_coord_t idx;
+        for(idx = 0; txt_src[idx]; ++idx) {
+            scale->custom_label_cnt++;
+        }
     }
 
     lv_obj_invalidate(obj);
