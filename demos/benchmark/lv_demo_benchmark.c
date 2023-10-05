@@ -467,7 +467,7 @@ static void line_cb(void)
     line_create(&style_common);
 }
 
-static void arc_think_cb(void)
+static void arc_thin_cb(void)
 {
 
     lv_style_reset(&style_common);
@@ -591,14 +591,14 @@ static scene_dsc_t scenes[] = {
     {.name = "Image ARGB recolor",           .weight = 20, .create_cb = img_argb_recolor_cb},
     {.name = "Image indexed recolor",        .weight = 3, .create_cb = img_index_recolor_cb},
 
-    {.name = "Image RGB rotate",             .weight = 3, .create_cb = img_rgb_rot_cb},
-    {.name = "Image RGB rotate anti aliased", .weight = 3, .create_cb = img_rgb_rot_aa_cb},
-    {.name = "Image ARGB rotate",            .weight = 5, .create_cb = img_argb_rot_cb},
-    {.name = "Image ARGB rotate anti aliased", .weight = 5, .create_cb = img_argb_rot_aa_cb},
-    {.name = "Image RGB zoom",               .weight = 3, .create_cb = img_rgb_zoom_cb},
-    {.name = "Image RGB zoom anti aliased",  .weight = 3, .create_cb = img_rgb_zoom_aa_cb},
-    {.name = "Image ARGB zoom",              .weight = 5, .create_cb = img_argb_zoom_cb},
-    {.name = "Image ARGB zoom anti aliased", .weight = 5, .create_cb = img_argb_zoom_aa_cb},
+    {.name = "Image RGB rotate",             .weight = 5, .create_cb = img_rgb_rot_cb},
+    {.name = "Image RGB rotate anti aliased", .weight = 10, .create_cb = img_rgb_rot_aa_cb},
+    {.name = "Image ARGB rotate",            .weight = 10, .create_cb = img_argb_rot_cb},
+    {.name = "Image ARGB rotate anti aliased", .weight = 15, .create_cb = img_argb_rot_aa_cb},
+    {.name = "Image RGB zoom",               .weight = 5, .create_cb = img_rgb_zoom_cb},
+    {.name = "Image RGB zoom anti aliased",  .weight = 10, .create_cb = img_rgb_zoom_aa_cb},
+    {.name = "Image ARGB zoom",              .weight = 10, .create_cb = img_argb_zoom_cb},
+    {.name = "Image ARGB zoom anti aliased", .weight = 15, .create_cb = img_argb_zoom_aa_cb},
 
     {.name = "Text small",                   .weight = 20, .create_cb = txt_small_cb},
     {.name = "Text medium",                  .weight = 30, .create_cb = txt_medium_cb},
@@ -612,7 +612,7 @@ static scene_dsc_t scenes[] = {
 
     {.name = "Line",                         .weight = 10, .create_cb = line_cb},
 
-    {.name = "Arc think",                    .weight = 10, .create_cb = arc_think_cb},
+    {.name = "Arc thin",                     .weight = 10, .create_cb = arc_thin_cb},
     {.name = "Arc thick",                    .weight = 10, .create_cb = arc_thick_cb},
 
     {.name = "Substr. rectangle",            .weight = 10, .create_cb = sub_rectangle_cb},
