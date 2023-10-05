@@ -654,7 +654,7 @@ static void analytics_create(lv_obj_t * parent)
     /*Scale 1*/
     lv_obj_t * arc;
     arc = lv_arc_create(scale1);
-    lv_obj_set_size(arc, scale_w, scale_w);
+    lv_obj_set_size(arc, lv_pct(100), lv_pct(100));
     lv_obj_set_style_arc_opa(arc, 0, 0);
     lv_obj_set_style_arc_width(arc, 15, LV_PART_INDICATOR);
     lv_obj_set_style_arc_color(arc, lv_palette_main(LV_PALETTE_BLUE), LV_PART_INDICATOR);
@@ -666,7 +666,8 @@ static void analytics_create(lv_obj_t * parent)
     lv_anim_start(&a);
 
     arc = lv_arc_create(scale1);
-    lv_obj_set_size(arc, scale_w - 40, scale_w - 40);
+    lv_obj_set_size(arc, lv_pct(100), lv_pct(100));
+    lv_obj_set_style_margin_all(arc, 20, 0);
     lv_obj_set_style_arc_opa(arc, 0, 0);
     lv_obj_set_style_arc_width(arc, 15, LV_PART_INDICATOR);
     lv_obj_set_style_arc_color(arc, lv_palette_main(LV_PALETTE_RED), LV_PART_INDICATOR);
@@ -679,7 +680,8 @@ static void analytics_create(lv_obj_t * parent)
     lv_anim_start(&a);
 
     arc = lv_arc_create(scale1);
-    lv_obj_set_size(arc, scale_w - 80, scale_w - 80);
+    lv_obj_set_size(arc, lv_pct(100), lv_pct(100));
+    lv_obj_set_style_margin_all(arc, 40, 0);
     lv_obj_set_style_arc_opa(arc, 0, 0);
     lv_obj_set_style_arc_width(arc, 15, LV_PART_INDICATOR);
     lv_obj_set_style_arc_color(arc, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR);
@@ -691,14 +693,14 @@ static void analytics_create(lv_obj_t * parent)
     lv_anim_set_playback_time(&a, 1800);
     lv_anim_start(&a);
 
-
     /*Scale 2*/
     lv_scale_set_round_props(scale2, 330, 0);
     lv_scale_set_total_tick_count(scale2, 10);
     lv_scale_set_major_tick_length(scale2, 30);
     lv_scale_set_major_tick_every(scale2, 1);
     arc = lv_arc_create(scale2);
-    lv_obj_set_size(arc, scale_w - 20, scale_w - 20);
+    lv_obj_set_size(arc, lv_pct(100), lv_pct(100));
+    lv_obj_set_style_margin_all(arc, 10, 0);
     lv_obj_set_style_bg_opa(arc, 0, LV_PART_KNOB);
     lv_obj_set_style_bg_opa(arc, 0, LV_PART_KNOB);
     lv_obj_set_style_arc_width(arc, 10, LV_PART_INDICATOR);
@@ -707,7 +709,8 @@ static void analytics_create(lv_obj_t * parent)
     lv_obj_center(arc);
 
     arc = lv_arc_create(scale2);
-    lv_obj_set_size(arc, scale_w - 10, scale_w - 10);
+    lv_obj_set_size(arc, lv_pct(100), lv_pct(100));
+    lv_obj_set_style_margin_all(arc, 5, 0);
     lv_obj_set_style_arc_opa(arc, 0, 0);
     lv_obj_set_style_bg_opa(arc, 0, LV_PART_KNOB);
     lv_obj_set_style_arc_width(arc, 20, LV_PART_INDICATOR);
@@ -716,7 +719,7 @@ static void analytics_create(lv_obj_t * parent)
     lv_obj_center(arc);
 
     arc = lv_arc_create(scale2);
-    lv_obj_set_size(arc, scale_w, scale_w);
+    lv_obj_set_size(arc, lv_pct(100), lv_pct(100));
     lv_obj_set_style_arc_opa(arc, 0, 0);
     lv_obj_set_style_bg_opa(arc, 0, LV_PART_KNOB);
     lv_obj_set_style_arc_width(arc, 30, LV_PART_INDICATOR);
@@ -731,17 +734,20 @@ static void analytics_create(lv_obj_t * parent)
     lv_scale_set_range(scale3, 10, 60);
     lv_scale_set_total_tick_count(scale3, 20);
     lv_scale_set_major_tick_every(scale3, 4);
+    lv_scale_set_minor_tick_length(scale3, 10);
+    lv_scale_set_major_tick_length(scale3, 20);
+
     static lv_style_t scale3_section1_main_style;
     static lv_style_t scale3_section1_indicator_style;
     static lv_style_t scale3_section1_tick_style;
 
     lv_style_init(&scale3_section1_main_style);
-    lv_style_set_line_width(&scale3_section1_main_style, 10);
-    lv_style_set_line_color(&scale3_section1_main_style, lv_palette_main(LV_PALETTE_RED));
+    lv_style_set_arc_width(&scale3_section1_main_style, 5);
+    lv_style_set_arc_color(&scale3_section1_main_style, lv_palette_main(LV_PALETTE_RED));
 
     lv_style_init(&scale3_section1_indicator_style);
     lv_style_set_line_width(&scale3_section1_indicator_style, 4);
-    lv_style_set_line_color(&scale3_section1_main_style, lv_palette_darken(LV_PALETTE_RED, 2));
+    lv_style_set_line_color(&scale3_section1_indicator_style, lv_palette_darken(LV_PALETTE_RED, 2));
 
     lv_style_init(&scale3_section1_tick_style);
     lv_style_set_line_width(&scale3_section1_tick_style, 4);
@@ -753,6 +759,18 @@ static void analytics_create(lv_obj_t * parent)
     lv_scale_section_set_style(section, LV_PART_MAIN, &scale3_section1_main_style);
     lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale3_section1_indicator_style);
     lv_scale_section_set_style(section, LV_PART_TICKS, &scale3_section1_tick_style);
+
+
+
+
+
+
+
+
+
+
+
+
 
     /*Add a special circle to the needle's pivot*/
     //    lv_obj_set_style_pad_hor(scale3, 10, 0);
