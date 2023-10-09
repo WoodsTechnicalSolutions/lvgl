@@ -439,6 +439,14 @@ lv_coord_t * lv_chart_get_x_array(const lv_obj_t * obj, lv_chart_series_t * ser)
  */
 uint32_t lv_chart_get_pressed_point(const lv_obj_t * obj);
 
+/**
+ * Get the overall offset from the chart's side to the center of the first point.
+ * In case of a bar chart it will be the center of the first column group
+ * @param obj       pointer to a chart object
+ * @return          the offset of the center
+ */
+int32_t lv_chart_get_first_point_center_offset(lv_obj_t * obj);
+
 /**********************
  *      MACROS
  **********************/

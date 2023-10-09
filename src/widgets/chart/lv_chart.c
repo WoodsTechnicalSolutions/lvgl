@@ -286,7 +286,7 @@ lv_chart_series_t * lv_chart_add_series(lv_obj_t * obj, lv_color_t color, lv_cha
     lv_chart_t * chart    = (lv_chart_t *)obj;
 
     /* Allocate space for a new series and add it to the chart series linked list */
-    lv_chart_series_t * ser = _lv_ll_ins_head(&chart->series_ll);
+    lv_chart_series_t * ser = _lv_ll_ins_tail(&chart->series_ll);
     LV_ASSERT_MALLOC(ser);
     if(ser == NULL) return NULL;
 
@@ -588,6 +588,24 @@ uint32_t lv_chart_get_pressed_point(const lv_obj_t * obj)
 {
     lv_chart_t * chart = (lv_chart_t *)obj;
     return chart->pressed_point_id;
+}
+
+int32_t lv_chart_get_first_point_center_offset(lv_obj_t * obj)
+{
+    lv_chart_t * chart = (lv_chart_t *)obj;
+
+    int32_t x_ofs = lv_obj_get_style_pad_left(obj, LV_PART_MAIN);
+    if(chart->type == LV_CHART_TYPE_BAR) {
+        lv_obj_update_layout(obj);
+        /*Gap between the columns on ~adjacent X*/
+        int32_t block_gap = lv_obj_get_style_pad_column(obj, LV_PART_MAIN);
+        lv_coord_t w = lv_obj_get_content_width(obj);
+        lv_coord_t block_w = (w + block_gap) / (chart->point_cnt);
+
+        x_ofs += (block_w - block_gap) / 2;
+    }
+
+    return x_ofs;
 }
 
 /**********************
@@ -1086,7 +1104,7 @@ static void draw_series_bar(lv_obj_t * obj, lv_layer_t * layer)
         col_dsc.base.id1 = 0;
 
         /*Draw the current point of all data line*/
-        _LV_LL_READ_BACK(&chart->series_ll, ser) {
+        _LV_LL_READ(&chart->series_ll, ser) {
             if(ser->hidden) continue;
 
             lv_coord_t start_point = lv_chart_get_x_start_point(obj, ser);

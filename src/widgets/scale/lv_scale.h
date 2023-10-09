@@ -48,7 +48,7 @@ enum {
     LV_SCALE_MODE_VERTICAL_LEFT     = 0x02U,
     LV_SCALE_MODE_VERTICAL_RIGHT    = 0x04U,
     LV_SCALE_MODE_ROUND_INNER       = 0x08U,
-    LV_SCALE_MODE_ROUND_OUTTER      = 0x10U,
+    LV_SCALE_MODE_ROUND_OUTER      = 0x10U,
     _LV_SCALE_MODE_LAST
 };
 typedef uint32_t lv_scale_mode_t;

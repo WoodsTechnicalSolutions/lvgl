@@ -1,5 +1,5 @@
 #include "../../lv_examples.h"
-#if LV_USE_CHART && LV_USE_SLIDER && LV_BUILD_EXAMPLES
+#if LV_USE_CHART && LV_USE_SLIDER && LV_BUILD_EXAMPLES && 0
 
 static lv_obj_t * chart;
 /* Source: https://github.com/ankur219/ECG-Arrhythmia-classification/blob/642230149583adfae1e4bd26c6f0e1fd8af2be0e/sample.csv*/

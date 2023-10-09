@@ -48,12 +48,10 @@ static void calendar_event_cb(lv_event_t * e);
 static void slider_event_cb(lv_event_t * e);
 static void chart_event_cb(lv_event_t * e);
 static void shop_chart_event_cb(lv_event_t * e);
-static void meter2_event_cb(lv_event_t * e);
-static void meter1_indic1_anim_cb(void * var, int32_t v);
-static void meter1_indic2_anim_cb(void * var, int32_t v);
-static void meter1_indic3_anim_cb(void * var, int32_t v);
-static void meter2_timer_cb(lv_timer_t * timer);
-static void meter3_anim_cb(void * var, int32_t v);
+static void scale2_event_cb(lv_event_t * e);
+static void scale1_indic1_anim_cb(void * var, int32_t v);
+static void scale2_timer_cb(lv_timer_t * timer);
+static void scale3_anim_cb(void * var, int32_t v);
 
 /**********************
  *  STATIC VARIABLES
@@ -564,22 +562,17 @@ static lv_obj_t * create_chart_with_scales(lv_obj_t * parent, const char * title
     lv_obj_set_grid_cell(chart, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
     lv_obj_set_style_border_width(chart, 0, 0);
     lv_obj_add_event(chart, chart_event_cb, LV_EVENT_ALL, NULL);
+    lv_obj_set_width(chart, lv_pct(200));
+    lv_obj_set_style_radius(chart, 0, 0);
 
     lv_obj_t * scale_hor = lv_scale_create(wrapper);
     lv_scale_set_mode(scale_hor, LV_SCALE_MODE_HORIZONTAL_BOTTOM);
     lv_obj_set_grid_cell(scale_hor, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 1, 1);
     lv_scale_set_total_tick_count(scale_hor, 11);
-    lv_scale_set_text_src(scale_hor, hor_text);
     lv_scale_set_major_tick_every(scale_hor, 1);
-
-    if(disp_size == DISP_SMALL) lv_obj_set_width(chart, lv_pct(300));
-    else if(disp_size == DISP_MEDIUM) lv_obj_set_width(chart, lv_pct(200));
-    else if(disp_size == DISP_LARGE) lv_obj_set_width(chart, lv_pct(300));
-
-    lv_obj_set_style_radius(chart, 0, 0);
-
-    lv_obj_set_width(scale_hor, lv_pct(300));
-    lv_obj_set_height(chart, 40);
+    lv_scale_set_text_src(scale_hor, hor_text);
+    lv_obj_set_width(scale_hor, lv_pct(200));
+    lv_obj_set_height(scale_hor, 40);
     lv_obj_set_style_pad_hor(scale_hor, lv_obj_get_style_pad_left(chart, 0), 0);
     lv_obj_set_style_pad_ver(scale_ver, lv_obj_get_style_pad_top(chart, 0), 0);
     return chart;
@@ -608,18 +601,21 @@ static void analytics_create(lv_obj_t * parent)
     lv_obj_set_height(chart2_cont, lv_pct(100));
     lv_obj_set_style_max_height(chart2_cont, 300, 0);
     lv_obj_set_flex_grow(chart2_cont, 1);
+    lv_obj_add_flag(chart2_cont, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+
 
     static const char * chart2_texts[] = {"I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", NULL};
     chart2 = create_chart_with_scales(chart2_cont, "Monthly revenue", chart2_texts);
-    lv_chart_set_update_mode(chart2, LV_CHART_TYPE_BAR);
-    lv_obj_add_flag(chart2, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+    lv_chart_set_type(chart2, LV_CHART_TYPE_BAR);
 
-    ser2 = lv_chart_add_series(chart2, lv_theme_get_color_primary(chart2), LV_CHART_AXIS_PRIMARY_Y);
-    ser3 = lv_chart_add_series(chart2, lv_palette_main(LV_PALETTE_GREY), LV_CHART_AXIS_PRIMARY_Y);
+    ser2 = lv_chart_add_series(chart2, lv_palette_main(LV_PALETTE_GREY), LV_CHART_AXIS_PRIMARY_Y);
+    ser3 = lv_chart_add_series(chart2, lv_theme_get_color_primary(chart2), LV_CHART_AXIS_PRIMARY_Y);
     for(i = 0; i < 12; i++) {
         lv_chart_set_next_value(chart2, ser2, lv_rand(10, 80));
         lv_chart_set_next_value(chart2, ser3, lv_rand(10, 80));
     }
+    lv_obj_t * chart2_hor_scale = lv_obj_get_sibling(chart2, 1);
+    lv_obj_set_style_pad_hor(chart2_hor_scale, lv_chart_get_first_point_center_offset(chart2), 0);
 
     /*Create all 3 scales first to have their size resolved*/
     scale1 = create_scale_box(parent, "Monthly Target", "Revenue: -", "Sales: -", "Costs: -");
@@ -632,7 +628,7 @@ static void analytics_create(lv_obj_t * parent)
     if(disp_size < DISP_LARGE) lv_obj_add_flag(lv_obj_get_parent(scale3), LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
 
     lv_obj_update_layout(parent);
-    lv_coord_t scale_w = 200;
+    lv_coord_t scale_w;
     if(disp_size == DISP_MEDIUM) {
         scale_w = 200;
         lv_obj_set_size(scale1, scale_w, scale_w);
@@ -652,42 +648,50 @@ static void analytics_create(lv_obj_t * parent)
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
 
     /*Scale 1*/
+    lv_scale_set_mode(scale1, LV_SCALE_MODE_ROUND_OUTER);
+    lv_obj_set_style_pad_all(scale1, 20, 0);
     lv_obj_t * arc;
     arc = lv_arc_create(scale1);
+    lv_obj_remove_style(arc, NULL, LV_PART_KNOB);
     lv_obj_set_size(arc, lv_pct(100), lv_pct(100));
     lv_obj_set_style_arc_opa(arc, 0, 0);
     lv_obj_set_style_arc_width(arc, 15, LV_PART_INDICATOR);
     lv_obj_set_style_arc_color(arc, lv_palette_main(LV_PALETTE_BLUE), LV_PART_INDICATOR);
+    lv_obj_add_flag(arc, LV_OBJ_FLAG_CLICKABLE);
 
-    lv_anim_set_exec_cb(&a, meter1_indic1_anim_cb);
+    lv_anim_set_exec_cb(&a, scale1_indic1_anim_cb);
     lv_anim_set_var(&a, arc);
     lv_anim_set_time(&a, 4100);
     lv_anim_set_playback_time(&a, 2700);
     lv_anim_start(&a);
 
     arc = lv_arc_create(scale1);
+    lv_obj_remove_style(arc, NULL, LV_PART_KNOB);
     lv_obj_set_size(arc, lv_pct(100), lv_pct(100));
     lv_obj_set_style_margin_all(arc, 20, 0);
     lv_obj_set_style_arc_opa(arc, 0, 0);
     lv_obj_set_style_arc_width(arc, 15, LV_PART_INDICATOR);
     lv_obj_set_style_arc_color(arc, lv_palette_main(LV_PALETTE_RED), LV_PART_INDICATOR);
+    lv_obj_add_flag(arc, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_center(arc);
 
-    lv_anim_set_exec_cb(&a, meter1_indic1_anim_cb);
+    lv_anim_set_exec_cb(&a, scale1_indic1_anim_cb);
     lv_anim_set_var(&a, arc);
     lv_anim_set_time(&a, 2600);
     lv_anim_set_playback_time(&a, 3200);
     lv_anim_start(&a);
 
     arc = lv_arc_create(scale1);
+    lv_obj_remove_style(arc, NULL, LV_PART_KNOB);
     lv_obj_set_size(arc, lv_pct(100), lv_pct(100));
     lv_obj_set_style_margin_all(arc, 40, 0);
     lv_obj_set_style_arc_opa(arc, 0, 0);
     lv_obj_set_style_arc_width(arc, 15, LV_PART_INDICATOR);
     lv_obj_set_style_arc_color(arc, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR);
+    lv_obj_add_flag(arc, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_center(arc);
 
-    lv_anim_set_exec_cb(&a, meter1_indic1_anim_cb);
+    lv_anim_set_exec_cb(&a, scale1_indic1_anim_cb);
     lv_anim_set_var(&a, arc);
     lv_anim_set_time(&a, 2800);
     lv_anim_set_playback_time(&a, 1800);
@@ -727,8 +731,8 @@ static void analytics_create(lv_obj_t * parent)
     lv_obj_set_style_arc_color(arc, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR);
     lv_obj_center(arc);
 
-    lv_timer_t * meter2_timer = lv_timer_create(meter2_timer_cb, 100, scale2);
-    lv_obj_add_event(scale2, meter2_event_cb, LV_EVENT_DELETE, meter2_timer);
+    lv_timer_t * scale2_timer = lv_timer_create(scale2_timer_cb, 100, scale2);
+    lv_obj_add_event(scale2, scale2_event_cb, LV_EVENT_DELETE, scale2_timer);
 
     /*Scale 3*/
     lv_scale_set_range(scale3, 10, 60);
@@ -736,6 +740,7 @@ static void analytics_create(lv_obj_t * parent)
     lv_scale_set_major_tick_every(scale3, 4);
     lv_scale_set_minor_tick_length(scale3, 10);
     lv_scale_set_major_tick_length(scale3, 20);
+    lv_scale_set_round_props(scale3, 225, 135);
 
     static lv_style_t scale3_section1_main_style;
     static lv_style_t scale3_section1_indicator_style;
@@ -760,11 +765,11 @@ static void analytics_create(lv_obj_t * parent)
     lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale3_section1_indicator_style);
     lv_scale_section_set_style(section, LV_PART_TICKS, &scale3_section1_tick_style);
 
-    LV_IMG_DECLARE(img_hand);
+    LV_IMG_DECLARE(img_demo_widgets_needle);
     lv_obj_t * needle = lv_image_create(scale3);
-    lv_image_set_src(needle, &img_hand);
+    lv_image_set_src(needle, &img_demo_widgets_needle);
     lv_image_set_pivot(needle, 3, 4);
-    lv_obj_align(needle, LV_ALIGN_CENTER, -3, -2);
+    lv_obj_align(needle, LV_ALIGN_CENTER, 47, -2);
 
     lv_obj_t * mbps_label = lv_label_create(scale3);
     lv_label_set_text(mbps_label, "-");
@@ -776,14 +781,14 @@ static void analytics_create(lv_obj_t * parent)
     lv_anim_init(&a);
     lv_anim_set_values(&a, 0, 60);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
-    lv_anim_set_exec_cb(&a, meter3_anim_cb);
+    lv_anim_set_exec_cb(&a, scale3_anim_cb);
     lv_anim_set_var(&a, needle);
     lv_anim_set_time(&a, 4100);
     lv_anim_set_playback_time(&a, 800);
     lv_anim_start(&a);
 
-    //    lv_obj_align(mbps_label, LV_ALIGN_TOP_MID, 10, lv_pct(55));
-    //    lv_obj_align_to(mbps_unit_label, mbps_label, LV_ALIGN_OUT_RIGHT_BOTTOM, 10, 0);
+    lv_obj_align(mbps_label, LV_ALIGN_TOP_MID, 10, lv_pct(55));
+    lv_obj_align_to(mbps_unit_label, mbps_label, LV_ALIGN_OUT_RIGHT_BOTTOM, 10, 0);
 }
 
 void shop_create(lv_obj_t * parent)
@@ -1107,8 +1112,6 @@ static lv_obj_t * create_scale_box(lv_obj_t * parent, const char * title, const 
     lv_obj_add_style(title_label, &style_title, 0);
 
     lv_obj_t * scale = lv_scale_create(cont);
-    //    lv_obj_remove_style(scale, NULL, LV_PART_MAIN);
-    //    lv_obj_remove_style(scale, NULL, LV_PART_INDICATOR);
     lv_scale_set_mode(scale, LV_SCALE_MODE_ROUND_INNER);
     lv_scale_set_post_draw(scale, true);
     lv_obj_set_width(scale, LV_PCT(100));
@@ -1381,7 +1384,6 @@ static void chart_event_cb(lv_event_t * e)
             lv_draw_rect(base_dsc->layer, &rect_dsc, &rect_area);
         }
 
-
         bool add_value = false;
         if(base_dsc->part == LV_PART_INDICATOR && lv_chart_get_pressed_point(obj) == base_dsc->id2) {
             if(lv_chart_get_type(obj) == LV_CHART_TYPE_LINE) {
@@ -1414,7 +1416,9 @@ static void chart_event_cb(lv_event_t * e)
 
         if(add_value) {
             const lv_chart_series_t * ser = lv_chart_get_series_next(obj, NULL);
-            if(base_dsc->id1 == 1) ser = lv_chart_get_series_next(obj, ser);
+            if(base_dsc->id1 == 1) {
+                ser = lv_chart_get_series_next(obj, ser);
+            }
 
             char buf[8];
             lv_snprintf(buf, sizeof(buf), "%"LV_PRIu32, ser->y_points[base_dsc->id2]);
@@ -1473,7 +1477,7 @@ static void shop_chart_event_cb(lv_event_t * e)
 }
 
 
-static void meter1_indic1_anim_cb(void * var, int32_t v)
+static void scale1_indic1_anim_cb(void * var, int32_t v)
 {
     lv_arc_set_value(var, v);
 
@@ -1482,36 +1486,19 @@ static void meter1_indic1_anim_cb(void * var, int32_t v)
     lv_label_set_text_fmt(label, "Revenue: %"LV_PRId32" %%", v);
 }
 
-static void meter1_indic2_anim_cb(void * var, int32_t v)
-{
-    lv_meter_set_indicator_end_value(scale1, var, v);
-
-    lv_obj_t * card = lv_obj_get_parent(scale1);
-    lv_obj_t * label = lv_obj_get_child(card, -3);
-    lv_label_set_text_fmt(label, "Sales: %"LV_PRId32" %%", v);
-
-}
-
-static void meter1_indic3_anim_cb(void * var, int32_t v)
-{
-    lv_meter_set_indicator_end_value(scale1, var, v);
-
-    lv_obj_t * card = lv_obj_get_parent(scale1);
-    lv_obj_t * label = lv_obj_get_child(card, -1);
-    lv_label_set_text_fmt(label, "Costs: %"LV_PRId32" %%", v);
-}
-
-static void meter2_event_cb(lv_event_t * e)
+static void scale2_event_cb(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     if(code == LV_EVENT_DELETE) {
-        lv_timer_t * meter2_timer = lv_event_get_user_data(e);
-        if(meter2_timer) lv_timer_del(meter2_timer);
+        lv_timer_t * scale2_timer = lv_event_get_user_data(e);
+        if(scale2_timer) lv_timer_del(scale2_timer);
     }
 }
 
-static void meter2_timer_cb(lv_timer_t * timer)
+static void scale2_timer_cb(lv_timer_t * timer)
 {
+    LV_UNUSED(timer);
+
     static bool down1 = false;
     static bool down2 = false;
     static bool down3 = false;
@@ -1565,13 +1552,15 @@ static void meter2_timer_cb(lv_timer_t * timer)
     lv_label_set_text_fmt(label, "Mobile: %"LV_PRIu32, session_mobile);
 }
 
-static void meter3_anim_cb(void * var, int32_t v)
+static void scale3_anim_cb(void * var, int32_t v)
 {
-    int32_t angle = lv_map(v, 0, 60, 1350, 3600 + 450);
+    LV_UNUSED(var);
+
+    int32_t angle = lv_map(v, 0, 60, 1350, 3600);
     lv_obj_t * needle = lv_obj_get_child(scale3, 0);
     lv_image_set_rotation(needle, angle);
 
-    lv_obj_t * label = lv_obj_get_child(scale3, -1);
+    lv_obj_t * label = lv_obj_get_child(scale3, 1);
     lv_label_set_text_fmt(label, "%"LV_PRId32, v);
 }
 
