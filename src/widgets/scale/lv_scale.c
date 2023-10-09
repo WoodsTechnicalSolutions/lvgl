@@ -262,7 +262,6 @@ void lv_scale_section_set_style(lv_scale_section_t * section, uint32_t part, lv_
     }
 }
 
-
 /*=====================
  * Getter functions
  *====================*/

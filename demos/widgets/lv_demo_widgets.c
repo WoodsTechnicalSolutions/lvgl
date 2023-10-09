@@ -760,76 +760,27 @@ static void analytics_create(lv_obj_t * parent)
     lv_scale_section_set_style(section, LV_PART_INDICATOR, &scale3_section1_indicator_style);
     lv_scale_section_set_style(section, LV_PART_TICKS, &scale3_section1_tick_style);
 
+    LV_IMG_DECLARE(img_hand);
+    lv_obj_t * needle = lv_image_create(scale3);
+    lv_image_set_src(needle, &img_hand);
+    lv_image_set_pivot(needle, 3, 4);
+    lv_obj_align(needle, LV_ALIGN_CENTER, -3, -2);
 
+    lv_obj_t * mbps_label = lv_label_create(scale3);
+    lv_label_set_text(mbps_label, "-");
+    lv_obj_add_style(mbps_label, &style_title, 0);
 
+    lv_obj_t * mbps_unit_label = lv_label_create(scale3);
+    lv_label_set_text(mbps_unit_label, "Mbps");
 
-
-
-
-
-
-
-
-
-
-    /*Add a special circle to the needle's pivot*/
-    //    lv_obj_set_style_pad_hor(scale3, 10, 0);
-    //    lv_obj_set_style_size(scale3, 10, 10, LV_PART_INDICATOR);
-    //    lv_obj_set_style_radius(scale3, LV_RADIUS_CIRCLE, LV_PART_INDICATOR);
-    //    lv_obj_set_style_bg_opa(scale3, LV_OPA_COVER, LV_PART_INDICATOR);
-    //    lv_obj_set_style_bg_color(scale3, lv_palette_darken(LV_PALETTE_GREY, 4), LV_PART_INDICATOR);
-    //    lv_obj_set_style_outline_color(scale3, lv_color_white(), LV_PART_INDICATOR);
-    //    lv_obj_set_style_outline_width(scale3, 3, LV_PART_INDICATOR);
-    //    lv_obj_set_style_text_color(scale3, lv_palette_darken(LV_PALETTE_GREY, 1), LV_PART_TICKS);
-
-    //    lv_meter_set_scale_range(meter3, 10, 60, 220, 360 - 220);
-    //    lv_meter_set_scale_ticks(meter3, 21, 3, 17, lv_color_white());
-    //    lv_meter_set_scale_major_ticks(meter3, 4, 4, 22, lv_color_white(), 15);
-    //
-    //    indic = lv_meter_add_arc(meter3, 10, lv_palette_main(LV_PALETTE_RED), 0);
-    //    lv_meter_set_indicator_start_value(meter3, indic, 0);
-    //    lv_meter_set_indicator_end_value(meter3, indic, 20);
-    //
-    //    indic = lv_meter_add_scale_lines(meter3, lv_palette_darken(LV_PALETTE_RED, 3), lv_palette_darken(LV_PALETTE_RED,
-    //                                                                                                     3), true, 0);
-    //    lv_meter_set_indicator_start_value(meter3, indic, 0);
-    //    lv_meter_set_indicator_end_value(meter3, indic, 20);
-    //
-    //    indic = lv_meter_add_arc(meter3, 12, lv_palette_main(LV_PALETTE_BLUE), 0);
-    //    lv_meter_set_indicator_start_value(meter3, indic, 20);
-    //    lv_meter_set_indicator_end_value(meter3, indic, 40);
-    //
-    //    indic = lv_meter_add_scale_lines(meter3, lv_palette_darken(LV_PALETTE_BLUE, 3),
-    //                                     lv_palette_darken(LV_PALETTE_BLUE, 3), true, 0);
-    //    lv_meter_set_indicator_start_value(meter3, indic, 20);
-    //    lv_meter_set_indicator_end_value(meter3, indic, 40);
-    //
-    //    indic = lv_meter_add_arc(meter3, 10, lv_palette_main(LV_PALETTE_GREEN), 0);
-    //    lv_meter_set_indicator_start_value(meter3, indic, 40);
-    //    lv_meter_set_indicator_end_value(meter3, indic, 60);
-    //
-    //    indic = lv_meter_add_scale_lines(meter3, lv_palette_darken(LV_PALETTE_GREEN, 3),
-    //                                     lv_palette_darken(LV_PALETTE_GREEN, 3), true, 0);
-    //    lv_meter_set_indicator_start_value(meter3, indic, 40);
-    //    lv_meter_set_indicator_end_value(meter3, indic, 60);
-    //
-    //    indic = lv_meter_add_needle_line(meter3, 4, lv_palette_darken(LV_PALETTE_GREY, 4), -25);
-    //
-    //    lv_obj_t * mbps_label = lv_label_create(meter3);
-    //    lv_label_set_text(mbps_label, "-");
-    //    lv_obj_add_style(mbps_label, &style_title, 0);
-    //
-    //    lv_obj_t * mbps_unit_label = lv_label_create(meter3);
-    //    lv_label_set_text(mbps_unit_label, "Mbps");
-    //
-    //    lv_anim_init(&a);
-    //    lv_anim_set_values(&a, 10, 60);
-    //    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
-    //    lv_anim_set_exec_cb(&a, meter3_anim_cb);
-    //    lv_anim_set_var(&a, indic);
-    //    lv_anim_set_time(&a, 4100);
-    //    lv_anim_set_playback_time(&a, 800);
-    //    lv_anim_start(&a);
+    lv_anim_init(&a);
+    lv_anim_set_values(&a, 0, 60);
+    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
+    lv_anim_set_exec_cb(&a, meter3_anim_cb);
+    lv_anim_set_var(&a, needle);
+    lv_anim_set_time(&a, 4100);
+    lv_anim_set_playback_time(&a, 800);
+    lv_anim_start(&a);
 
     //    lv_obj_align(mbps_label, LV_ALIGN_TOP_MID, 10, lv_pct(55));
     //    lv_obj_align_to(mbps_unit_label, mbps_label, LV_ALIGN_OUT_RIGHT_BOTTOM, 10, 0);
@@ -1616,9 +1567,11 @@ static void meter2_timer_cb(lv_timer_t * timer)
 
 static void meter3_anim_cb(void * var, int32_t v)
 {
-    lv_meter_set_indicator_value(scale3, var, v);
+    int32_t angle = lv_map(v, 0, 60, 1350, 3600 + 450);
+    lv_obj_t * needle = lv_obj_get_child(scale3, 0);
+    lv_image_set_rotation(needle, angle);
 
-    lv_obj_t * label = lv_obj_get_child(scale3, 0);
+    lv_obj_t * label = lv_obj_get_child(scale3, -1);
     lv_label_set_text_fmt(label, "%"LV_PRId32, v);
 }
 
