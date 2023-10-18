@@ -16,7 +16,7 @@
  *      TYPEDEFS
  **********************/
 
-#define SCENE_TIME  2000
+#define SCENE_TIME  5000
 
 
 typedef struct {
@@ -32,90 +32,289 @@ static void load_scene(uint32_t scene);
 static void next_scene_timer_cb(lv_timer_t * timer);
 static void sysmon_perf_observer_cb(lv_subject_t * subject, lv_observer_t * observer);
 static int32_t rnd_next(int32_t min, int32_t max);
+static void shake_anim_y_cb(void * var, int32_t v);
+static void shake_anim(lv_obj_t * obj, lv_coord_t y_max);
+static void scroll_anim(lv_obj_t * obj, lv_coord_t y_max);
+static void scroll_anim_y_cb(void * var, int32_t v);
+static void color_anim_cb(void * var, int32_t v);
+static void color_anim(lv_obj_t * obj);
+static void arc_anim(lv_obj_t * obj);
+
+static lv_obj_t * card_create(void);
 
 static void empty_screen_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    color_anim(lv_screen_active());
 }
 
-static void moving_wallpaepr_cb(void)
+static void moving_wallpaper_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_style_pad_all(lv_screen_active(), 0, 0);
+    LV_IMG_DECLARE(img_benchmark_cogwheel_rgb);
+
+    lv_obj_t * img = lv_img_create(lv_screen_active());
+    lv_obj_set_size(img, lv_pct(150), lv_pct(150));
+    lv_img_set_src(img, &img_benchmark_cogwheel_rgb);
+    shake_anim(img, - lv_display_get_vertical_resolution(NULL) / 3);
 }
 
-static void single_circle_cb(void)
+static void single_rectangle_cb(void)
 {
     lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_remove_style_all(obj);
+    lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
+    lv_obj_center(obj);
+    lv_obj_set_size(obj, lv_pct(30), lv_pct(30));
+
+    color_anim(obj);
+
 }
 
 static void multiple_rectangles_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_SPACE_EVENLY);
+
+    uint32_t i;
+    for(i = 0; i < 9; i++) {
+        lv_obj_t * obj = lv_obj_create(lv_screen_active());
+        lv_obj_remove_style_all(obj);
+        lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
+        lv_obj_set_size(obj, lv_pct(25), lv_pct(25));
+
+        color_anim(obj);
+    }
 }
 
 static void multiple_rgb_images_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_set_style_pad_row(lv_screen_active(), 20, 0);
+
+    LV_IMG_DECLARE(img_benchmark_cogwheel_rgb);
+    uint32_t hor_cnt = (lv_display_get_horizontal_resolution(NULL) - 16) / 116;
+    uint32_t ver_cnt = (lv_display_get_vertical_resolution(NULL) - 116) / 116;
+
+    uint32_t y;
+    for(y = 0; y < ver_cnt; y++) {
+        uint32_t x;
+        for(x = 0; x < hor_cnt; x++) {
+            lv_obj_t * obj = lv_img_create(lv_screen_active());
+            lv_image_set_src(obj, &img_benchmark_cogwheel_rgb);
+            if(x == 0) lv_obj_add_flag(obj, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+
+            shake_anim(obj, 80);
+        }
+    }
 }
 
 static void multiple_argb_images_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_set_style_pad_row(lv_screen_active(), 20, 0);
+
+    LV_IMG_DECLARE(img_benchmark_cogwheel_argb);
+    uint32_t hor_cnt = (lv_display_get_horizontal_resolution(NULL) - 16) / 116;
+    uint32_t ver_cnt = (lv_display_get_vertical_resolution(NULL) - 116) / 116;
+
+    uint32_t y;
+    for(y = 0; y < ver_cnt; y++) {
+        uint32_t x;
+        for(x = 0; x < hor_cnt; x++) {
+            lv_obj_t * obj = lv_img_create(lv_screen_active());
+            lv_image_set_src(obj, &img_benchmark_cogwheel_argb);
+            if(x == 0) lv_obj_add_flag(obj, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+
+            shake_anim(obj, 80);
+        }
+    }
 }
 
 static void rotated_argb_image_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_set_style_pad_row(lv_screen_active(), 20, 0);
+
+
+    LV_IMG_DECLARE(img_benchmark_cogwheel_argb);
+    uint32_t hor_cnt = (lv_display_get_horizontal_resolution(NULL) - 16) / 116;
+    uint32_t ver_cnt = (lv_display_get_vertical_resolution(NULL) - 116) / 116;
+
+    uint32_t y;
+    for(y = 0; y < ver_cnt; y++) {
+        uint32_t x;
+        for(x = 0; x < hor_cnt; x++) {
+            lv_obj_t * obj = lv_img_create(lv_screen_active());
+            lv_image_set_src(obj, &img_benchmark_cogwheel_argb);
+            if(x == 0) lv_obj_add_flag(obj, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+
+            lv_image_set_rotation(obj, lv_rand(100, 3500));
+            shake_anim(obj, 80);
+        }
+    }
 }
 
 static void multiple_labels_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_set_style_pad_row(lv_screen_active(), 80, 0);
+
+    lv_point_t s;
+    lv_text_get_size(&s, "Hello LVGL!", lv_obj_get_style_text_font(lv_screen_active(), 0), 0, 0, LV_COORD_MAX,
+                     LV_TEXT_FLAG_NONE);
+
+    uint32_t cnt = (lv_display_get_horizontal_resolution(NULL) - 16) / (s.x + 30);
+    cnt = cnt * ((lv_display_get_vertical_resolution(NULL) - 200) / (s.y + 50));
+
+    uint32_t i;
+    for(i = 0; i < cnt; i++) {
+        lv_obj_t * obj = lv_label_create(lv_screen_active());
+        lv_label_set_text(obj, "Hello LVGL!");
+        color_anim(obj);
+    }
 }
 
 static void screen_sized_text_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_t * obj = lv_label_create(lv_screen_active());
+    lv_obj_set_width(obj, lv_pct(100));
+
+    if(lv_display_get_horizontal_resolution(NULL) * lv_display_get_vertical_resolution(NULL) < 150000) {
+        lv_label_set_text(obj,
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec rhoncus arcu, in consectetur orci. Sed vitae dolor sed nisi ultrices vehicula quis ac dolor. Vivamus hendrerit hendrerit lectus, sed tempus velit suscipit in. Fusce eu tristique arcu. Sed et molestie leo, in lacinia nunc. Quisque semper lorem sed ante feugiat, at molestie risus blandit. Maecenas lobortis urna in diam feugiat porta. Ut facilisis mauris eget nibh posuere aliquet. Proin facilisis egestas magna, id vulputate massa bibendum a. Etiam gravida metus non egestas suscipit. Sed sollicitudin mollis nisi, eu fringilla leo vestibulum posuere. Donec et ex nulla. Phasellus et ornare justo, vel hendrerit justo. Curabitur pulvinar nunc sed tincidunt dignissim. Praesent eleifend lectus velit, id malesuada ante placerat id. Fusce massa erat, egestas vel venenatis eu, tempus nec est.\n\n"
+                          "Phasellus iaculis malesuada molestie. Cras ullamcorper justo a dolor dignissim tincidunt. Mauris euismod risus quis lobortis mollis. Ut vitae placerat massa, aliquet varius lectus. Nulla ac ornare purus, quis auctor velit. Donec posuere dolor rhoncus efficitur dictum. Integer venenatis aliquet nunc eu convallis. Nunc quis varius velit. Suspendisse enim metus, molestie eget mauris sit amet, euismod volutpat turpis. Duis rhoncus commodo gravida. Pellentesque velit mi, dictum id consequat placerat, condimentum ac elit. Duis aliquet leo eu dolor cursus rhoncus. Quisque aliquam sapien ut purus hendrerit laoreet. Ut venenatis venenatis risus, a vestibulum enim lobortis a. Maecenas auctor tortor lorem, quis laoreet nulla aliquet a. Sed ipsum lorem, facilisis in congue a, dictum ut ligula.\n\n"
+                          "Aliquam id tellus in enim hendrerit mattis. Sed ipsum arcu, feugiat sed eros quis, vulputate facilisis turpis. Quisque venenatis risus massa. Proin lacinia, nunc non ultrices commodo, ligula dolor lobortis lectus, iaculis pulvinar metus orci eu elit. Donec tincidunt lacinia semper. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec vitae odio risus. Donec sodales sed nulla sit amet iaculis. Duis lacinia mauris dictum, fermentum nibh eget, convallis tellus. Sed congue luctus purus non scelerisque. Etiam fermentum lacus mauris, at bibendum nunc aliquam at. Vivamus accumsan vestibulum pharetra. Proin rhoncus nisi purus, vel blandit metus auctor eget. Fusce dictum sed lectus sed aliquam. Praesent lobortis quam sed pretium tincidunt.");
+    }
+    else {
+        lv_label_set_text(obj,
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec rhoncus arcu, in consectetur orci. Sed vitae dolor sed nisi ultrices vehicula quis ac dolor. Vivamus hendrerit hendrerit lectus, sed tempus velit suscipit in. Fusce eu tristique arcu. Sed et molestie leo, in lacinia nunc. Quisque semper lorem sed ante feugiat, at molestie risus blandit. Maecenas lobortis urna in diam feugiat porta. Ut facilisis mauris eget nibh posuere aliquet. Proin facilisis egestas magna, id vulputate massa bibendum a. Etiam gravida metus non egestas suscipit. Sed sollicitudin mollis nisi, eu fringilla leo vestibulum posuere. Donec et ex nulla. Phasellus et ornare justo, vel hendrerit justo. Curabitur pulvinar nunc sed tincidunt dignissim. Praesent eleifend lectus velit, id malesuada ante placerat id. Fusce massa erat, egestas vel venenatis eu, tempus nec est.\n\n"
+                          "Phasellus iaculis malesuada molestie. Cras ullamcorper justo a dolor dignissim tincidunt. Mauris euismod risus quis lobortis mollis. Ut vitae placerat massa, aliquet varius lectus. Nulla ac ornare purus, quis auctor velit. Donec posuere dolor rhoncus efficitur dictum. Integer venenatis aliquet nunc eu convallis. Nunc quis varius velit. Suspendisse enim metus, molestie eget mauris sit amet, euismod volutpat turpis. Duis rhoncus commodo gravida. Pellentesque velit mi, dictum id consequat placerat, condimentum ac elit. Duis aliquet leo eu dolor cursus rhoncus. Quisque aliquam sapien ut purus hendrerit laoreet. Ut venenatis venenatis risus, a vestibulum enim lobortis a. Maecenas auctor tortor lorem, quis laoreet nulla aliquet a. Sed ipsum lorem, facilisis in congue a, dictum ut ligula.\n\n"
+                          "Aliquam id tellus in enim hendrerit mattis. Sed ipsum arcu, feugiat sed eros quis, vulputate facilisis turpis. Quisque venenatis risus massa. Proin lacinia, nunc non ultrices commodo, ligula dolor lobortis lectus, iaculis pulvinar metus orci eu elit. Donec tincidunt lacinia semper. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec vitae odio risus. Donec sodales sed nulla sit amet iaculis. Duis lacinia mauris dictum, fermentum nibh eget, convallis tellus. Sed congue luctus purus non scelerisque. Etiam fermentum lacus mauris, at bibendum nunc aliquam at. Vivamus accumsan vestibulum pharetra. Proin rhoncus nisi purus, vel blandit metus auctor eget. Fusce dictum sed lectus sed aliquam. Praesent lobortis quam sed pretium tincidunt.\n\n"
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec rhoncus arcu, in consectetur orci. Sed vitae dolor sed nisi ultrices vehicula quis ac dolor. Vivamus hendrerit hendrerit lectus, sed tempus velit suscipit in. Fusce eu tristique arcu. Sed et molestie leo, in lacinia nunc. Quisque semper lorem sed ante feugiat, at molestie risus blandit. Maecenas lobortis urna in diam feugiat porta. Ut facilisis mauris eget nibh posuere aliquet. Proin facilisis egestas magna, id vulputate massa bibendum a. Etiam gravida metus non egestas suscipit. Sed sollicitudin mollis nisi, eu fringilla leo vestibulum posuere. Donec et ex nulla. Phasellus et ornare justo, vel hendrerit justo. Curabitur pulvinar nunc sed tincidunt dignissim. Praesent eleifend lectus velit, id malesuada ante placerat id. Fusce massa erat, egestas vel venenatis eu, tempus nec est.\n\n"
+                          "Phasellus iaculis malesuada molestie. Cras ullamcorper justo a dolor dignissim tincidunt. Mauris euismod risus quis lobortis mollis. Ut vitae placerat massa, aliquet varius lectus. Nulla ac ornare purus, quis auctor velit. Donec posuere dolor rhoncus efficitur dictum. Integer venenatis aliquet nunc eu convallis. Nunc quis varius velit. Suspendisse enim metus, molestie eget mauris sit amet, euismod volutpat turpis. Duis rhoncus commodo gravida. Pellentesque velit mi, dictum id consequat placerat, condimentum ac elit. Duis aliquet leo eu dolor cursus rhoncus. Quisque aliquam sapien ut purus hendrerit laoreet. Ut venenatis venenatis risus, a vestibulum enim lobortis a. Maecenas auctor tortor lorem, quis laoreet nulla aliquet a. Sed ipsum lorem, facilisis in congue a, dictum ut ligula.\n\n"
+                          "Aliquam id tellus in enim hendrerit mattis. Sed ipsum arcu, feugiat sed eros quis, vulputate facilisis turpis. Quisque venenatis risus massa. Proin lacinia, nunc non ultrices commodo, ligula dolor lobortis lectus, iaculis pulvinar metus orci eu elit. Donec tincidunt lacinia semper. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Donec vitae odio risus. Donec sodales sed nulla sit amet iaculis. Duis lacinia mauris dictum, fermentum nibh eget, convallis tellus. Sed congue luctus purus non scelerisque. Etiam fermentum lacus mauris, at bibendum nunc aliquam at. Vivamus accumsan vestibulum pharetra. Proin rhoncus nisi purus, vel blandit metus auctor eget. Fusce dictum sed lectus sed aliquam. Praesent lobortis quam sed pretium tincidunt.");
+    }
+
+    scroll_anim(lv_screen_active(), LV_VER_RES - lv_obj_get_height(obj));
 }
 
 static void multiple_arcs_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_SPACE_EVENLY);
+
+    LV_IMG_DECLARE(img_benchmark_cogwheel_argb);
+    uint32_t hor_cnt = (lv_display_get_horizontal_resolution(NULL) - 16) / lv_dpx(160);
+    uint32_t ver_cnt = (lv_display_get_vertical_resolution(NULL) - 16) / lv_dpx(160);
+
+    uint32_t y;
+    for(y = 0; y < ver_cnt; y++) {
+        uint32_t x;
+        for(x = 0; x < hor_cnt; x++) {
+
+            lv_obj_t * obj = lv_arc_create(lv_screen_active());
+            if(x == 0) lv_obj_add_flag(obj, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+            lv_obj_set_size(obj, lv_dpx(100), lv_dpx(100));
+            lv_obj_center(obj);
+
+            lv_arc_set_bg_angles(obj, 0, 360);
+
+            lv_obj_set_style_margin_all(obj, lv_dpx(20), 0);
+            lv_obj_set_style_arc_opa(obj, 0, LV_PART_MAIN);
+            lv_obj_set_style_bg_opa(obj, 0, LV_PART_KNOB);
+            lv_obj_set_style_arc_width(obj, 10, LV_PART_INDICATOR);
+            lv_obj_set_style_arc_rounded(obj, false, LV_PART_INDICATOR);
+            lv_obj_set_style_arc_color(obj, lv_color_hex3(lv_rand(0x00f, 0xff0)), LV_PART_INDICATOR);
+            arc_anim(obj);
+        }
+    }
 }
 
 
 static void containers_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_SPACE_EVENLY);
+
+    uint32_t hor_cnt = (lv_display_get_horizontal_resolution(NULL) - 16) / 300;
+    uint32_t ver_cnt = (lv_display_get_vertical_resolution(NULL) - 16) / 150;
+
+    uint32_t y;
+    for(y = 0; y < ver_cnt; y++) {
+        uint32_t x;
+        for(x = 0; x < hor_cnt; x++) {
+            lv_obj_t * card = card_create();
+            if(x == 0) lv_obj_add_flag(card, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+            shake_anim(card, 50);
+        }
+    }
 }
 
 static void containers_with_overlay_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_SPACE_EVENLY);
+
+    uint32_t hor_cnt = (lv_display_get_horizontal_resolution(NULL) - 16) / 300;
+    uint32_t ver_cnt = (lv_display_get_vertical_resolution(NULL) - 16) / 150;
+
+    uint32_t y;
+    for(y = 0; y < ver_cnt; y++) {
+        uint32_t x;
+        for(x = 0; x < hor_cnt; x++) {
+            lv_obj_t * card = card_create();
+            if(x == 0) lv_obj_add_flag(card, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+            shake_anim(card, 50);
+        }
+    }
+
+    lv_obj_set_style_bg_opa(lv_layer_top(), LV_OPA_50, 0);
+    color_anim(lv_layer_top());
 }
 
 static void containers_with_opa_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_SPACE_EVENLY);
+
+    uint32_t hor_cnt = (lv_display_get_horizontal_resolution(NULL) - 16) / 300;
+    uint32_t ver_cnt = (lv_display_get_vertical_resolution(NULL) - 16) / 150;
+
+    uint32_t y;
+    for(y = 0; y < ver_cnt; y++) {
+        uint32_t x;
+        for(x = 0; x < hor_cnt; x++) {
+            lv_obj_t * card = card_create();
+            if(x == 0) lv_obj_add_flag(card, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+            lv_obj_set_style_opa(card, LV_OPA_50, 0);
+            shake_anim(card, 50);
+        }
+    }
 }
 
 static void containers_with_opa_layer_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_set_flex_flow(lv_screen_active(), LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(lv_screen_active(), LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_SPACE_EVENLY);
+
+    uint32_t hor_cnt = (lv_display_get_horizontal_resolution(NULL) - 16) / 300;
+    uint32_t ver_cnt = (lv_display_get_vertical_resolution(NULL) - 16) / 150;
+
+    uint32_t y;
+    for(y = 0; y < ver_cnt; y++) {
+        uint32_t x;
+        for(x = 0; x < hor_cnt; x++) {
+            lv_obj_t * card = card_create();
+            lv_obj_set_style_opa_layered(card, LV_OPA_50, 0);
+            if(x == 0) lv_obj_add_flag(card, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
+            shake_anim(card, 50);
+        }
+    }
 }
 
 static void containers_with_scrolling_cb(void)
@@ -130,8 +329,8 @@ static void containers_with_scrolling_cb(void)
 
 static scene_dsc_t scenes[] = {
     {.name = "Empty screen",               .create_cb = empty_screen_cb},
-    {.name = "Moving wallpaper",           .create_cb = moving_wallpaepr_cb},
-    {.name = "Single rectangle",           .create_cb = single_circle_cb},
+    {.name = "Moving wallpaper",           .create_cb = moving_wallpaper_cb},
+    {.name = "Single rectangle",           .create_cb = single_rectangle_cb},
     {.name = "Multiple rectangles",        .create_cb = multiple_rectangles_cb},
     {.name = "Multiple RGB images",        .create_cb = multiple_rgb_images_cb},
     {.name = "Multiple ARGB images",       .create_cb = multiple_argb_images_cb},
@@ -169,7 +368,11 @@ void lv_demo_benchmark(void)
     lv_obj_t * scr = lv_screen_active();
     lv_obj_remove_style_all(scr);
     lv_obj_set_style_bg_opa(scr, LV_OPA_COVER, 0);
+    lv_obj_set_style_text_color(scr, lv_color_black(), 0);
     lv_obj_set_style_bg_color(scr, lv_palette_lighten(LV_PALETTE_GREY, 4), 0);
+    lv_obj_set_style_pad_all(lv_screen_active(), 8, 0);
+    lv_obj_set_style_pad_top(lv_screen_active(), 48, 0);
+    lv_obj_set_style_pad_gap(lv_screen_active(), 8, 0);
 
     lv_obj_t * title = lv_label_create(lv_layer_top());
     lv_obj_set_style_bg_opa(title, LV_OPA_COVER, 0);
@@ -194,6 +397,19 @@ static void load_scene(uint32_t scene)
 {
     lv_obj_t * scr = lv_screen_active();
     lv_obj_clean(scr);
+    lv_obj_set_style_bg_color(scr, lv_palette_lighten(LV_PALETTE_GREY, 4), 0);
+    lv_obj_set_style_text_color(scr, lv_color_black(), 0);
+    lv_obj_set_style_pad_all(lv_screen_active(), 8, 0);
+    lv_obj_set_style_pad_top(lv_screen_active(), 48, 0);
+    lv_obj_set_style_pad_gap(lv_screen_active(), 8, 0);
+    lv_obj_set_layout(scr, LV_LAYOUT_NONE);
+
+    lv_anim_delete(scr, scroll_anim_y_cb);
+    lv_anim_delete(scr, shake_anim_y_cb);
+    lv_anim_delete(scr, color_anim_cb);
+
+    lv_anim_delete(lv_layer_top(), color_anim_cb);
+    lv_obj_set_style_bg_opa(lv_layer_top(), LV_OPA_TRANSP, 0);
 
     if(scenes[scene].create_cb) scenes[scene].create_cb();
 }
@@ -225,26 +441,118 @@ static void sysmon_perf_observer_cb(lv_subject_t * subject, lv_observer_t * obse
  * SCENE HELPERS
  *----------------*/
 
-static void shake_anim_y_cb(void * var, int32_t v)
+
+static void color_anim_cb(void * var, int32_t v)
 {
-    lv_obj_set_y(var, v);
+    lv_obj_set_style_bg_color(var, lv_color_hex3(lv_rand(0x00f, 0xff0)), 0);
+    lv_obj_set_style_text_color(var, lv_color_hex3(lv_rand(0x00f, 0xff0)), 0);
 }
 
-static void shake_anim(lv_obj_t * obj)
+static void color_anim(lv_obj_t * obj)
 {
-    lv_obj_update_layout(obj);  /*To be sure width an height are updated*/
+    lv_anim_t a;
+    lv_anim_init(&a);
+    lv_anim_set_exec_cb(&a, color_anim_cb);
+    lv_anim_set_values(&a, 0, 100);
+    lv_anim_set_time(&a, 100);      /*New value in each ms*/
+    lv_anim_set_var(&a, obj);
+    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
+    lv_anim_start(&a);
+}
 
-    uint32_t t = rnd_next(500, 3000);
+static void arc_anim_cb(void * var, int32_t v)
+{
+    lv_arc_set_value(var, v);
+}
+
+static void arc_anim(lv_obj_t * obj)
+{
+    uint32_t t1 = rnd_next(1000, 3000);
+    uint32_t t2 = rnd_next(1000, 3000);
+    lv_anim_t a;
+    lv_anim_init(&a);
+    lv_anim_set_exec_cb(&a, arc_anim_cb);
+    lv_anim_set_values(&a, 0, 100);
+    lv_anim_set_time(&a, t1);
+    lv_anim_set_playback_time(&a, t2);
+    lv_anim_set_var(&a, obj);
+    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
+    lv_anim_start(&a);
+}
+
+static void scroll_anim_y_cb(void * var, int32_t v)
+{
+    lv_obj_scroll_to_y(var, v, LV_ANIM_OFF);
+}
+
+static void scroll_anim(lv_obj_t * obj, lv_coord_t y_max)
+{
+    uint32_t t1 = rnd_next(1000, 3000);
+    uint32_t t2 = rnd_next(1000, 3000);
+
+    lv_anim_t a;
+    lv_anim_init(&a);
+    lv_anim_set_var(&a, obj);
+    lv_anim_set_exec_cb(&a, scroll_anim_y_cb);
+    lv_anim_set_values(&a, 0, y_max);
+    lv_anim_set_time(&a, t1);
+    lv_anim_set_playback_time(&a, t2);
+    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
+    lv_anim_start(&a);
+
+}
+static void shake_anim_y_cb(void * var, int32_t v)
+{
+    lv_obj_set_style_translate_y(var, v, 0);
+}
+
+static void shake_anim(lv_obj_t * obj, lv_coord_t y_max)
+{
+    uint32_t t1 = rnd_next(300, 3000);
+    uint32_t t2 = rnd_next(300, 3000);
 
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, obj);
     lv_anim_set_exec_cb(&a, shake_anim_y_cb);
-    lv_anim_set_values(&a, 0, lv_display_get_vertical_resolution(NULL) / 10);
-    lv_anim_set_time(&a, t);
-    lv_anim_set_playback_time(&a, t);
+    lv_anim_set_values(&a, 0, y_max);
+    lv_anim_set_time(&a, t1);
+    lv_anim_set_playback_time(&a, t2);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
     lv_anim_start(&a);
+}
+
+
+static lv_obj_t * card_create(void)
+{
+    lv_obj_t * panel = lv_obj_create(lv_screen_active());
+    lv_obj_set_size(panel, 270, 120);
+    lv_obj_set_style_pad_all(panel, 8, 0);
+
+    LV_IMG_DECLARE(img_transform_avatar_15);
+    lv_obj_t * child = lv_image_create(panel);
+    lv_obj_align(child, LV_ALIGN_LEFT_MID, 0, 0);
+    lv_image_set_src(child, &img_transform_avatar_15);
+
+    child = lv_label_create(panel);
+    lv_label_set_text(child, "John Smith");
+    lv_obj_set_style_text_font(child, &lv_font_montserrat_24, 0);
+    lv_obj_set_pos(child, 100, 0);
+
+    child = lv_label_create(panel);
+    lv_label_set_text(child, "A DIY enthusiast");
+    lv_obj_set_style_text_font(child, &lv_font_montserrat_14, 0);
+    lv_obj_set_pos(child, 100, 30);
+
+    child = lv_button_create(panel);
+    lv_obj_set_pos(child, 100, 50);
+
+    child = lv_label_create(child);
+    lv_label_set_text(child, "Connect");
+
+
+
+    return panel;
 }
 
 static void rnd_reset(void)
