@@ -16,12 +16,12 @@
  *      TYPEDEFS
  **********************/
 
-#define SCENE_TIME  5000
-
+#define SCENE_TIME_DEF  2000
 
 typedef struct {
     const char * name;
     void (*create_cb)(void);
+    uint32_t scene_time;
 } scene_dsc_t;
 
 /**********************
@@ -250,7 +250,7 @@ static void containers_cb(void)
         for(x = 0; x < hor_cnt; x++) {
             lv_obj_t * card = card_create();
             if(x == 0) lv_obj_add_flag(card, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
-            shake_anim(card, 50);
+            shake_anim(card, 30);
         }
     }
 }
@@ -269,7 +269,7 @@ static void containers_with_overlay_cb(void)
         for(x = 0; x < hor_cnt; x++) {
             lv_obj_t * card = card_create();
             if(x == 0) lv_obj_add_flag(card, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
-            shake_anim(card, 50);
+            shake_anim(card, 30);
         }
     }
 
@@ -292,7 +292,7 @@ static void containers_with_opa_cb(void)
             lv_obj_t * card = card_create();
             if(x == 0) lv_obj_add_flag(card, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
             lv_obj_set_style_opa(card, LV_OPA_50, 0);
-            shake_anim(card, 50);
+            shake_anim(card, 30);
         }
     }
 }
@@ -312,15 +312,35 @@ static void containers_with_opa_layer_cb(void)
             lv_obj_t * card = card_create();
             lv_obj_set_style_opa_layered(card, LV_OPA_50, 0);
             if(x == 0) lv_obj_add_flag(card, LV_OBJ_FLAG_FLEX_IN_NEW_TRACK);
-            shake_anim(card, 50);
+            shake_anim(card, 30);
         }
     }
 }
 
 static void containers_with_scrolling_cb(void)
 {
-    lv_obj_t * obj = lv_obj_create(lv_screen_active());
-    lv_obj_set_pos(obj, rnd_next(0, 300), rnd_next(0, 300));
+    lv_obj_t * scr = lv_screen_active();
+
+    lv_obj_set_flex_flow(scr, LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(scr, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_START);
+
+    uint32_t i;
+    for(i = 0; i < 50; i++) {
+        card_create();
+    }
+
+    lv_obj_update_layout(scr);
+    scroll_anim(scr, lv_obj_get_scroll_bottom(scr));
+}
+
+static void widgets_demo_cb(void)
+{
+    lv_obj_t * scr = lv_screen_active();
+    lv_obj_set_style_pad_hor(scr, 0, 0);
+    lv_obj_set_style_pad_bottom(scr, 0, 0);
+    lv_demo_widgets();
+    lv_demo_widgets_start_slideshow();
+
 }
 
 /**********************
@@ -328,22 +348,24 @@ static void containers_with_scrolling_cb(void)
  **********************/
 
 static scene_dsc_t scenes[] = {
-    {.name = "Empty screen",               .create_cb = empty_screen_cb},
-    {.name = "Moving wallpaper",           .create_cb = moving_wallpaper_cb},
-    {.name = "Single rectangle",           .create_cb = single_rectangle_cb},
-    {.name = "Multiple rectangles",        .create_cb = multiple_rectangles_cb},
-    {.name = "Multiple RGB images",        .create_cb = multiple_rgb_images_cb},
-    {.name = "Multiple ARGB images",       .create_cb = multiple_argb_images_cb},
-    {.name = "Rotated ARGB images",        .create_cb = rotated_argb_image_cb},
-    {.name = "Multiple labels",            .create_cb = multiple_labels_cb},
-    {.name = "Screen sized text",          .create_cb = screen_sized_text_cb},
-    {.name = "Multiple arcs",              .create_cb = multiple_arcs_cb},
+    {.name = "Empty screen",               .scene_time = 2000, .create_cb = empty_screen_cb},
+    {.name = "Moving wallpaper",           .scene_time = 2000, .create_cb = moving_wallpaper_cb},
+    {.name = "Single rectangle",           .scene_time = 2000, .create_cb = single_rectangle_cb},
+    {.name = "Multiple rectangles",        .scene_time = 2000, .create_cb = multiple_rectangles_cb},
+    {.name = "Multiple RGB images",        .scene_time = 2000, .create_cb = multiple_rgb_images_cb},
+    {.name = "Multiple ARGB images",       .scene_time = 2000, .create_cb = multiple_argb_images_cb},
+    {.name = "Rotated ARGB images",        .scene_time = 2000, .create_cb = rotated_argb_image_cb},
+    {.name = "Multiple labels",            .scene_time = 2000, .create_cb = multiple_labels_cb},
+    {.name = "Screen sized text",          .scene_time = 5000, .create_cb = screen_sized_text_cb},
+    {.name = "Multiple arcs",              .scene_time = 2000, .create_cb = multiple_arcs_cb},
 
-    {.name = "Containers",                 .create_cb = containers_cb},
-    {.name = "Containers with overlay",    .create_cb = containers_with_overlay_cb},
-    {.name = "Containers with opa",        .create_cb = containers_with_opa_cb},
-    {.name = "Containers with opa_layer",  .create_cb = containers_with_opa_layer_cb},
-    {.name = "Containers with scrolling",  .create_cb = containers_with_scrolling_cb},
+    {.name = "Containers",                 .scene_time = 3000, .create_cb = containers_cb},
+    {.name = "Containers with overlay",    .scene_time = 3000, .create_cb = containers_with_overlay_cb},
+    {.name = "Containers with opa",        .scene_time = 3000, .create_cb = containers_with_opa_cb},
+    {.name = "Containers with opa_layer",  .scene_time = 3000, .create_cb = containers_with_opa_layer_cb},
+    {.name = "Containers with scrolling",  .scene_time = 5000, .create_cb = containers_with_scrolling_cb},
+
+    {.name = "Widgets demo",               .scene_time = 20000,           .create_cb = widgets_demo_cb},
 
     {.name = "", .create_cb = NULL}
 };
@@ -383,7 +405,7 @@ void lv_demo_benchmark(void)
 
     load_scene(scene_act);
 
-    lv_timer_create(next_scene_timer_cb, SCENE_TIME, NULL);
+    lv_timer_create(next_scene_timer_cb, SCENE_TIME_DEF, NULL);
 
     lv_subject_add_observer_obj(&sysmon_perf.subject, sysmon_perf_observer_cb, title, NULL);
 }
@@ -421,7 +443,14 @@ static void next_scene_timer_cb(lv_timer_t * timer)
     LV_UNUSED(timer);
 
     scene_act++;
+
     load_scene(scene_act);
+    if(scenes[scene_act].scene_time == 0) {
+        lv_timer_delete(timer);
+    }
+    else {
+        lv_timer_set_period(timer, scenes[scene_act].scene_time);
+    }
 }
 
 static void sysmon_perf_observer_cb(lv_subject_t * subject, lv_observer_t * observer)
@@ -487,16 +516,15 @@ static void scroll_anim_y_cb(void * var, int32_t v)
 
 static void scroll_anim(lv_obj_t * obj, lv_coord_t y_max)
 {
-    uint32_t t1 = rnd_next(1000, 3000);
-    uint32_t t2 = rnd_next(1000, 3000);
+    uint32_t t = lv_anim_speed_to_time(lv_display_get_dpi(NULL), 0, y_max);
 
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, obj);
     lv_anim_set_exec_cb(&a, scroll_anim_y_cb);
     lv_anim_set_values(&a, 0, y_max);
-    lv_anim_set_time(&a, t1);
-    lv_anim_set_playback_time(&a, t2);
+    lv_anim_set_time(&a, t);
+    lv_anim_set_playback_time(&a, t);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
     lv_anim_start(&a);
 
