@@ -15,6 +15,8 @@ extern "C" {
  *********************/
 #include "../lv_demos.h"
 
+#if LV_USE_DEMO_BENCHMARK
+
 #if LV_USE_PERF_MONITOR == 0
 #error "lv_demo_benchmark: LV_USE_PERF_MONITOR is required. Enable it in lv_conf.h (LV_USE_PERF_MONITOR 1)"
 #endif
@@ -39,6 +41,8 @@ void lv_demo_benchmark(void);
 /**********************
  *      MACROS
  **********************/
+
+#endif /*LV_USE_DEMO_BENCHMARK*/
 
 #ifdef __cplusplus
 } /* extern "C" */
