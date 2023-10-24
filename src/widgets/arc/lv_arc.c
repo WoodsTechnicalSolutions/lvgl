@@ -37,10 +37,10 @@
 static void lv_arc_constructor(const lv_obj_class_t * class_p, lv_obj_t * obj);
 static void lv_arc_draw(lv_event_t * e);
 static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e);
-static void inv_arc_area(lv_obj_t * arc, uint32_t start_angle, uint32_t end_angle, lv_part_t part);
+static void inv_arc_area(lv_obj_t * arc, lv_value_precise_t start_angle, lv_value_precise_t end_angle, lv_part_t part);
 static void inv_knob_area(lv_obj_t * obj);
 static void get_center(const lv_obj_t * obj, lv_point_t * center, lv_coord_t * arc_r);
-static lv_coord_t get_angle(const lv_obj_t * obj);
+static lv_value_precise_t get_angle(const lv_obj_t * obj);
 static void get_knob_area(lv_obj_t * arc, const lv_point_t * center, lv_coord_t r, lv_area_t * knob_area);
 static void value_update(lv_obj_t * arc);
 static lv_coord_t knob_get_extra_size(lv_obj_t * obj);
@@ -86,15 +86,15 @@ lv_obj_t * lv_arc_create(lv_obj_t * parent)
  * Setter functions
  *====================*/
 
-void lv_arc_set_start_angle(lv_obj_t * obj, uint32_t start)
+void lv_arc_set_start_angle(lv_obj_t * obj, lv_value_precise_t start)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arc_t * arc = (lv_arc_t *)obj;
 
     if(start > 360) start -= 360;
 
-    int16_t old_delta = arc->indic_angle_end - arc->indic_angle_start;
-    int16_t new_delta = arc->indic_angle_end - start;
+    lv_value_precise_t old_delta = arc->indic_angle_end - arc->indic_angle_start;
+    lv_value_precise_t new_delta = arc->indic_angle_end - start;
 
     if(old_delta < 0) old_delta = 360 + old_delta;
     if(new_delta < 0) new_delta = 360 + new_delta;
@@ -110,14 +110,14 @@ void lv_arc_set_start_angle(lv_obj_t * obj, uint32_t start)
     inv_knob_area(obj);
 }
 
-void lv_arc_set_end_angle(lv_obj_t * obj, uint32_t end)
+void lv_arc_set_end_angle(lv_obj_t * obj, lv_value_precise_t end)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arc_t * arc = (lv_arc_t *)obj;
     if(end > 360) end -= 360;
 
-    int32_t old_delta = arc->indic_angle_end - arc->indic_angle_start;
-    int32_t new_delta = end - arc->indic_angle_start;
+    lv_value_precise_t old_delta = arc->indic_angle_end - arc->indic_angle_start;
+    lv_value_precise_t new_delta = end - arc->indic_angle_start;
 
     if(old_delta < 0) old_delta = 360 + old_delta;
     if(new_delta < 0) new_delta = 360 + new_delta;
@@ -133,21 +133,21 @@ void lv_arc_set_end_angle(lv_obj_t * obj, uint32_t end)
     inv_knob_area(obj);
 }
 
-void lv_arc_set_angles(lv_obj_t * obj, uint32_t start, uint32_t end)
+void lv_arc_set_angles(lv_obj_t * obj, lv_value_precise_t start, lv_value_precise_t end)
 {
     lv_arc_set_end_angle(obj, end);
     lv_arc_set_start_angle(obj, start);
 }
 
-void lv_arc_set_bg_start_angle(lv_obj_t * obj, uint32_t start)
+void lv_arc_set_bg_start_angle(lv_obj_t * obj, lv_value_precise_t start)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arc_t * arc = (lv_arc_t *)obj;
 
     if(start > 360) start -= 360;
 
-    int32_t old_delta = arc->bg_angle_end - arc->bg_angle_start;
-    int32_t new_delta = arc->bg_angle_end - start;
+    lv_value_precise_t old_delta = arc->bg_angle_end - arc->bg_angle_start;
+    lv_value_precise_t new_delta = arc->bg_angle_end - start;
 
     if(old_delta < 0) old_delta = 360 + old_delta;
     if(new_delta < 0) new_delta = 360 + new_delta;
@@ -161,15 +161,15 @@ void lv_arc_set_bg_start_angle(lv_obj_t * obj, uint32_t start)
     value_update(obj);
 }
 
-void lv_arc_set_bg_end_angle(lv_obj_t * obj, uint32_t end)
+void lv_arc_set_bg_end_angle(lv_obj_t * obj, lv_value_precise_t end)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arc_t * arc = (lv_arc_t *)obj;
 
     if(end > 360) end -= 360;
 
-    int32_t old_delta = arc->bg_angle_end - arc->bg_angle_start;
-    int32_t new_delta = end - arc->bg_angle_start;
+    lv_value_precise_t old_delta = arc->bg_angle_end - arc->bg_angle_start;
+    lv_value_precise_t new_delta = end - arc->bg_angle_start;
 
     if(old_delta < 0) old_delta = 360 + old_delta;
     if(new_delta < 0) new_delta = 360 + new_delta;
@@ -183,7 +183,7 @@ void lv_arc_set_bg_end_angle(lv_obj_t * obj, uint32_t end)
     value_update(obj);
 }
 
-void lv_arc_set_bg_angles(lv_obj_t * obj, uint32_t start, uint32_t end)
+void lv_arc_set_bg_angles(lv_obj_t * obj, lv_value_precise_t start, lv_value_precise_t end)
 {
     lv_arc_set_bg_end_angle(obj, end);
     lv_arc_set_bg_start_angle(obj, start);
@@ -209,7 +209,7 @@ void lv_arc_set_mode(lv_obj_t * obj, lv_arc_mode_t type)
     arc->type = type;
     arc->value = -1; /** Force set_value handling*/
 
-    int16_t bg_midpoint, bg_end = arc->bg_angle_end;
+    lv_value_precise_t bg_midpoint, bg_end = arc->bg_angle_end;
     if(arc->bg_angle_end < arc->bg_angle_start) bg_end = arc->bg_angle_end + 360;
 
     switch(arc->type) {
@@ -285,25 +285,25 @@ void lv_arc_set_knob_offset(lv_obj_t * obj, int32_t offset)
  * Getter functions
  *====================*/
 
-uint32_t lv_arc_get_angle_start(lv_obj_t * obj)
+lv_value_precise_t lv_arc_get_angle_start(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     return ((lv_arc_t *) obj)->indic_angle_start;
 }
 
-uint32_t lv_arc_get_angle_end(lv_obj_t * obj)
+lv_value_precise_t lv_arc_get_angle_end(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     return ((lv_arc_t *) obj)->indic_angle_end;
 }
 
-uint32_t lv_arc_get_bg_angle_start(lv_obj_t * obj)
+lv_value_precise_t lv_arc_get_bg_angle_start(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     return ((lv_arc_t *) obj)->bg_angle_start;
 }
 
-uint32_t lv_arc_get_bg_angle_end(lv_obj_t * obj)
+lv_value_precise_t lv_arc_get_bg_angle_end(lv_obj_t * obj)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     return ((lv_arc_t *) obj)->bg_angle_end;
@@ -365,7 +365,7 @@ void lv_arc_align_obj_to_angle(const lv_obj_t * obj, lv_obj_t * obj_to_align, lv
     arc_r -= indic_width_half;
     arc_r += r_offset;
 
-    uint32_t angle = get_angle(obj);
+    int32_t angle = (int32_t)get_angle(obj);
     lv_coord_t knob_x = (arc_r * lv_trigo_sin(angle + 90)) >> LV_TRIGO_SHIFT;
     lv_coord_t knob_y = (arc_r * lv_trigo_sin(angle)) >> LV_TRIGO_SHIFT;
     lv_obj_align_to(obj_to_align, obj, LV_ALIGN_CENTER, knob_x, knob_y);
@@ -390,7 +390,7 @@ void lv_arc_rotate_obj_to_angle(const lv_obj_t * obj, lv_obj_t * obj_to_rotate, 
 
     lv_obj_update_layout(obj);
 
-    uint32_t angle = get_angle(obj);
+    int32_t angle = (int32_t)get_angle(obj);
     lv_coord_t pivot_x = obj_to_rotate->coords.x1 - center.x;
     lv_coord_t pivot_y = obj_to_rotate->coords.y1 - center.y;
     lv_obj_set_style_transform_pivot_x(obj_to_rotate, -pivot_x, 0);
@@ -495,8 +495,8 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         if(p.x == 0 && p.y == 0) return;
 
         /*Calculate the angle of the pressed point*/
-        int16_t angle;
-        int16_t bg_end = arc->bg_angle_end;
+        lv_value_precise_t angle;
+        lv_value_precise_t bg_end = arc->bg_angle_end;
         if(arc->bg_angle_end < arc->bg_angle_start) {
             bg_end = arc->bg_angle_end + 360;
         }
@@ -512,14 +512,14 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         const uint32_t tolerance_deg = (360U * lv_dpx(50U)) / circumference;
         const uint32_t min_close_prev = (uint32_t) arc->min_close;
 
-        const bool is_angle_within_bg_bounds = lv_arc_angle_within_bg_bounds(obj, (uint32_t) angle, tolerance_deg);
+        const bool is_angle_within_bg_bounds = lv_arc_angle_within_bg_bounds(obj, angle, tolerance_deg);
         if(!is_angle_within_bg_bounds) {
             return;
         }
 
-        int16_t deg_range = bg_end - arc->bg_angle_start;
-        int16_t last_angle_rel = arc->last_angle - arc->bg_angle_start;
-        int16_t delta_angle = angle - last_angle_rel;
+        lv_value_precise_t deg_range = bg_end - arc->bg_angle_start;
+        lv_value_precise_t last_angle_rel = arc->last_angle - arc->bg_angle_start;
+        lv_value_precise_t delta_angle = angle - last_angle_rel;
 
         /*Do not allow big jumps (jumps bigger than 280°).
          *It's mainly to avoid jumping to the opposite end if the "dead" range between min. and max. is crossed.
@@ -552,7 +552,7 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
         uint32_t delta_tick = lv_tick_elaps(arc->last_tick);
         /* delta_angle_max can never be signed. delta_tick is always signed, same for ch_rate */
-        const uint16_t delta_angle_max = (arc->chg_rate * delta_tick) / 1000;
+        const lv_value_precise_t delta_angle_max = (arc->chg_rate * delta_tick) / 1000;
 
         if(delta_angle > delta_angle_max) {
             delta_angle = delta_angle_max;
@@ -565,15 +565,15 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         angle = last_angle_rel + delta_angle; /*Apply the limited angle change*/
 
         /*Rounding for symmetry*/
-        int32_t round = ((bg_end - arc->bg_angle_start) * 8) / (arc->max_value - arc->min_value);
-        round = (round + 4) >> 4;
+        lv_value_precise_t round = ((bg_end - arc->bg_angle_start) * 8) / (arc->max_value - arc->min_value);
+        round = (round + 4) / 8;
         angle += round;
 
         angle += arc->bg_angle_start;  /*Make the angle absolute again*/
 
         /*Set the new value*/
         int16_t old_value = arc->value;
-        int16_t new_value = lv_map(angle, arc->bg_angle_start, bg_end, arc->min_value, arc->max_value);
+        int16_t new_value = lv_map((int32_t)angle, (int32_t)arc->bg_angle_start, (int32_t)bg_end, arc->min_value, arc->max_value);
         if(arc->type == LV_ARC_MODE_REVERSE) {
             new_value = arc->max_value - new_value + arc->min_value;
         }
@@ -720,7 +720,7 @@ static void lv_arc_draw(lv_event_t * e)
     lv_draw_rect(layer, &knob_rect_dsc, &knob_area);
 }
 
-static void inv_arc_area(lv_obj_t * obj, uint32_t start_angle, uint32_t end_angle, lv_part_t part)
+static void inv_arc_area(lv_obj_t * obj, lv_value_precise_t start_angle, lv_value_precise_t end_angle, lv_part_t part)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
 
@@ -787,10 +787,10 @@ static void get_center(const lv_obj_t * obj, lv_point_t * center, lv_coord_t * a
     if(arc_r) *arc_r = r;
 }
 
-static lv_coord_t get_angle(const lv_obj_t * obj)
+static lv_value_precise_t get_angle(const lv_obj_t * obj)
 {
     lv_arc_t * arc = (lv_arc_t *)obj;
-    uint32_t angle = arc->rotation;
+    lv_value_precise_t angle = arc->rotation;
     if(arc->type == LV_ARC_MODE_NORMAL) {
         angle += arc->indic_angle_end;
     }
@@ -798,13 +798,13 @@ static lv_coord_t get_angle(const lv_obj_t * obj)
         angle += arc->indic_angle_start;
     }
     else if(arc->type == LV_ARC_MODE_SYMMETRICAL) {
-        int16_t bg_end = arc->bg_angle_end;
+        lv_value_precise_t bg_end = arc->bg_angle_end;
         if(arc->bg_angle_end < arc->bg_angle_start) bg_end = arc->bg_angle_end + 360;
-        int16_t indic_end = arc->indic_angle_end;
+        lv_value_precise_t indic_end = arc->indic_angle_end;
         if(arc->indic_angle_end < arc->indic_angle_start) indic_end = arc->indic_angle_end + 360;
 
-        int32_t angle_midpoint = (int32_t)(arc->bg_angle_start + bg_end) / 2;
-        if((int32_t)arc->indic_angle_start < angle_midpoint) angle += arc->indic_angle_start;
+        lv_value_precise_t angle_midpoint = (int32_t)(arc->bg_angle_start + bg_end) / 2;
+        if(arc->indic_angle_start < angle_midpoint) angle += arc->indic_angle_start;
         else if(indic_end > angle_midpoint) angle += arc->indic_angle_end;
         else angle += angle_midpoint;
     }
@@ -819,7 +819,7 @@ static void get_knob_area(lv_obj_t * obj, const lv_point_t * center, lv_coord_t 
     lv_coord_t indic_width_half = indic_width / 2;
     r -= indic_width_half;
 
-    lv_coord_t angle = get_angle(obj);
+    int32_t angle = (int32_t)get_angle(obj);
     lv_coord_t knob_offset = lv_arc_get_knob_offset(obj);
     lv_coord_t knob_x = (r * lv_trigo_sin(knob_offset + angle + 90)) >> LV_TRIGO_SHIFT;
     lv_coord_t knob_y = (r * lv_trigo_sin(knob_offset + angle)) >> LV_TRIGO_SHIFT;
@@ -847,32 +847,33 @@ static void value_update(lv_obj_t * obj)
     /*If the value is still not set to any value do not update*/
     if(arc->value == VALUE_UNSET) return;
 
-    int16_t bg_midpoint, range_midpoint, bg_end = arc->bg_angle_end;
+    lv_value_precise_t bg_midpoint, bg_end = arc->bg_angle_end;
+    int32_t range_midpoint;
     if(arc->bg_angle_end < arc->bg_angle_start) bg_end = arc->bg_angle_end + 360;
 
-    int16_t angle;
+    int32_t angle;
     switch(arc->type) {
         case LV_ARC_MODE_SYMMETRICAL:
             bg_midpoint = (arc->bg_angle_start + bg_end) / 2;
             range_midpoint = (int32_t)(arc->min_value + arc->max_value) / 2;
 
             if(arc->value < range_midpoint) {
-                angle = lv_map(arc->value, arc->min_value, range_midpoint, arc->bg_angle_start, bg_midpoint);
+                angle = lv_map(arc->value, arc->min_value, range_midpoint, (int32_t)arc->bg_angle_start, (int32_t)bg_midpoint);
                 lv_arc_set_start_angle(obj, angle);
                 lv_arc_set_end_angle(obj, bg_midpoint);
             }
             else {
-                angle = lv_map(arc->value, range_midpoint, arc->max_value, bg_midpoint, bg_end);
+                angle = lv_map(arc->value, range_midpoint, arc->max_value, (int32_t)bg_midpoint, (int32_t)bg_end);
                 lv_arc_set_start_angle(obj, bg_midpoint);
                 lv_arc_set_end_angle(obj, angle);
             }
             break;
         case LV_ARC_MODE_REVERSE:
-            angle = lv_map(arc->value, arc->min_value, arc->max_value, bg_end, arc->bg_angle_start);
+            angle = lv_map(arc->value, arc->min_value, arc->max_value, (int32_t)bg_end, (int32_t)arc->bg_angle_start);
             lv_arc_set_angles(obj, angle, arc->bg_angle_end);
             break;
         case LV_ARC_MODE_NORMAL:
-            angle = lv_map(arc->value, arc->min_value, arc->max_value, arc->bg_angle_start, bg_end);
+            angle = lv_map(arc->value, arc->min_value, arc->max_value, (int32_t)arc->bg_angle_start, (int32_t)bg_end);
             lv_arc_set_angles(obj, arc->bg_angle_start, angle);
 
             break;
@@ -920,13 +921,13 @@ static lv_coord_t knob_get_extra_size(lv_obj_t * obj)
  *
  * @return true if angle is within arc background bounds, false otherwise
  */
-static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const uint32_t angle, const uint32_t tolerance_deg)
+static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise_t angle, const uint32_t tolerance_deg)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arc_t * arc = (lv_arc_t *)obj;
 
-    uint32_t smaller_angle = 0;
-    uint32_t bigger_angle = 0;
+    lv_value_precise_t smaller_angle = 0;
+    lv_value_precise_t bigger_angle = 0;
 
     /* Determine which background angle is smaller and bigger */
     if(arc->bg_angle_start < arc->bg_angle_end) {
