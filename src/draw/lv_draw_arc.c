@@ -66,7 +66,8 @@ void lv_draw_arc(lv_layer_t * layer, const lv_draw_arc_dsc_t * dsc)
     LV_PROFILER_END;
 }
 
-void lv_draw_arc_get_area(lv_coord_t x, lv_coord_t y, uint16_t radius,  lv_value_precise_t start_angle, lv_value_precise_t end_angle,
+void lv_draw_arc_get_area(lv_coord_t x, lv_coord_t y, uint16_t radius,  lv_value_precise_t start_angle,
+                          lv_value_precise_t end_angle,
                           lv_coord_t w, bool rounded, lv_area_t * area)
 {
     lv_coord_t rout = radius;

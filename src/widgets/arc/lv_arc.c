@@ -44,7 +44,8 @@ static lv_value_precise_t get_angle(const lv_obj_t * obj);
 static void get_knob_area(lv_obj_t * arc, const lv_point_t * center, lv_coord_t r, lv_area_t * knob_area);
 static void value_update(lv_obj_t * arc);
 static lv_coord_t knob_get_extra_size(lv_obj_t * obj);
-static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise_t angle, const lv_value_precise_t tolerance_deg);
+static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise_t angle,
+                                          const lv_value_precise_t tolerance_deg);
 
 /**********************
  *  STATIC VARIABLES
@@ -573,7 +574,8 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
         /*Set the new value*/
         int32_t old_value = arc->value;
-        int32_t new_value = lv_map((int32_t)angle, (int32_t)arc->bg_angle_start, (int32_t)bg_end, arc->min_value, arc->max_value);
+        int32_t new_value = lv_map((int32_t)angle, (int32_t)arc->bg_angle_start, (int32_t)bg_end, arc->min_value,
+                                   arc->max_value);
         if(arc->type == LV_ARC_MODE_REVERSE) {
             new_value = arc->max_value - new_value + arc->min_value;
         }
@@ -921,7 +923,8 @@ static lv_coord_t knob_get_extra_size(lv_obj_t * obj)
  *
  * @return true if angle is within arc background bounds, false otherwise
  */
-static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise_t angle, const lv_value_precise_t tolerance_deg)
+static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise_t angle,
+                                          const lv_value_precise_t tolerance_deg)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arc_t * arc = (lv_arc_t *)obj;

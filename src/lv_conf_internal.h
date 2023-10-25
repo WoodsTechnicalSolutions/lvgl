@@ -2745,11 +2745,10 @@ LV_EXPORT_CONST_INT(LV_DPI_DEF);
 
 #undef _LV_KCONFIG_PRESENT
 
-
 #if LV_USE_FLOAT
-typedef float lv_value_precise_t;
+    typedef float lv_value_precise_t;
 #else
-typedef int32_t lv_value_precise_t;
+    typedef int32_t lv_value_precise_t;
 #endif
 
 /*Set some defines if a dependency is disabled*/
