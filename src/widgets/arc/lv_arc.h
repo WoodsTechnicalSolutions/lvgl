@@ -46,9 +46,9 @@ typedef struct {
     lv_value_precise_t indic_angle_end;
     lv_value_precise_t bg_angle_start;
     lv_value_precise_t bg_angle_end;
-    int16_t value;              /*Current value of the arc*/
-    int16_t min_value;          /*Minimum value of the arc*/
-    int16_t max_value;          /*Maximum value of the arc*/
+    int32_t value;              /*Current value of the arc*/
+    int32_t min_value;          /*Minimum value of the arc*/
+    int32_t max_value;          /*Maximum value of the arc*/
     uint32_t dragging    : 1;
     uint32_t type        : 2;
     uint32_t min_close   : 1;   /*1: the last pressed angle was closer to minimum end*/

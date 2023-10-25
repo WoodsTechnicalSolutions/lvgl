@@ -566,14 +566,14 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
 
         /*Rounding for symmetry*/
         lv_value_precise_t round = ((bg_end - arc->bg_angle_start) * 8) / (arc->max_value - arc->min_value);
-        round = (round + 4) / 8;
+        round = (round + 4) / 16;
         angle += round;
 
         angle += arc->bg_angle_start;  /*Make the angle absolute again*/
 
         /*Set the new value*/
-        int16_t old_value = arc->value;
-        int16_t new_value = lv_map((int32_t)angle, (int32_t)arc->bg_angle_start, (int32_t)bg_end, arc->min_value, arc->max_value);
+        int32_t old_value = arc->value;
+        int32_t new_value = lv_map((int32_t)angle, (int32_t)arc->bg_angle_start, (int32_t)bg_end, arc->min_value, arc->max_value);
         if(arc->type == LV_ARC_MODE_REVERSE) {
             new_value = arc->max_value - new_value + arc->min_value;
         }
