@@ -44,7 +44,7 @@ static lv_value_precise_t get_angle(const lv_obj_t * obj);
 static void get_knob_area(lv_obj_t * arc, const lv_point_t * center, lv_coord_t r, lv_area_t * knob_area);
 static void value_update(lv_obj_t * arc);
 static lv_coord_t knob_get_extra_size(lv_obj_t * obj);
-static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const uint32_t angle, const uint32_t tolerance_deg);
+static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise_t angle, const lv_value_precise_t tolerance_deg);
 
 /**********************
  *  STATIC VARIABLES
@@ -509,7 +509,7 @@ static void lv_arc_event(const lv_obj_class_t * class_p, lv_event_t * e)
         if(angle < 0) angle += 360;
 
         const uint32_t circumference = (uint32_t)((2U * r * 314U) / 100U);  /* Equivalent to: 2r * 3.14, avoiding floats */
-        const uint32_t tolerance_deg = (360U * lv_dpx(50U)) / circumference;
+        const lv_value_precise_t tolerance_deg = (360U * lv_dpx(50U)) / circumference;
         const uint32_t min_close_prev = (uint32_t) arc->min_close;
 
         const bool is_angle_within_bg_bounds = lv_arc_angle_within_bg_bounds(obj, angle, tolerance_deg);
@@ -921,7 +921,7 @@ static lv_coord_t knob_get_extra_size(lv_obj_t * obj)
  *
  * @return true if angle is within arc background bounds, false otherwise
  */
-static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise_t angle, const uint32_t tolerance_deg)
+static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise_t angle, const lv_value_precise_t tolerance_deg)
 {
     LV_ASSERT_OBJ(obj, MY_CLASS);
     lv_arc_t * arc = (lv_arc_t *)obj;
@@ -935,8 +935,8 @@ static bool lv_arc_angle_within_bg_bounds(lv_obj_t * obj, const lv_value_precise
         smaller_angle = arc->bg_angle_start;
     }
     else {
-        bigger_angle = 360U - arc->bg_angle_end;
-        smaller_angle = arc->bg_angle_start;
+        bigger_angle = (360 - arc->bg_angle_start) + arc->bg_angle_end;
+        smaller_angle = 0;
     }
 
     /* Angle is between both background angles */
