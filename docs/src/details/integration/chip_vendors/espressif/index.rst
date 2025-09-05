@@ -8,5 +8,7 @@ Espressif
     :maxdepth: 2
 
     overview
-    ppa_gpu
-
+    add_lvgl_to_esp32_idf_project
+    esp32_idf_display_subsystem
+    hardware_accelerator_ppa
+    tips_and_tricks

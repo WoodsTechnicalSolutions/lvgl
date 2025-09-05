@@ -2,13 +2,15 @@
 Overview
 ========
 
-LVGL can be used and configured as standard `ESP-IDF <https://github.com/espressif/esp-idf>`__ component.
+About
+*****
 
-If you are new to ESP-IDF, follow the instructions in the `ESP-IDF Programming guide <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/index.html>`__ to install and set up ESP-IDF on your machine.
+Application Development
+-----------------------
 
 
-LVGL Demo Projects for ESP32
-----------------------------
+Ready to use projects
+---------------------
 
 For a quick start with LVGL and ESP32, the following pre-configured demo projects are available for specific development boards:
 
@@ -19,6 +21,16 @@ For a quick start with LVGL and ESP32, the following pre-configured demo project
 Refer to the README.md files in these repositories for build and flash instructions.
 
 These demo projects use Espressif's Board Support Packages (BSPs). Additional BSPs and examples are available in the `esp-bsp <https://github.com/espressif/esp-bsp>`__ repository.
+
+
+LVGL Support for ESP32 Graphical Peripherals
+--------------------------------------------
+LVGL can be used and configured as standard `ESP-IDF <https://github.com/espressif/esp-idf>`__ component.
+
+If you are new to ESP-IDF, follow the instructions in the `ESP-IDF Programming guide <https://docs.espressif.com/projects/esp-idf/en/stable/esp32/get-started/index.html>`__ to install and set up ESP-IDF on your machine.
+
+
+
 
 
 Using LVGL in Your ESP-IDF Project
