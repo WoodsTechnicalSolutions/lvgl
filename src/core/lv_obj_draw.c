@@ -445,7 +445,7 @@ int32_t lv_obj_get_ext_draw_size(const lv_obj_t * obj)
 
 lv_layer_type_t lv_obj_get_layer_type(const lv_obj_t * obj)
 {
-    LV_CHECK_ARG(obj != NULL, return 0);
+    LV_CHECK_ARG(obj != NULL, return LV_LAYER_TYPE_NONE);
 
     if(obj->spec_attr) return (lv_layer_type_t)obj->spec_attr->layer_type;
     else return LV_LAYER_TYPE_NONE;

@@ -1403,9 +1403,9 @@ const lv_matrix_t * lv_obj_get_transform(const lv_obj_t * obj)
 static lv_result_t obj_invalidate_area_internal(const lv_display_t * disp, const lv_obj_t * obj,
                                                 const lv_area_t * area)
 {
-    LV_CHECK_ARG(disp != NULL, return LV_RESULT_INVALID);
-    LV_CHECK_ARG(obj != NULL, return LV_RESULT_INVALID);
-    LV_CHECK_ARG(area != NULL, return LV_RESULT_INVALID);
+    LV_ASSERT_NULL(disp);
+    LV_ASSERT_NULL(obj);
+    LV_ASSERT_NULL(area);
 
     lv_area_t area_tmp;
     lv_area_copy(&area_tmp, area);

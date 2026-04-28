@@ -124,22 +124,22 @@ uint32_t lv_obj_get_event_count(lv_obj_t * obj)
 
 lv_event_dsc_t * lv_obj_get_event_dsc(lv_obj_t * obj, uint32_t index)
 {
-    LV_CHECK_ARG(obj != NULL, return 0);
+    LV_CHECK_ARG(obj != NULL, return NULL);
     if(obj->spec_attr == NULL) return NULL;
     return lv_event_get_dsc(&obj->spec_attr->event_list, index);
 }
 
 bool lv_obj_remove_event(lv_obj_t * obj, uint32_t index)
 {
-    LV_CHECK_ARG(obj != NULL, return 0);
+    LV_CHECK_ARG(obj != NULL, return false);
     if(obj->spec_attr == NULL) return false;
     return lv_event_remove(&obj->spec_attr->event_list, index);
 }
 
 bool lv_obj_remove_event_dsc(lv_obj_t * obj, lv_event_dsc_t * dsc)
 {
-    LV_CHECK_ARG(obj != NULL, return 0);
-    LV_CHECK_ARG(dsc != NULL, return 0);
+    LV_CHECK_ARG(obj != NULL, return false);
+    LV_CHECK_ARG(dsc != NULL, return false);
 
     if(obj->spec_attr == NULL) return false;
     return lv_event_remove_dsc(&obj->spec_attr->event_list, dsc);
