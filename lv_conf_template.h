@@ -532,6 +532,15 @@
  * Requires LV_USE_CHECK_ARG to be enabled. */
 #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
 
+/** Controls what is logged when an LV_CHECK_ARG check fails.
+ * Any mode other than NONE also requires LV_USE_LOG; if LV_USE_LOG is 0
+ * no output is produced regardless of this setting.
+ *
+ * LV_CHECK_ARG_LOG_MODE_NONE    (0): No log output.
+ * LV_CHECK_ARG_LOG_MODE_MINIMAL (1): Log "Check failed" only (file/line from LV_LOG_WARN).
+ * LV_CHECK_ARG_LOG_MODE_VERBOSE (2): Log "Check failed: <cond>" plus caller-supplied message. */
+#define LV_CHECK_ARG_LOG_MODE LV_CHECK_ARG_LOG_MODE_VERBOSE
+
 /*-------------
  * Debug
  *-----------*/
