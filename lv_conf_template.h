@@ -530,11 +530,9 @@
 
 
 #if LV_USE_CHECK_ARG == 1
-    #if LV_USE_ASSERT
-        /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
-         * Requires LV_USE_CHECK_ARG to be enabled. */
-        #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
-    #endif
+    /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
+     * Requires LV_USE_CHECK_ARG to be enabled. */
+    #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
 
     #if LV_USE_LOG
         #define LV_CHECK_ARG_LOG_MODE_DEFAULT LV_CHECK_ARG_LOG_MODE_VERBOSE
