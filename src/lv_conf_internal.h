@@ -1527,33 +1527,23 @@
 
 
 #if LV_USE_CHECK_ARG == 1
-    #if LV_USE_ASSERT
-        /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
-         * Requires LV_USE_CHECK_ARG to be enabled. */
-        #ifndef LV_CHECK_ARG_ASSERT_ON_FAIL
-            #ifdef CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
-                #define LV_CHECK_ARG_ASSERT_ON_FAIL CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
-            #else
-                #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
-            #endif
+    /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
+     * Requires LV_USE_CHECK_ARG to be enabled. */
+    #ifndef LV_CHECK_ARG_ASSERT_ON_FAIL
+        #ifdef CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
+            #define LV_CHECK_ARG_ASSERT_ON_FAIL CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
+        #else
+            #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
         #endif
     #endif
 
-    #if LV_USE_LOG
-        #ifndef LV_CHECK_ARG_LOG_MODE_DEFAULT
-            #ifdef CONFIG_LV_CHECK_ARG_LOG_MODE_DEFAULT
-                #define LV_CHECK_ARG_LOG_MODE_DEFAULT CONFIG_LV_CHECK_ARG_LOG_MODE_DEFAULT
-            #else
-                #define LV_CHECK_ARG_LOG_MODE_DEFAULT LV_CHECK_ARG_LOG_MODE_VERBOSE
-            #endif
-        #endif
-    #else
-        #ifndef LV_CHECK_ARG_LOG_MODE_DEFAULT
-            #ifdef CONFIG_LV_CHECK_ARG_LOG_MODE_DEFAULT
-                #define LV_CHECK_ARG_LOG_MODE_DEFAULT CONFIG_LV_CHECK_ARG_LOG_MODE_DEFAULT
-            #else
-                #define LV_CHECK_ARG_LOG_MODE_DEFAULT LV_CHECK_ARG_LOG_MODE_NONE
-            #endif
+    #ifndef LV_CHECK_ARG_LOG_MODE_DEFAULT
+        #ifdef CONFIG_LV_CHECK_ARG_LOG_MODE_DEFAULT
+            #define LV_CHECK_ARG_LOG_MODE_DEFAULT CONFIG_LV_CHECK_ARG_LOG_MODE_DEFAULT
+        #elif LV_USE_LOG
+            #define LV_CHECK_ARG_LOG_MODE_DEFAULT LV_CHECK_ARG_LOG_MODE_VERBOSE
+        #else
+            #define LV_CHECK_ARG_LOG_MODE_DEFAULT LV_CHECK_ARG_LOG_MODE_NONE
         #endif
     #endif
 
