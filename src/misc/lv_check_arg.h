@@ -52,16 +52,18 @@ extern "C" {
  *      MACROS
  **********************/
 
+#if LV_USE_CHECK_ARG
+
 /*----------------------------------------------------------------------
  * Internal helper: assert handler
  * Expands to LV_ASSERT_HANDLER when LV_CHECK_ARG_ASSERT_ON_FAIL is set,
  * otherwise to a no-op.
  *---------------------------------------------------------------------*/
-#if LV_CHECK_ARG_ASSERT_ON_FAIL
-#  define LV_CHECK_ARG_ASSERT_HANDLER_ LV_ASSERT_HANDLER
-#else
-#  define LV_CHECK_ARG_ASSERT_HANDLER_ do {} while(0)
-#endif
+#  if LV_CHECK_ARG_ASSERT_ON_FAIL
+#    define LV_CHECK_ARG_ASSERT_HANDLER_ LV_ASSERT_HANDLER
+#  else
+#    define LV_CHECK_ARG_ASSERT_HANDLER_ do {} while(0)
+#  endif
 
 /*----------------------------------------------------------------------
  * Internal helper: log output
@@ -69,31 +71,29 @@ extern "C" {
  * In all modes the macro accepts (cond_str, ...) so that
  * LV_CHECK_ARG_INTERNAL_ can call it uniformly.
  *---------------------------------------------------------------------*/
-#if LV_CHECK_ARG_LOG_MODE == LV_CHECK_ARG_LOG_MODE_VERBOSE
-#  define LV_CHECK_ARG_LOG_(cond_str, ...) LV_LOG_WARN("Check failed: " cond_str " " __VA_ARGS__)
-#elif LV_CHECK_ARG_LOG_MODE == LV_CHECK_ARG_LOG_MODE_MINIMAL
-#  define LV_CHECK_ARG_LOG_(cond_str, ...) LV_LOG_WARN("Check failed")
-#else /* LV_CHECK_ARG_LOG_MODE_NONE */
-#  define LV_CHECK_ARG_LOG_(cond_str, ...) do {} while(0)
-#endif
+#  if LV_CHECK_ARG_LOG_MODE == LV_CHECK_ARG_LOG_MODE_VERBOSE
+#    define LV_CHECK_ARG_LOG_(cond_str, ...) LV_LOG_WARN("Check failed: " cond_str " " __VA_ARGS__)
+#  elif LV_CHECK_ARG_LOG_MODE == LV_CHECK_ARG_LOG_MODE_MINIMAL
+#    define LV_CHECK_ARG_LOG_(cond_str, ...) LV_LOG_WARN("Check failed")
+#  else /* LV_CHECK_ARG_LOG_MODE_NONE */
+#    define LV_CHECK_ARG_LOG_(cond_str, ...) do {} while(0)
+#  endif
 
 /*----------------------------------------------------------------------
  * Internal macro: single definition, behaviour driven by the helpers above.
  * Do not use directly; use LV_CHECK_ARG instead.
  *---------------------------------------------------------------------*/
-#if LV_USE_CHECK_ARG
-
-#define LV_CHECK_ARG_INTERNAL_(cond, cond_str, action_on_fail, ...)  \
-    if(LV_UNLIKELY(!(cond))) {                                        \
-        LV_CHECK_ARG_LOG_(cond_str, __VA_ARGS__);                     \
-        LV_CHECK_ARG_ASSERT_HANDLER_;                                 \
-        action_on_fail;                                               \
+#  define LV_CHECK_ARG_INTERNAL_(cond, cond_str, action_on_fail, ...)  \
+    if(LV_UNLIKELY(!(cond))) {                                          \
+        LV_CHECK_ARG_LOG_(cond_str, __VA_ARGS__);                       \
+        LV_CHECK_ARG_ASSERT_HANDLER_;                                   \
+        action_on_fail;                                                 \
     } else {}
 
 #else
 
 /** LV_CHECK_ARG is disabled; all checks compile to nothing. */
-#define LV_CHECK_ARG_INTERNAL_(cond, cond_str, action_on_fail, ...) ((void)0)
+#  define LV_CHECK_ARG_INTERNAL_(cond, cond_str, action_on_fail, ...) ((void)0)
 
 #endif /*LV_USE_CHECK_ARG*/
 

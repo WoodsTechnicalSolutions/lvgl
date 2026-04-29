@@ -1527,15 +1527,13 @@
 
 
 #if LV_USE_CHECK_ARG == 1
-    #ifdef  LV_ASSERT_HANDLER
-        /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
-         * Requires LV_USE_CHECK_ARG to be enabled. */
-        #ifndef LV_CHECK_ARG_ASSERT_ON_FAIL
-            #ifdef CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
-                #define LV_CHECK_ARG_ASSERT_ON_FAIL CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
-            #else
-                #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
-            #endif
+    /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
+     * Requires LV_USE_CHECK_ARG to be enabled. */
+    #ifndef LV_CHECK_ARG_ASSERT_ON_FAIL
+        #ifdef CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
+            #define LV_CHECK_ARG_ASSERT_ON_FAIL CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
+        #else
+            #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
         #endif
     #endif
 
@@ -5043,5 +5041,9 @@ LV_EXPORT_CONST_INT(LV_DRAW_BUF_ALIGN);
         #define _CRT_SECURE_NO_WARNINGS
     #endif
 #endif  /*defined(LV_CONF_SKIP)*/
+
+#ifndef LV_CHECK_ARG_LOG_MODE
+    #define LV_CHECK_ARG_LOG_MODE   0
+#endif
 
 #endif  /*LV_CONF_INTERNAL_H*/
