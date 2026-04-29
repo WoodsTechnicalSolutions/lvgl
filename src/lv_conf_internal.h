@@ -1527,40 +1527,36 @@
 
 
 #if LV_USE_CHECK_ARG == 1
-    /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
-     * Requires LV_USE_CHECK_ARG to be enabled. */
-    #ifndef LV_CHECK_ARG_ASSERT_ON_FAIL
-        #ifdef CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
-            #define LV_CHECK_ARG_ASSERT_ON_FAIL CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
-        #else
-            #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
+    #ifdef  LV_ASSERT_HANDLER
+        /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
+         * Requires LV_USE_CHECK_ARG to be enabled. */
+        #ifndef LV_CHECK_ARG_ASSERT_ON_FAIL
+            #ifdef CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
+                #define LV_CHECK_ARG_ASSERT_ON_FAIL CONFIG_LV_CHECK_ARG_ASSERT_ON_FAIL
+            #else
+                #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
+            #endif
         #endif
     #endif
 
-    #ifndef LV_CHECK_ARG_LOG_MODE_DEFAULT
-        #ifdef CONFIG_LV_CHECK_ARG_LOG_MODE_DEFAULT
-            #define LV_CHECK_ARG_LOG_MODE_DEFAULT CONFIG_LV_CHECK_ARG_LOG_MODE_DEFAULT
-        #elif LV_USE_LOG
-            #define LV_CHECK_ARG_LOG_MODE_DEFAULT LV_CHECK_ARG_LOG_MODE_VERBOSE
-        #else
-            #define LV_CHECK_ARG_LOG_MODE_DEFAULT LV_CHECK_ARG_LOG_MODE_NONE
+    #if LV_USE_LOG
+        /** Controls what is logged when an LV_CHECK_ARG check fails.
+         * Any mode other than NONE also requires LV_USE_LOG; if LV_USE_LOG is 0
+         * no output is produced regardless of this setting.
+         *
+         * LV_CHECK_ARG_LOG_MODE_NONE    (0): No log output.
+         * LV_CHECK_ARG_LOG_MODE_MINIMAL (1): Log "Check failed" only (file/line from LV_LOG_WARN).
+         * LV_CHECK_ARG_LOG_MODE_VERBOSE (2): Log "Check failed: <cond>" plus caller-supplied message. */
+        #ifndef LV_CHECK_ARG_LOG_MODE
+            #ifdef CONFIG_LV_CHECK_ARG_LOG_MODE
+                #define LV_CHECK_ARG_LOG_MODE CONFIG_LV_CHECK_ARG_LOG_MODE
+            #else
+                #define LV_CHECK_ARG_LOG_MODE LV_CHECK_ARG_LOG_MODE_VERBOSE
+            #endif
         #endif
     #endif
 
-    /** Controls what is logged when an LV_CHECK_ARG check fails.
-     * Any mode other than NONE also requires LV_USE_LOG; if LV_USE_LOG is 0
-     * no output is produced regardless of this setting.
-     *
-     * LV_CHECK_ARG_LOG_MODE_NONE    (0): No log output.
-     * LV_CHECK_ARG_LOG_MODE_MINIMAL (1): Log "Check failed" only (file/line from LV_LOG_WARN).
-     * LV_CHECK_ARG_LOG_MODE_VERBOSE (2): Log "Check failed: <cond>" plus caller-supplied message. */
-    #ifndef LV_CHECK_ARG_LOG_MODE
-        #ifdef CONFIG_LV_CHECK_ARG_LOG_MODE
-            #define LV_CHECK_ARG_LOG_MODE CONFIG_LV_CHECK_ARG_LOG_MODE
-        #else
-            #define LV_CHECK_ARG_LOG_MODE LV_CHECK_ARG_LOG_MODE_DEFAULT
-        #endif
-    #endif
+
 #endif
 
 
@@ -4936,6 +4932,7 @@ LV_EXPORT_CONST_INT(LV_DRAW_BUF_ALIGN);
     #define LV_LOG_TRACE_OBJ_CREATE 0
     #define LV_LOG_TRACE_LAYOUT     0
     #define LV_LOG_TRACE_ANIM       0
+    #define LV_CHECK_ARG_LOG_MODE   0
 #endif  /*LV_USE_LOG*/
 
 #if LV_USE_WAYLAND
