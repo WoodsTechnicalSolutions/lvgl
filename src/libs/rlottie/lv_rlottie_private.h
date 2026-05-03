@@ -14,9 +14,10 @@ extern "C" {
  *      INCLUDES
  *********************/
 
-#include "lv_rlottie.h"
+#include "../../lv_public_api.h"
 #if LV_USE_RLOTTIE
 #include "../../widgets/image/lv_image_private.h"
+#include "../../../lvgl_private.h"
 
 /*********************
  *      DEFINES

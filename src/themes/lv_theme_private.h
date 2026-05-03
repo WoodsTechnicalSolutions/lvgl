@@ -14,8 +14,7 @@ extern "C" {
  *      INCLUDES
  *********************/
 
-#include "../misc/lv_ext_data.h"
-#include "lv_theme.h"
+#include "../lv_public_api.h"
 
 /*********************
  *      DEFINES

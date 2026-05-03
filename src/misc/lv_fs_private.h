@@ -14,7 +14,7 @@ extern "C" {
  *      INCLUDES
  *********************/
 
-#include "lv_fs.h"
+#include "../lv_public_api.h"
 
 /*********************
  *      DEFINES

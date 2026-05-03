@@ -7,7 +7,7 @@
  *      INCLUDES
  *********************/
 
-#include "lv_lcd_generic_mipi.h"
+#include "../../../lv_public_api.h"
 
 #if LV_USE_GENERIC_MIPI
 

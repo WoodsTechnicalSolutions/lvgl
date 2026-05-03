@@ -6,7 +6,7 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "lv_tft_espi.h"
+#include "../../../lv_public_api.h"
 #if LV_USE_TFT_ESPI
 
 #include <TFT_eSPI.h>

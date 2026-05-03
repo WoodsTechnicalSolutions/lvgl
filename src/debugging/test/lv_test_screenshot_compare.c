@@ -11,14 +11,14 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "../../lv_conf_internal.h"
+#include "../../lv_public_api.h"
+
 #if LV_USE_TEST && defined(LV_USE_TEST_SCREENSHOT_COMPARE) && LV_USE_TEST_SCREENSHOT_COMPARE
 
 #if LV_USE_LODEPNG == 0
     #error "lodepng is required for screenshot compare. Enable it in lv_conf.h (LV_USE_LODEPNG 1)"
 #endif
 
-#include "../../lvgl.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-#include "../../lv_conf_internal.h"
+#include "../../lv_public_api.h"
 #if LV_USE_THORVG_INTERNAL
 
 #include "tvgCanvas.h"

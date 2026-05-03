@@ -6,15 +6,13 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "../../lv_conf_internal.h"
+#include "../../lv_public_api.h"
 
 #if LV_SDL_USE_EGL
 
 #include <SDL2/SDL_syswm.h>
 #include "lv_sdl_private.h"
 #include "../opengles/lv_opengles_egl_private.h"
-#include "../opengles/lv_opengles_driver.h"
-#include "../../draw/lv_draw_buf.h"
 
 /*********************
  *      DEFINES

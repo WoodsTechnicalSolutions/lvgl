@@ -14,7 +14,7 @@ extern "C" {
  *      INCLUDES
  *********************/
 
-#include "../../lv_conf_internal.h"
+#include "../../lv_public_api.h"
 
 #if LV_USE_WAYLAND
 
@@ -22,7 +22,6 @@ extern "C" {
 #include <sys/poll.h>
 #include <wayland-client-protocol.h>
 #include <wayland_xdg_shell.h>
-#include "../../misc/lv_types.h"
 #include "lv_wayland_backend_private.h"
 
 /*********************

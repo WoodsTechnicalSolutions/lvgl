@@ -7,7 +7,7 @@
  *      INCLUDES
  *********************/
 
-#include "lv_nuttx_touchscreen.h"
+#include "../../lv_public_api.h"
 
 #if LV_USE_NUTTX
 

@@ -14,7 +14,7 @@ extern "C" {
  *      INCLUDES
  *********************/
 
-#include "lv_obj_draw.h"
+#include "../lv_public_api.h"
 
 /*********************
  *      DEFINES

@@ -6,7 +6,8 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "lv_wayland.h"
+
+#include "../../lv_public_api.h"
 
 #if LV_USE_WAYLAND
 
