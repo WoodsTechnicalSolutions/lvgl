@@ -11,7 +11,6 @@
 #include "lv_global.h"
 #include "../misc/lv_check_arg.h"
 #include "../osal/lv_os_private.h"
-#include "../stdlib/lv_sprintf.h"
 
 /*********************
  *      DEFINES

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """ Generate these 5 files:
 
-- lvgl/src/core/lv_obj_style_gen.h
+- lvgl/include/lvgl/core/lv_obj_style_gen.h
+- lvgl/include/lvgl/core/lv_style_gen.h
 - lvgl/src/core/lv_obj_style_gen.c
 - lvgl/src/misc/lv_style_gen.c
-- lvgl/src/misc/lv_style_gen.h
 - lvgl/docs/src/common-widget-features/styles/style-properties.rst
 
 This script effectively "factors out" what would be duplicate code and
@@ -376,6 +376,10 @@ props = [
 {'name': 'TEXT_OUTLINE_STROKE_OPA',
  'style_type': 'num',  'var_type': 'lv_opa_t',  'default':'`LV_OPA_COVER`', 'inherited': 1, 'layout': 0, 'ext_draw': 0,
  'dsc': "Set the opacity of the letter outline stroke. Value 0, `LV_OPA_0` or `LV_OPA_TRANSP` means fully transparent, 255, `LV_OPA_100` or `LV_OPA_COVER` means fully covering, other values or LV_OPA_10, LV_OPA_20, etc means semi transparency."},
+
+{'name': 'TEXT_LEADING_TRIM',
+ 'style_type': 'num',  'var_type': 'lv_text_leading_trim_t',  'default':'`LV_TEXT_LEADING_TRIM_NONE`', 'inherited': 1, 'layout': 1, 'ext_draw': 0,
+ 'dsc': "Set the text leading trim mode. Removes empty space above and/or below text based on font metrics (cap-height, x-height, baseline). Similar to CSS `text-box-trim`. Possible values are `LV_TEXT_LEADING_TRIM_NONE/CAPITAL_BASELINE/LOWER_BASELINE/CAPITAL/LOWER`."},
 
 {'section': 'Blur', 'dsc':'Blur the widget or its background' },
 {'name': 'BLUR_RADIUS',
@@ -935,7 +939,7 @@ def guard_close():
 # -------------------------------------------------------------------------
 base_dir = os.path.abspath(os.path.dirname(__file__))
 orig_stdout = sys.stdout
-sys.stdout = open(base_dir + '/../src/core/lv_obj_style_gen.h', 'w')
+sys.stdout = open(base_dir + '/../include/lvgl/core/lv_obj_style_gen.h', 'w')
 
 print(HEADING)
 print('#ifndef LV_OBJ_STYLE_GEN_H')
@@ -946,10 +950,10 @@ print('''\
 extern "C" {
 #endif
 ''')
-print('#include "../misc/lv_area.h"')
-print('#include "../misc/lv_style.h"')
-print('#include "../core/lv_obj_style.h"')
-print('#include "../misc/lv_types.h"')
+print('#include "lv_area.h"')
+print('#include "lv_style.h"')
+print('#include "lv_obj_style.h"')
+print('#include "../lv_types.h"')
 print()
 
 guard = ""
@@ -980,7 +984,7 @@ print('#endif /* LV_OBJ_STYLE_GEN_H */')
 sys.stdout = open(base_dir + '/../src/core/lv_obj_style_gen.c', 'w')
 
 print(HEADING)
-print('#include "lv_obj.h"')
+print('#include "../lv_public_api.h"')
 print()
 
 for prop in props:
@@ -994,7 +998,7 @@ guard_close()
 sys.stdout = open(base_dir + '/../src/misc/lv_style_gen.c', 'w')
 
 print(HEADING)
-print('#include "lv_style.h"')
+print('#include "../lv_public_api.h"')
 print()
 
 for prop in props:
@@ -1005,7 +1009,7 @@ guard_close()
 # -------------------------------------------------------------------------
 # lv_style_gen.h
 # -------------------------------------------------------------------------
-sys.stdout = open(base_dir + '/../src/misc/lv_style_gen.h', 'w')
+sys.stdout = open(base_dir + '/../include/lvgl/core/lv_style_gen.h', 'w')
 
 print(HEADING)
 print('#ifndef LV_STYLE_GEN_H')

@@ -15,9 +15,9 @@ extern "C" {
  *********************/
 
 #include "../../core/lv_obj_private.h"
-#include "lv_span.h"
+#include "../../lv_public_api.h"
 
-#if LV_USE_SPAN != 0
+#if LV_USE_SPAN
 
 /*********************
  *      DEFINES

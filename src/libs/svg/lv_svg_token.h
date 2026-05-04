@@ -9,10 +9,10 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "../../lv_conf_internal.h"
-#if LV_USE_SVG
 
-#include "../../misc/lv_array.h"
+#include "../../lv_public_api.h"
+
+#if LV_USE_SVG
 
 /*********************
  *      DEFINES

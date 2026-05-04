@@ -8,8 +8,6 @@
  *********************/
 #include "lv_obj_class_private.h"
 #include "lv_obj_private.h"
-#include "../themes/lv_theme.h"
-#include "../display/lv_display.h"
 #include "../display/lv_display_private.h"
 #include "../misc/lv_check_arg.h"
 #include "../misc/lv_assert.h"

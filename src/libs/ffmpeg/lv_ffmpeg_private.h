@@ -14,8 +14,8 @@ extern "C" {
  *      INCLUDES
  *********************/
 
-#include "lv_ffmpeg.h"
-#if LV_USE_FFMPEG != 0
+#include "../../lv_public_api.h"
+#if LV_USE_FFMPEG
 #include "../../widgets/image/lv_image_private.h"
 
 /*********************

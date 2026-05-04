@@ -1,4 +1,4 @@
-#include "../../lv_conf_internal.h"
+#include "../../lv_public_api.h"
 #if LV_USE_DRAW_EVE
 /*
 @file    EVE_supplemental.h

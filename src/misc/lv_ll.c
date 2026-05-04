@@ -7,10 +7,9 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "lv_ll.h"
 
+#include "../lv_public_api.h"
 #include "lv_check_arg.h"
-#include "../stdlib/lv_mem.h"
 
 /*********************
  *      DEFINES

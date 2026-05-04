@@ -15,7 +15,7 @@ extern "C" {
  *********************/
 
 #include "../../core/lv_obj_private.h"
-#include "lv_menu.h"
+#include "../../lv_public_api.h"
 
 #if LV_USE_MENU
 
