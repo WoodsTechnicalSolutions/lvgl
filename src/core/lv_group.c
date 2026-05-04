@@ -9,7 +9,7 @@
 #include "lv_group_private.h"
 #include "../core/lv_obj_private.h"
 #include "../core/lv_global.h"
-#include "../misc/lv_check_arg.h"
+#include "../lv_public_api.h"
 
 /*********************
  *      DEFINES
@@ -241,11 +241,9 @@ void lv_group_remove_all_objs(lv_group_t * group)
 
 void lv_group_focus_obj(lv_obj_t * obj)
 {
-    lv_group_t * g;
-
     LV_CHECK_ARG(obj != NULL, return);
 
-    g = lv_obj_get_group(obj);
+    lv_group_t * g = lv_obj_get_group(obj);
 
     LV_CHECK_ARG(g != NULL, return);
     LV_CHECK_ARG(g->frozen == 0, return, "Cannot change focus on a frozen group");

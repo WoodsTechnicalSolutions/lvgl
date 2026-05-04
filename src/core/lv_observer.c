@@ -11,7 +11,6 @@
 #if LV_USE_OBSERVER
 
 #include "../lv_public_api.h"
-#include "../misc/lv_check_arg.h"
 #include "../core/lv_obj_private.h"
 #include "../misc/lv_event_private.h"
 /*********************

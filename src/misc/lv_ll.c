@@ -9,7 +9,6 @@
  *********************/
 
 #include "../lv_public_api.h"
-#include "lv_check_arg.h"
 
 /*********************
  *      DEFINES

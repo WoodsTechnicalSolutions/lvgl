@@ -9,8 +9,7 @@
 #include "lv_obj_class_private.h"
 #include "lv_obj_private.h"
 #include "../display/lv_display_private.h"
-#include "../misc/lv_check_arg.h"
-#include "../misc/lv_assert.h"
+#include "../lv_public_api.h"
 
 /*********************
  *      DEFINES
@@ -209,7 +208,7 @@ static void lv_obj_construct(const lv_obj_class_t * class_p, lv_obj_t * obj)
     LV_ASSERT_NULL(obj->class_p);
 
 #if LV_USE_OBJ_NAME
-    LV_CHECK_ARG(class_p->name != NULL, return);
+    LV_ASSERT_NULL(class_p->name);
 #endif
 
 #if LV_USE_EXT_DATA

@@ -7,6 +7,7 @@
  *      INCLUDES
  *********************/
 #include "lv_obj_private.h"
+#include "../lv_public_api.h"
 #include "../misc/lv_event_private.h"
 #include "../misc/lv_area_private.h"
 #include "lv_obj_style_private.h"
@@ -15,7 +16,6 @@
 #include "../indev/lv_indev_private.h"
 #include "../display/lv_display_private.h"
 #include "lv_obj_draw_private.h"
-#include "../misc/lv_check_arg.h"
 
 /*********************
  *      DEFINES

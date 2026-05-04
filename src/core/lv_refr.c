@@ -17,7 +17,7 @@
 #include "../draw/lv_draw_private.h"
 #include "../draw/opengles/lv_draw_opengles.h"
 #include "lv_global.h"
-#include "../misc/lv_check_arg.h"
+#include "../lv_public_api.h"
 
 /*********************
  *      DEFINES

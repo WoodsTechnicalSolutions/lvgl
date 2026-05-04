@@ -8,7 +8,7 @@
  *********************/
 #include "lv_obj_draw_private.h"
 #include "lv_obj_private.h"
-#include "../misc/lv_check_arg.h"
+#include "../lv_public_api.h"
 
 /*********************
  *      DEFINES

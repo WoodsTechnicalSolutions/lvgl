@@ -13,7 +13,7 @@
 #include "../display/lv_display_private.h"
 #include "../core/lv_global.h"
 #include "lv_observer_private.h"
-#include "../misc/lv_check_arg.h"
+#include "../lv_public_api.h"
 
 /*********************
  *      DEFINES
