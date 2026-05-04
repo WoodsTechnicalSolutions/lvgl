@@ -222,6 +222,8 @@ void lv_subject_snprintf(lv_subject_t * subject, const char * format, ...) LV_FO
  * Get current value of a string Subject.
  * @param subject   pointer to Subject
  * @return          pointer to buffer containing current value
+ * @note            NULL will be returned if NULL was passed in `lv_subject_init_string()`
+ *                  as `buf` or if `subject` is NULL or not of string type.
  */
 const char * lv_subject_get_string(lv_subject_t * subject);
 
@@ -230,7 +232,7 @@ const char * lv_subject_get_string(lv_subject_t * subject);
  * @param subject   pointer to Subject
  * @return          pointer to buffer containing previous value
  * @note            NULL will be returned if NULL was passed in `lv_subject_init_string()`
- *                  as `prev_buf`.
+ *                  as `prev_buf` or if `subject` is NULL or not of string type.
  */
 const char * lv_subject_get_previous_string(lv_subject_t * subject);
 

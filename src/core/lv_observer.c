@@ -273,8 +273,8 @@ void lv_subject_snprintf(lv_subject_t * subject, const char * format, ...)
 
 const char * lv_subject_get_string(lv_subject_t * subject)
 {
-    LV_CHECK_ARG(subject != NULL, return "");
-    LV_CHECK_ARG(subject->type == LV_SUBJECT_TYPE_STRING, return "");
+    LV_CHECK_ARG(subject != NULL, return NULL);
+    LV_CHECK_ARG(subject->type == LV_SUBJECT_TYPE_STRING, return NULL);
 
     return subject->value.pointer;
 }
