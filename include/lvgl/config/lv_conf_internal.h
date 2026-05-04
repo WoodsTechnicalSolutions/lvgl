@@ -45,6 +45,10 @@
 #define LV_NANOVG_BACKEND_GLES2     3
 #define LV_NANOVG_BACKEND_GLES3     4
 
+#define LV_CHECK_ARG_LOG_MODE_NONE    0
+#define LV_CHECK_ARG_LOG_MODE_MINIMAL 1
+#define LV_CHECK_ARG_LOG_MODE_VERBOSE 2
+
 /** Handle special Kconfig options. */
 #ifndef LV_KCONFIG_IGNORE
     #include "lv_conf_kconfig.h"
@@ -1500,7 +1504,6 @@
  * Check arg
  *-----------*/
 
-
 /** When enabled, LV_CHECK_ARG checks validate function arguments
  * at runtime. Failed checks log a warning and execute the specified
  * action. When disabled, all LV_CHECK_ARG checks compile to nothing.
@@ -1509,9 +1512,19 @@
  * ensured that invariants are never violated.
  *
  * 0: Disable all LV_CHECK_ARG checks (checks compile to nothing)
- * 1: Enable LV_CHECK_ARG checks
- *
- */
+ * 1: Enable LV_CHECK_ARG checks */
+#ifndef LV_USE_CHECK_ARG
+    #ifdef LV_KCONFIG_PRESENT
+        #ifdef CONFIG_LV_USE_CHECK_ARG
+            #define LV_USE_CHECK_ARG CONFIG_LV_USE_CHECK_ARG
+        #else
+            #define LV_USE_CHECK_ARG 0
+        #endif
+    #else
+        #define LV_USE_CHECK_ARG 1
+    #endif
+#endif
+
 #if LV_USE_CHECK_ARG
     /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
      * Requires LV_USE_CHECK_ARG to be enabled. */
