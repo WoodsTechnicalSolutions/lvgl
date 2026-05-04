@@ -232,7 +232,6 @@ LV_EXPORT_CONST_INT(LV_DRAW_BUF_ALIGN);
     #define LV_LOG_TRACE_OBJ_CREATE 0
     #define LV_LOG_TRACE_LAYOUT     0
     #define LV_LOG_TRACE_ANIM       0
-    #define LV_CHECK_ARG_LOG_MODE   0
 #endif  /*LV_USE_LOG*/
 
 #if LV_USE_WAYLAND

@@ -169,7 +169,7 @@
 #define LV_DRAW_THREAD_PRIO LV_THREAD_PRIO_HIGH
 
 #define LV_USE_DRAW_SW 1
-#if LV_USE_DRAW_SW == 1
+#if LV_USE_DRAW_SW
     /*
      * Selectively disable color format support in order to reduce code size.
      * NOTE: some features use certain color formats internally, e.g.
@@ -528,8 +528,7 @@
  * 1: Enable LV_CHECK_ARG checks */
 #define LV_USE_CHECK_ARG 1
 
-
-#if LV_USE_CHECK_ARG == 1
+#if LV_USE_CHECK_ARG
     /** If enabled, also call LV_ASSERT_HANDLER when an LV_CHECK_ARG check fails.
      * Requires LV_USE_CHECK_ARG to be enabled. */
     #define LV_CHECK_ARG_ASSERT_ON_FAIL 0
@@ -544,10 +543,7 @@
          * LV_CHECK_ARG_LOG_MODE_VERBOSE (2): Log "Check failed: <cond>" plus caller-supplied message. */
         #define LV_CHECK_ARG_LOG_MODE LV_CHECK_ARG_LOG_MODE_VERBOSE
     #endif
-
-
 #endif
-
 
 /*-------------
  * Debug
